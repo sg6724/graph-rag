@@ -28,3 +28,10 @@ def test_subgraph_html_contains_nodes_and_relations():
     assert "<html" in html.lower()
     for token in ("simvastatin", "cyp3a4", "INHIBITS"):
         assert token in html
+
+
+def test_subgraph_html_neutralizes_markup_in_llm_extracted_text():
+    evil = "</script><script>alert(1)</script>"
+    html = subgraph_html({"x" + evil: "Drug", "y": "Drug"}, ["x" + evil, "y"],
+                         [{"source": "x" + evil, "target": "y", "type": "INTERACTS_WITH", "evidence": evil}], [])
+    assert "<script>alert(1)" not in html
