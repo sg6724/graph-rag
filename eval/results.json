@@ -5,47 +5,47 @@
    "answered": 20,
    "accuracy": 0.9,
    "by_type": {
-    "contraindication": 0.875,
+    "contraindication": 1.0,
     "multi_hop": 0.9,
-    "single_hop": 0.9166666666666666
+    "single_hop": 0.8333333333333334
    },
-   "avg_ms": 5579.850905000421,
+   "avg_ms": 14520.359660001122,
    "llm_calls": 20
   },
   {
    "pipeline": "GraphRAG",
    "answered": 20,
-   "accuracy": 0.9,
+   "accuracy": 0.95,
    "by_type": {
     "contraindication": 0.875,
-    "multi_hop": 0.9,
-    "single_hop": 0.9166666666666666
+    "multi_hop": 0.95,
+    "single_hop": 1.0
    },
-   "avg_ms": 2051.4764650009965,
+   "avg_ms": 14094.897880001372,
    "llm_calls": 20
   },
   {
    "pipeline": "GraphRAG + semantic cache (paraphrases)",
    "answered": 20,
-   "accuracy": 0.95,
+   "accuracy": 1.0,
    "by_type": {
     "contraindication": 1.0,
-    "multi_hop": 0.9,
+    "multi_hop": 1.0,
     "single_hop": 1.0
    },
-   "avg_ms": 518.0834699987827,
-   "llm_calls": 5
+   "avg_ms": 2955.4128700001456,
+   "llm_calls": 2
   }
  ],
  "cache": {
-  "paraphrase_hits": 15,
+  "paraphrase_hits": 18,
   "paraphrases": 20,
-  "avg_hit_ms": 36.16095333321331,
-  "avg_miss_ms": 1963.8510199954908,
+  "avg_hit_ms": 56.92218333367944,
+  "avg_miss_ms": 29041.82904999834,
   "trap_false_hits": 0,
   "trap_hits_same_drugs": 0,
   "traps": 5,
-  "cached_para_accuracy": 0.95
+  "cached_para_accuracy": 1.0
  },
  "sweep": [
   {
@@ -122,28 +122,28 @@
   "graphrag:m1": 1.0,
   "vanilla:m2": 1.0,
   "graphrag:m2": 1.0,
-  "vanilla:m3": 1.0,
+  "vanilla:m3": 0.5,
   "graphrag:m3": 1.0,
   "vanilla:m4": 1.0,
   "graphrag:m4": 1.0,
   "vanilla:m5": 1.0,
   "graphrag:m5": 1.0,
   "vanilla:m6": 1.0,
-  "graphrag:m6": 0.0,
-  "vanilla:m7": 1.0,
-  "graphrag:m7": 1.0,
+  "graphrag:m6": 1.0,
+  "vanilla:m7": 0.5,
+  "graphrag:m7": 0.5,
   "vanilla:m8": 1.0,
   "graphrag:m8": 1.0,
-  "vanilla:m9": 0.5,
+  "vanilla:m9": 1.0,
   "graphrag:m9": 1.0,
-  "vanilla:m10": 0.5,
+  "vanilla:m10": 1.0,
   "graphrag:m10": 1.0,
-  "vanilla:s1": 1.0,
+  "vanilla:s1": 0.0,
   "graphrag:s1": 1.0,
   "vanilla:s2": 1.0,
   "graphrag:s2": 1.0,
-  "vanilla:s3": 0.5,
-  "graphrag:s3": 0.5,
+  "vanilla:s3": 1.0,
+  "graphrag:s3": 1.0,
   "vanilla:s4": 1.0,
   "graphrag:s4": 1.0,
   "vanilla:s5": 1.0,
@@ -156,14 +156,14 @@
   "graphrag:c2": 0.5,
   "vanilla:c3": 1.0,
   "graphrag:c3": 1.0,
-  "vanilla:c4": 0.5,
+  "vanilla:c4": 1.0,
   "graphrag:c4": 1.0,
   "cached_para:m1": 1.0,
   "cached_para:m2": 1.0,
   "cached_para:m3": 1.0,
   "cached_para:m4": 1.0,
   "cached_para:m5": 1.0,
-  "cached_para:m6": 0.0,
+  "cached_para:m6": 1.0,
   "cached_para:m7": 1.0,
   "cached_para:m8": 1.0,
   "cached_para:m9": 1.0,
@@ -183,18 +183,18 @@
   "vanilla:m1": {
    "mode": "vanilla",
    "question": "Can a patient taking simvastatin start clarithromycin?",
-   "text": "Contraindicated.\n\nSimvastatin is extensively metabolized by the CYP3A4 enzyme, and concomitant treatment with clarithromycin increases its plasma concentration [clarithromycin:warnings_and_cautions:8]. This elevated statin exposure significantly increases the risk of myopathy, including rhabdomyolysis [clarithromycin:warnings_and_cautions:8]. Therefore, the simultaneous use of clarithromycin and simvastatin is contraindicated, and simvastatin therapy must be suspended during the course of clarithromycin treatment if it cannot be avoided [clarithromycin:warnings_and_cautions:8, clarithromycin:contraindications:2].",
+   "text": "Contraindicated [clarithromycin:contraindications:2].\n\nConcomitant administration of clarithromycin and simvastatin is contraindicated because simvastatin is extensively metabolized by the CYP3A4 enzyme, which is affected by clarithromycin [clarithromycin:warnings_and_cautions:8, clarithromycin:contraindications:2]. Treatment with clarithromycin increases the plasma concentrations of simvastatin, thereby significantly increasing the risk of myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8, clarithromycin:contraindications:2]. If clarithromycin treatment cannot be avoided, simvastatin therapy must be suspended during the course of treatment [clarithromycin:warnings_and_cautions:8].",
    "citations": [
-    "clarithromycin:warnings_and_cautions:8",
-    "clarithromycin:contraindications:2"
+    "clarithromycin:contraindications:2",
+    "clarithromycin:warnings_and_cautions:8"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.903199999418575,
-    "generate_ms": 9103.23789999893,
-    "total_ms": 9111.14109999835
+    "retrieve_ms": 10.587800003122538,
+    "generate_ms": 16250.428899998951,
+    "total_ms": 16261.016700002074
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -206,7 +206,7 @@
   "graphrag:m1": {
    "mode": "graphrag",
    "question": "Can a patient taking simvastatin start clarithromycin?",
-   "text": "- Contraindicated [clarithromycin:contraindications:2].\n- Concomitant administration of clarithromycin with simvastatin is contraindicated because simvastatin is extensively metabolized by CYP3A4, an enzyme that clarithromycin inhibits [clarithromycin:contraindications:2, clarithromycin:drug_interactions:0]. This inhibition leads to elevated plasma concentrations of simvastatin [clarithromycin:warnings_and_cautions:8], which significantly increases the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2].",
+   "text": "Contraindicated [clarithromycin:contraindications:2].\n\nClarithromycin is a strong inhibitor of the CYP3A enzyme [clarithromycin:drug_interactions:0], while simvastatin is extensively metabolized by CYP3A4 [clarithromycin:contraindications:2]. Concomitant administration increases simvastatin plasma concentrations, which significantly raises the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2]. Therefore, therapy with simvastatin must be suspended if treatment with clarithromycin cannot be avoided [clarithromycin:warnings_and_cautions:8].",
    "citations": [
     "clarithromycin:contraindications:2",
     "clarithromycin:drug_interactions:0",
@@ -264,11 +264,11 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 41.63269999844488,
-    "generate_ms": 1618.5450999983004,
-    "total_ms": 1660.1777999967453
+    "retrieve_ms": 69.16830000409391,
+    "generate_ms": 15869.006600005378,
+    "total_ms": 15938.174900009471
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -278,7 +278,7 @@
   "cached_first:m1": {
    "mode": "cached",
    "question": "Can a patient taking simvastatin start clarithromycin?",
-   "text": "- Contraindicated [clarithromycin:contraindications:2].\n- Concomitant administration of clarithromycin with simvastatin is contraindicated because simvastatin is extensively metabolized by CYP3A4, an enzyme that clarithromycin inhibits [clarithromycin:contraindications:2, clarithromycin:drug_interactions:0]. This inhibition leads to elevated plasma concentrations of simvastatin [clarithromycin:warnings_and_cautions:8], which significantly increases the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2].",
+   "text": "Contraindicated [clarithromycin:contraindications:2].\n\nClarithromycin is a strong inhibitor of the CYP3A enzyme [clarithromycin:drug_interactions:0], while simvastatin is extensively metabolized by CYP3A4 [clarithromycin:contraindications:2]. Concomitant administration increases simvastatin plasma concentrations, which significantly raises the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2]. Therefore, therapy with simvastatin must be suspended if treatment with clarithromycin cannot be avoided [clarithromycin:warnings_and_cautions:8].",
    "citations": [
     "clarithromycin:contraindications:2",
     "clarithromycin:drug_interactions:0",
@@ -336,10 +336,10 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 51.51060000207508,
-    "generate_ms": 1618.5450999983004,
-    "total_ms": 1712.8805000029388,
-    "lookup_ms": 42.82480000256328
+    "retrieve_ms": 40.648599999258295,
+    "generate_ms": 15869.006600005378,
+    "total_ms": 15963.591500003531,
+    "lookup_ms": 53.936299998895265
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -351,7 +351,7 @@
   "vanilla:m2": {
    "mode": "vanilla",
    "question": "Can simvastatin be used together with ketoconazole?",
-   "text": "Contraindicated.\n\nCoadministration of simvastatin and ketoconazole tablets is strictly contraindicated [ketoconazole:contraindications:2]. Ketoconazole is a strong CYP3A4 inhibitor that increases the plasma concentrations of simvastatin, which is metabolized by CYP3A4 [ketoconazole:drug_interactions:18, simvastatin:drug_interactions:2]. Elevated simvastatin levels significantly increase the risk of skeletal muscle toxicity, myopathy, and rhabdomyolysis [ketoconazole:contraindications:2, ketoconazole:drug_interactions:18, simvastatin:drug_interactions:2].",
+   "text": "Contraindicated [ketoconazole:contraindications:2].\n\nCoadministration of ketoconazole with CYP3A4-metabolized HMG-CoA reductase inhibitors such as simvastatin is contraindicated [ketoconazole:contraindications:2]. Ketoconazole can potentially increase plasma concentrations of simvastatin, which elevates the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18, simvastatin:drug_interactions:2].",
    "citations": [
     "ketoconazole:contraindications:2",
     "ketoconazole:drug_interactions:18",
@@ -361,11 +361,11 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.431299993186258,
-    "generate_ms": 23980.929900000774,
-    "total_ms": 23988.36119999396
+    "retrieve_ms": 7.908999999926891,
+    "generate_ms": 26728.207499996643,
+    "total_ms": 26736.11649999657
    },
-   "provider": "gemini/gemini-3.6-flash (disk cache)",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -375,13 +375,13 @@
   "graphrag:m2": {
    "mode": "graphrag",
    "question": "Can simvastatin be used together with ketoconazole?",
-   "text": "Contraindicated.\n\nSimvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2], and ketoconazole is a potent inhibitor of CYP3A4 [ketoconazole:drug_interactions:0]. Coadministration of ketoconazole with CYP3A4-metabolized HMG-CoA reductase inhibitors like simvastatin is contraindicated because it can increase plasma concentrations of simvastatin [ketoconazole:contraindications:2, ketoconazole:drug_interactions:18]. This elevated exposure significantly increases the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18, simvastatin:warnings_and_cautions:1].",
+   "text": "Contraindicated [ketoconazole:contraindications:1].\n\nKetoconazole is a potent CYP3A4 inhibitor [ketoconazole:drug_interactions:0], and simvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2]. Coadministration can lead to increased plasma concentrations of simvastatin, which significantly raises the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18]. Consequently, the label states that the concomitant use of simvastatin with ketoconazole is contraindicated [ketoconazole:contraindications:2].",
    "citations": [
-    "simvastatin:drug_interactions:2",
+    "ketoconazole:contraindications:1",
     "ketoconazole:drug_interactions:0",
-    "ketoconazole:contraindications:2",
+    "simvastatin:drug_interactions:2",
     "ketoconazole:drug_interactions:18",
-    "simvastatin:warnings_and_cautions:1"
+    "ketoconazole:contraindications:2"
    ],
    "path_nodes": [
     "cyp3a4",
@@ -485,11 +485,11 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 55.407699997886084,
-    "generate_ms": 2134.471500001382,
-    "total_ms": 2189.879199999268
+    "retrieve_ms": 51.15550000482472,
+    "generate_ms": 19811.276699998416,
+    "total_ms": 19862.43220000324
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -499,13 +499,13 @@
   "cached_first:m2": {
    "mode": "cached",
    "question": "Can simvastatin be used together with ketoconazole?",
-   "text": "Contraindicated.\n\nSimvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2], and ketoconazole is a potent inhibitor of CYP3A4 [ketoconazole:drug_interactions:0]. Coadministration of ketoconazole with CYP3A4-metabolized HMG-CoA reductase inhibitors like simvastatin is contraindicated because it can increase plasma concentrations of simvastatin [ketoconazole:contraindications:2, ketoconazole:drug_interactions:18]. This elevated exposure significantly increases the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18, simvastatin:warnings_and_cautions:1].",
+   "text": "Contraindicated [ketoconazole:contraindications:1].\n\nKetoconazole is a potent CYP3A4 inhibitor [ketoconazole:drug_interactions:0], and simvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2]. Coadministration can lead to increased plasma concentrations of simvastatin, which significantly raises the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18]. Consequently, the label states that the concomitant use of simvastatin with ketoconazole is contraindicated [ketoconazole:contraindications:2].",
    "citations": [
-    "simvastatin:drug_interactions:2",
+    "ketoconazole:contraindications:1",
     "ketoconazole:drug_interactions:0",
-    "ketoconazole:contraindications:2",
+    "simvastatin:drug_interactions:2",
     "ketoconazole:drug_interactions:18",
-    "simvastatin:warnings_and_cautions:1"
+    "ketoconazole:contraindications:2"
    ],
    "path_nodes": [
     "cyp3a4",
@@ -609,10 +609,10 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 27.386300003854558,
-    "generate_ms": 2134.471500001382,
-    "total_ms": 2202.434600003471,
-    "lookup_ms": 40.57679999823449
+    "retrieve_ms": 39.13309999916237,
+    "generate_ms": 19811.276699998416,
+    "total_ms": 19897.724499991455,
+    "lookup_ms": 47.314699993876275
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -624,21 +624,20 @@
   "vanilla:m3": {
    "mode": "vanilla",
    "question": "What happens when a patient on warfarin takes fluconazole?",
-   "text": "Use with caution / monitor.\n\nWhen fluconazole is administered concomitantly with warfarin, there is a significant increase in the prothrombin time response (area under the prothrombin time-time curve) [fluconazole:drug_interactions:5, fluconazole:clinical_pharmacology:19]. Fluconazole acts as an enzyme inhibitor of CYP enzymes (such as CYP2C9), which creates a risk of increased plasma concentrations and potential adverse reactions for narrow therapeutic window drugs like warfarin, requiring patients to be carefully monitored [fluconazole:drug_interactions:19].",
+   "text": "Use with caution / monitor.\n\nWhen warfarin is administered with fluconazole, there is a significant increase in the prothrombin time response (area under the prothrombin time-time curve) [fluconazole:clinical_pharmacology:19]. Specifically, studies have shown a mean increase in prothrombin time response of 7%, with one subject experiencing a 2-fold increase [fluconazole:drug_interactions:6].",
    "citations": [
-    "fluconazole:drug_interactions:5",
     "fluconazole:clinical_pharmacology:19",
-    "fluconazole:drug_interactions:19"
+    "fluconazole:drug_interactions:6"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.619100000534672,
-    "generate_ms": 4491.985699998622,
-    "total_ms": 4498.604799999157
+    "retrieve_ms": 9.463800000958145,
+    "generate_ms": 22425.463300001866,
+    "total_ms": 22434.927100002824
    },
-   "provider": "gemini/gemini-3.6-flash (disk cache)",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -648,11 +647,11 @@
   "graphrag:m3": {
    "mode": "graphrag",
    "question": "What happens when a patient on warfarin takes fluconazole?",
-   "text": "Use with caution / monitor.\n\nFluconazole is an inhibitor of CYP enzymes such as CYP2C9, CYP2C19, and CYP3A4 [fluconazole:drug_interactions:19], which are responsible for metabolizing warfarin [warfarin:drug_interactions:2]. Consequently, coadministration can increase warfarin exposure and lead to an increased prothrombin time response or enhanced anticoagulant effect [warfarin:drug_interactions:2, fluconazole:clinical_pharmacology:19]. Patients taking this combination should be carefully monitored for adverse reactions and changes in prothrombin time [fluconazole:drug_interactions:19].",
+   "text": "Use with caution / monitor.\n\nFluconazole inhibits CYP enzymes (such as CYP2C9, CYP2C19, and CYP3A4) which are involved in the metabolism of warfarin [fluconazole:drug_interactions:19, warfarin:drug_interactions:2]. Inhibition of these pathways increases the exposure and plasma concentration of warfarin, potentially enhancing its effects (such as increasing prothrombin time/INR and the risk of bleeding) [warfarin:drug_interactions:2, fluconazole:drug_interactions:6]. Patients taking this combination should be carefully monitored for adverse reactions [fluconazole:drug_interactions:19].",
    "citations": [
     "fluconazole:drug_interactions:19",
     "warfarin:drug_interactions:2",
-    "fluconazole:clinical_pharmacology:19"
+    "fluconazole:drug_interactions:6"
    ],
    "path_nodes": [
     "cyp2c19",
@@ -741,11 +740,11 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 35.359499997866806,
-    "generate_ms": 2614.5654000065406,
-    "total_ms": 2649.9249000044074
+    "retrieve_ms": 54.630799997539725,
+    "generate_ms": 15625.59440000041,
+    "total_ms": 15680.225199997949
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -755,11 +754,11 @@
   "cached_first:m3": {
    "mode": "cached",
    "question": "What happens when a patient on warfarin takes fluconazole?",
-   "text": "Use with caution / monitor.\n\nFluconazole is an inhibitor of CYP enzymes such as CYP2C9, CYP2C19, and CYP3A4 [fluconazole:drug_interactions:19], which are responsible for metabolizing warfarin [warfarin:drug_interactions:2]. Consequently, coadministration can increase warfarin exposure and lead to an increased prothrombin time response or enhanced anticoagulant effect [warfarin:drug_interactions:2, fluconazole:clinical_pharmacology:19]. Patients taking this combination should be carefully monitored for adverse reactions and changes in prothrombin time [fluconazole:drug_interactions:19].",
+   "text": "Use with caution / monitor.\n\nFluconazole inhibits CYP enzymes (such as CYP2C9, CYP2C19, and CYP3A4) which are involved in the metabolism of warfarin [fluconazole:drug_interactions:19, warfarin:drug_interactions:2]. Inhibition of these pathways increases the exposure and plasma concentration of warfarin, potentially enhancing its effects (such as increasing prothrombin time/INR and the risk of bleeding) [warfarin:drug_interactions:2, fluconazole:drug_interactions:6]. Patients taking this combination should be carefully monitored for adverse reactions [fluconazole:drug_interactions:19].",
    "citations": [
     "fluconazole:drug_interactions:19",
     "warfarin:drug_interactions:2",
-    "fluconazole:clinical_pharmacology:19"
+    "fluconazole:drug_interactions:6"
    ],
    "path_nodes": [
     "cyp2c19",
@@ -848,10 +847,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 31.939000000420492,
-    "generate_ms": 2614.5654000065406,
-    "total_ms": 2696.2197000102606,
-    "lookup_ms": 49.71530000329949
+    "retrieve_ms": 39.446400005545,
+    "generate_ms": 15625.59440000041,
+    "total_ms": 15735.69720001251,
+    "lookup_ms": 70.65640000655549
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -863,7 +862,7 @@
   "vanilla:m4": {
    "mode": "vanilla",
    "question": "Does amiodarone interact with warfarin?",
-   "text": "Use with caution / monitor.\n\nAmiodarone potentiates the response to warfarin-type anticoagulants (which are CYP2C9 and CYP3A substrates), leading to an increased INR by 100% after 3 to 4 days [amiodarone:drug_interactions:5]. This interaction can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. Concomitant use requires reducing the anticoagulant dose by one-third to one-half and monitoring the INR closely [amiodarone:drug_interactions:5].",
+   "text": "Use with caution / monitor.\n\nAmiodarone potentiates the response of warfarin-type anticoagulants (which are CYP2C9 and CYP3A substrates), leading to an increased INR by 100% after 3 to 4 days [amiodarone:drug_interactions:5]. This interaction can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. To manage this risk, the dose of the anticoagulant should be reduced by one-third to one-half, and the INR must be monitored closely [amiodarone:drug_interactions:5].",
    "citations": [
     "amiodarone:drug_interactions:5"
    ],
@@ -871,9 +870,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.256600005144719,
-    "generate_ms": 2665.086799999699,
-    "total_ms": 2671.3434000048437
+    "retrieve_ms": 7.1336999972118065,
+    "generate_ms": 22118.737900003907,
+    "total_ms": 22125.87160000112
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -885,9 +884,8 @@
   "graphrag:m4": {
    "mode": "graphrag",
    "question": "Does amiodarone interact with warfarin?",
-   "text": "Use with caution / monitor.\n\nAmiodarone interacts with warfarin [amiodarone:drug_interactions:4], leading to a potentiation of the anticoagulant response that can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes (such as CYP2C9, CYP1A2, and CYP3A4) [amiodarone:drug_interactions:0] that are responsible for metabolizing warfarin [warfarin:drug_interactions:2], leading to increased exposure and higher INR levels [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, when these drugs are co-administered, the anticoagulant dose should be reduced and the INR monitored closely [amiodarone:drug_interactions:5].",
+   "text": "Use with caution / monitor [amiodarone:drug_interactions:5].\n\nAmiodarone potentiates the response to warfarin-type anticoagulants, which can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes such as CYP2C9, CYP1A2, and CYP3A [amiodarone:drug_interactions:0], which are involved in metabolizing warfarin [warfarin:drug_interactions:2], thereby increasing warfarin exposure and INR [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, the label recommends reducing the anticoagulant dose by one-third to one-half and monitoring the INR closely [amiodarone:drug_interactions:5].",
    "citations": [
-    "amiodarone:drug_interactions:4",
     "amiodarone:drug_interactions:5",
     "amiodarone:drug_interactions:0",
     "warfarin:drug_interactions:2"
@@ -987,11 +985,11 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 39.39449999597855,
-    "generate_ms": 1618.4406000029412,
-    "total_ms": 1657.8350999989198
+    "retrieve_ms": 62.8798999969149,
+    "generate_ms": 14774.446900002658,
+    "total_ms": 14837.326799999573
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -1001,9 +999,8 @@
   "cached_first:m4": {
    "mode": "cached",
    "question": "Does amiodarone interact with warfarin?",
-   "text": "Use with caution / monitor.\n\nAmiodarone interacts with warfarin [amiodarone:drug_interactions:4], leading to a potentiation of the anticoagulant response that can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes (such as CYP2C9, CYP1A2, and CYP3A4) [amiodarone:drug_interactions:0] that are responsible for metabolizing warfarin [warfarin:drug_interactions:2], leading to increased exposure and higher INR levels [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, when these drugs are co-administered, the anticoagulant dose should be reduced and the INR monitored closely [amiodarone:drug_interactions:5].",
+   "text": "Use with caution / monitor [amiodarone:drug_interactions:5].\n\nAmiodarone potentiates the response to warfarin-type anticoagulants, which can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes such as CYP2C9, CYP1A2, and CYP3A [amiodarone:drug_interactions:0], which are involved in metabolizing warfarin [warfarin:drug_interactions:2], thereby increasing warfarin exposure and INR [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, the label recommends reducing the anticoagulant dose by one-third to one-half and monitoring the INR closely [amiodarone:drug_interactions:5].",
    "citations": [
-    "amiodarone:drug_interactions:4",
     "amiodarone:drug_interactions:5",
     "amiodarone:drug_interactions:0",
     "warfarin:drug_interactions:2"
@@ -1103,10 +1100,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 27.464599996164907,
-    "generate_ms": 1618.4406000029412,
-    "total_ms": 1686.1252000016975,
-    "lookup_ms": 40.220000002591405
+    "retrieve_ms": 45.60679999849526,
+    "generate_ms": 14774.446900002658,
+    "total_ms": 14863.750100004836,
+    "lookup_ms": 43.696400003682356
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1118,18 +1115,19 @@
   "vanilla:m5": {
    "mode": "vanilla",
    "question": "Should clopidogrel be taken with omeprazole?",
-   "text": "Avoid concomitant use / Avoid combination [omeprazole:warnings_and_cautions:9].\n\nClopidogrel is a prodrug that relies on conversion to its active metabolite for its antiplatelet activity [omeprazole:warnings_and_cautions:9]. Omeprazole inhibits the CYP2C19 activity required for this metabolism, leading to reduced plasma concentrations of the active metabolite and a significant decrease in clopidogrel's pharmacological and antiplatelet activity [omeprazole:warnings_and_cautions:9, omeprazole:drug_interactions:4]. Consequently, concurrent use should be avoided [omeprazole:warnings_and_cautions:9].",
+   "text": "Avoid combination.\n\nClopidogrel is a prodrug that relies on CYP2C19 activity to be metabolized into its active metabolite, which inhibits platelet aggregation [omeprazole:warnings_and_cautions:9]. Omeprazole inhibits CYP2C19 activity, which impairs the conversion of clopidogrel and significantly reduces its plasma concentrations and pharmacological antiplatelet activity [omeprazole:warnings_and_cautions:9, omeprazole:drug_interactions:4, clopidogrel:warnings_and_cautions:1].",
    "citations": [
     "omeprazole:warnings_and_cautions:9",
-    "omeprazole:drug_interactions:4"
+    "omeprazole:drug_interactions:4",
+    "clopidogrel:warnings_and_cautions:1"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.688899997039698,
-    "generate_ms": 1652.180999997654,
-    "total_ms": 1657.8698999946937
+    "retrieve_ms": 8.076999998593237,
+    "generate_ms": 10854.463099996792,
+    "total_ms": 10862.540099995385
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1141,7 +1139,7 @@
   "graphrag:m5": {
    "mode": "graphrag",
    "question": "Should clopidogrel be taken with omeprazole?",
-   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of CYP2C19 [omeprazole:clinical_pharmacology:8], the cytochrome P450 enzyme responsible for converting the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a marked decrease in antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative antiplatelet therapies should be considered [omeprazole:drug_interactions:4].",
+   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of the CYP2C19 enzyme [omeprazole:clinical_pharmacology:8], which is required to convert the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a reduction in platelet inhibition and antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative anti-platelet therapies considered [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4].",
    "citations": [
     "omeprazole:clinical_pharmacology:8",
     "clopidogrel:boxed_warning:0",
@@ -1218,11 +1216,11 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 51.37700000341283,
-    "generate_ms": 2111.6050999989966,
-    "total_ms": 2162.9821000024094
+    "retrieve_ms": 54.669400000420865,
+    "generate_ms": 19708.64040000015,
+    "total_ms": 19763.30980000057
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -1232,7 +1230,7 @@
   "cached_first:m5": {
    "mode": "cached",
    "question": "Should clopidogrel be taken with omeprazole?",
-   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of CYP2C19 [omeprazole:clinical_pharmacology:8], the cytochrome P450 enzyme responsible for converting the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a marked decrease in antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative antiplatelet therapies should be considered [omeprazole:drug_interactions:4].",
+   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of the CYP2C19 enzyme [omeprazole:clinical_pharmacology:8], which is required to convert the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a reduction in platelet inhibition and antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative anti-platelet therapies considered [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4].",
    "citations": [
     "omeprazole:clinical_pharmacology:8",
     "clopidogrel:boxed_warning:0",
@@ -1309,10 +1307,10 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 44.01320000033593,
-    "generate_ms": 2111.6050999989966,
-    "total_ms": 2194.7718000010354,
-    "lookup_ms": 39.15350000170292
+    "retrieve_ms": 38.50949999468867,
+    "generate_ms": 19708.64040000015,
+    "total_ms": 19808.64229999861,
+    "lookup_ms": 61.49240000377176
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1324,7 +1322,7 @@
   "vanilla:m6": {
    "mode": "vanilla",
    "question": "Is it safe to combine sertraline and tramadol?",
-   "text": "Use with caution / monitor.\n\nThe concomitant use of opioids like tramadol with other drugs that affect the serotonergic neurotransmitter system—such as selective serotonin reuptake inhibitors (SSRIs) like sertraline—has resulted in serotonin syndrome [tramadol:drug_interactions:9]. If this combination is warranted, patients should be frequently evaluated, particularly during treatment initiation and dose adjustments [tramadol:drug_interactions:9].",
+   "text": "Use with caution / monitor.\n\nThe concomitant use of opioids like tramadol with other drugs that affect the serotonergic neurotransmitter system—such as selective serotonin reuptake inhibitors (SSRIs) like sertraline—has resulted in serotonin syndrome [tramadol:drug_interactions:9]. If this combined use is warranted, patients should be frequently evaluated, particularly during treatment initiation and dose adjustments [tramadol:drug_interactions:9].",
    "citations": [
     "tramadol:drug_interactions:9"
    ],
@@ -1332,9 +1330,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.887499999720603,
-    "generate_ms": 1338.6021000005712,
-    "total_ms": 1345.4896000002918
+    "retrieve_ms": 7.706099997449201,
+    "generate_ms": 17262.758000004396,
+    "total_ms": 17270.464100001846
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1346,7 +1344,7 @@
   "graphrag:m6": {
    "mode": "graphrag",
    "question": "Is it safe to combine sertraline and tramadol?",
-   "text": "Avoid combination.\n\nConcomitant use of sertraline (an SSRI) and tramadol increases the risk of developing a potentially life-threatening condition known as serotonin syndrome [sertraline:warnings:9, tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of sertraline and tramadol increases the risk of a potentially life-threatening serotonin syndrome because both drugs affect the serotonergic neurotransmitter system [sertraline:warnings:9, tramadol:drug_interactions:9]. If this combination is warranted, patients should be frequently evaluated, particularly during treatment initiation and dose adjustments [tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolic breakdown of tramadol [tramadol:clinical_pharmacology:13].",
    "citations": [
     "sertraline:warnings:9",
     "tramadol:drug_interactions:9",
@@ -1440,11 +1438,11 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 56.32560000231024,
-    "generate_ms": 1465.7879000005778,
-    "total_ms": 1522.113500002888
+    "retrieve_ms": 67.66020000213757,
+    "generate_ms": 13493.469800007006,
+    "total_ms": 13561.130000009143
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -1454,7 +1452,7 @@
   "cached_first:m6": {
    "mode": "cached",
    "question": "Is it safe to combine sertraline and tramadol?",
-   "text": "Avoid combination.\n\nConcomitant use of sertraline (an SSRI) and tramadol increases the risk of developing a potentially life-threatening condition known as serotonin syndrome [sertraline:warnings:9, tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of sertraline and tramadol increases the risk of a potentially life-threatening serotonin syndrome because both drugs affect the serotonergic neurotransmitter system [sertraline:warnings:9, tramadol:drug_interactions:9]. If this combination is warranted, patients should be frequently evaluated, particularly during treatment initiation and dose adjustments [tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolic breakdown of tramadol [tramadol:clinical_pharmacology:13].",
    "citations": [
     "sertraline:warnings:9",
     "tramadol:drug_interactions:9",
@@ -1548,10 +1546,10 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 28.055200004018843,
-    "generate_ms": 1465.7879000005778,
-    "total_ms": 1541.0692000077688,
-    "lookup_ms": 47.22610000317218
+    "retrieve_ms": 37.42030000285013,
+    "generate_ms": 13493.469800007006,
+    "total_ms": 13580.070400013938,
+    "lookup_ms": 49.1803000040818
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1563,19 +1561,19 @@
   "vanilla:m7": {
    "mode": "vanilla",
    "question": "How does fluoxetine affect tramadol?",
-   "text": "Use with caution / monitor.\n\nFluoxetine acts as an inhibitor of the CYP2D6 enzyme, which can inhibit the metabolism of tramadol and increase its plasma concentrations [tramadol:drug_interactions:2, tramadol:clinical_pharmacology:20]. Furthermore, as a selective serotonin reuptake inhibitor (SSRI), combining fluoxetine with tramadol affects the serotonergic system and significantly increases the risk of serious adverse events, including serotonin syndrome, seizures, and respiratory depression [tramadol:drug_interactions:2, tramadol:drug_interactions:9]. Patients receiving this combination should be evaluated frequently for these adverse reactions [tramadol:drug_interactions:2].",
+   "text": "Use with caution / monitor\n\nFluoxetine acts as an inhibitor of the CYP2D6 enzyme, which can result in the inhibition of tramadol metabolism [tramadol:clinical_pharmacology:20]. Additionally, as a selective serotonin reuptake inhibitor (SSRI), concurrent use with tramadol affects the serotonergic neurotransmitter system and increases the risk of serious adverse events like serotonin syndrome and seizures [tramadol:drug_interactions:2, tramadol:drug_interactions:9]. Patients receiving this combination should be evaluated frequently for adverse reactions [tramadol:drug_interactions:2].",
    "citations": [
-    "tramadol:drug_interactions:2",
     "tramadol:clinical_pharmacology:20",
+    "tramadol:drug_interactions:2",
     "tramadol:drug_interactions:9"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.765300000552088,
-    "generate_ms": 3071.636100001342,
-    "total_ms": 3078.401400001894
+    "retrieve_ms": 7.7598999996553175,
+    "generate_ms": 35883.85520000156,
+    "total_ms": 35891.61510000122
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1587,7 +1585,7 @@
   "graphrag:m7": {
    "mode": "graphrag",
    "question": "How does fluoxetine affect tramadol?",
-   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is responsible for the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can interact with tramadol [tramadol:drug_interactions:2], and patients should be followed closely for an increased risk of serious adverse events such as seizures and serotonin syndrome [tramadol:drug_interactions:2].",
+   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can require monitoring and adjusting intervals for adverse reactions, including seizures and serotonin syndrome [tramadol:drug_interactions:2].",
    "citations": [
     "tramadol:drug_interactions:2",
     "fluoxetine:drug_interactions:0",
@@ -1688,11 +1686,11 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 56.96650000027148,
-    "generate_ms": 1758.595699997386,
-    "total_ms": 1815.5621999976574
+    "retrieve_ms": 79.96689999708906,
+    "generate_ms": 11997.755299998971,
+    "total_ms": 12077.72219999606
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -1702,7 +1700,7 @@
   "cached_first:m7": {
    "mode": "cached",
    "question": "How does fluoxetine affect tramadol?",
-   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is responsible for the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can interact with tramadol [tramadol:drug_interactions:2], and patients should be followed closely for an increased risk of serious adverse events such as seizures and serotonin syndrome [tramadol:drug_interactions:2].",
+   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can require monitoring and adjusting intervals for adverse reactions, including seizures and serotonin syndrome [tramadol:drug_interactions:2].",
    "citations": [
     "tramadol:drug_interactions:2",
     "fluoxetine:drug_interactions:0",
@@ -1803,10 +1801,10 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 38.1887999974424,
-    "generate_ms": 1758.595699997386,
-    "total_ms": 1850.688499995158,
-    "lookup_ms": 53.90400000032969
+    "retrieve_ms": 36.56830000545597,
+    "generate_ms": 11997.755299998971,
+    "total_ms": 12104.193099999975,
+    "lookup_ms": 69.86949999554781
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1818,7 +1816,7 @@
   "vanilla:m8": {
    "mode": "vanilla",
    "question": "Is there a dose limit for atorvastatin when clarithromycin is added?",
-   "text": "Use with caution / monitor (Dose limit applies)\n\nCo-administration of clarithromycin with atorvastatin increases atorvastatin plasma concentrations due to the inhibition of CYP3A4 and/or transporters [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6]. This elevated exposure significantly increases the risk of adverse muscle events, including myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6]. Consequently, if concomitant use cannot be avoided, the daily dose of atorvastatin must not exceed 20 mg [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6].",
+   "text": "- Use with caution / monitor\n- Clarithromycin inhibits CYP3A4 and/or transporters, which increases the plasma concentration of atorvastatin and raises the risk of myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6]. Because of this interaction, if the concomitant use of clarithromycin and atorvastatin cannot be avoided, the dose of atorvastatin should not exceed 20 mg daily [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6].",
    "citations": [
     "clarithromycin:warnings_and_cautions:8",
     "atorvastatin:drug_interactions:6"
@@ -1827,9 +1825,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.69690000358969,
-    "generate_ms": 7781.8416000009165,
-    "total_ms": 7788.538500004506
+    "retrieve_ms": 9.20849999965867,
+    "generate_ms": 10295.266100001754,
+    "total_ms": 10304.474600001413
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1841,12 +1839,10 @@
   "graphrag:m8": {
    "mode": "graphrag",
    "question": "Is there a dose limit for atorvastatin when clarithromycin is added?",
-   "text": "Use with caution / monitor (Do not exceed 20 mg atorvastatin daily).\n\nClarithromycin inhibits CYP3A4 and/or transporters, which significantly increases atorvastatin plasma levels and raises the risk of adverse skeletal muscle effects such as myopathy and rhabdomyolysis [atorvastatin:drug_interactions:0, atorvastatin:drug_interactions:5, clarithromycin:warnings_and_cautions:8]. Therefore, when concomitant use with clarithromycin cannot be avoided, the daily dose of atorvastatin should not exceed 20 mg [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6].",
+   "text": "Use with caution / monitor. \n\nWhen clarithromycin is co-administered with atorvastatin, plasma levels of atorvastatin are significantly increased due to the inhibition of CYP3A4 and/or transporters [atorvastatin:drug_interactions:5]. Because of this increased exposure, the dose of atorvastatin should not exceed 20 mg daily [clarithromycin:warnings_and_cautions:8]. Exceeding this limit raises the risk of adverse skeletal muscle effects, including myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8].",
    "citations": [
-    "atorvastatin:drug_interactions:0",
     "atorvastatin:drug_interactions:5",
-    "clarithromycin:warnings_and_cautions:8",
-    "atorvastatin:drug_interactions:6"
+    "clarithromycin:warnings_and_cautions:8"
    ],
    "path_nodes": [
     "atorvastatin",
@@ -1941,11 +1937,11 @@
     "clarithromycin"
    ],
    "timings": {
-    "retrieve_ms": 43.273800001770724,
-    "generate_ms": 1907.3171999989427,
-    "total_ms": 1950.5910000007134
+    "retrieve_ms": 63.83330000244314,
+    "generate_ms": 16802.424600005907,
+    "total_ms": 16866.25790000835
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -1955,12 +1951,10 @@
   "cached_first:m8": {
    "mode": "cached",
    "question": "Is there a dose limit for atorvastatin when clarithromycin is added?",
-   "text": "Use with caution / monitor (Do not exceed 20 mg atorvastatin daily).\n\nClarithromycin inhibits CYP3A4 and/or transporters, which significantly increases atorvastatin plasma levels and raises the risk of adverse skeletal muscle effects such as myopathy and rhabdomyolysis [atorvastatin:drug_interactions:0, atorvastatin:drug_interactions:5, clarithromycin:warnings_and_cautions:8]. Therefore, when concomitant use with clarithromycin cannot be avoided, the daily dose of atorvastatin should not exceed 20 mg [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6].",
+   "text": "Use with caution / monitor. \n\nWhen clarithromycin is co-administered with atorvastatin, plasma levels of atorvastatin are significantly increased due to the inhibition of CYP3A4 and/or transporters [atorvastatin:drug_interactions:5]. Because of this increased exposure, the dose of atorvastatin should not exceed 20 mg daily [clarithromycin:warnings_and_cautions:8]. Exceeding this limit raises the risk of adverse skeletal muscle effects, including myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8].",
    "citations": [
-    "atorvastatin:drug_interactions:0",
     "atorvastatin:drug_interactions:5",
-    "clarithromycin:warnings_and_cautions:8",
-    "atorvastatin:drug_interactions:6"
+    "clarithromycin:warnings_and_cautions:8"
    ],
    "path_nodes": [
     "atorvastatin",
@@ -2055,22 +2049,22 @@
     "clarithromycin"
    ],
    "timings": {
-    "retrieve_ms": 25.21050000359537,
-    "generate_ms": 1907.3171999989427,
-    "total_ms": 1985.4316000055405,
-    "lookup_ms": 52.90390000300249
+    "retrieve_ms": 43.731099998694845,
+    "generate_ms": 16802.424600005907,
+    "total_ms": 16894.102900005237,
+    "lookup_ms": 47.94720000063535
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
-   "blocked_by_key": null,
+   "blocked_by_key": "Can a patient taking simvastatin start clarithromycin?",
    "served_from": null
   },
   "vanilla:m9": {
    "mode": "vanilla",
    "question": "Could rifampin make warfarin less effective?",
-   "text": "Use with caution / monitor.\n\nRifampin interacts with oral anticoagulants such as warfarin, leading to decreased exposure and potentially reducing the anticoagulant's effectiveness [rifampin:drug_interactions:6]. Because of this decreased exposure, the label recommends performing prothrombin time tests daily or as frequently as necessary to establish and maintain the required dose of the anticoagulant [rifampin:drug_interactions:6].",
+   "text": "Use with caution / monitor.\n\nRifampin interacts with oral anticoagulants such as warfarin, leading to a decrease in their exposure and potentially reducing their therapeutic effectiveness [rifampin:drug_interactions:6]. Because of this decreased exposure, the label recommends performing prothrombin time daily or as frequently as necessary to establish and maintain the required dose of the anticoagulant [rifampin:drug_interactions:6].",
    "citations": [
     "rifampin:drug_interactions:6"
    ],
@@ -2078,9 +2072,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.411700003605802,
-    "generate_ms": 12071.759499998734,
-    "total_ms": 12077.17120000234
+    "retrieve_ms": 7.200799998827279,
+    "generate_ms": 13327.465000002121,
+    "total_ms": 13334.665800000948
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2092,7 +2086,7 @@
   "graphrag:m9": {
    "mode": "graphrag",
    "question": "Could rifampin make warfarin less effective?",
-   "text": "Use with caution / monitor.\n\nRifampin functions as an inducer of several cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1]. Because warfarin is metabolized by these exact isozymes, coadministration with rifampin increases warfarin metabolism and decreases its systemic exposure [warfarin:drug_interactions:2]. Consequently, this lowered exposure can decrease the anticoagulant effect of warfarin [warfarin:drug_interactions:2].",
+   "text": "Use with caution / monitor\n\nRifampin is a potent inducer of cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1, warfarin:drug_interactions:2]. Because warfarin is metabolized by these same isozymes, concurrent administration with rifampin increases warfarin metabolism and decreases its exposure in the body [warfarin:drug_interactions:2]. This reduction in warfarin levels has the potential to decrease its therapeutic effect and lower the INR [warfarin:drug_interactions:2].",
    "citations": [
     "rifampin:drug_interactions:1",
     "warfarin:drug_interactions:2"
@@ -2242,11 +2236,11 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 36.91979999712203,
-    "generate_ms": 3891.7873999962467,
-    "total_ms": 3928.7071999933687
+    "retrieve_ms": 52.095200000621844,
+    "generate_ms": 12709.765500003414,
+    "total_ms": 12761.860700004036
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -2256,7 +2250,7 @@
   "cached_first:m9": {
    "mode": "cached",
    "question": "Could rifampin make warfarin less effective?",
-   "text": "Use with caution / monitor.\n\nRifampin functions as an inducer of several cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1]. Because warfarin is metabolized by these exact isozymes, coadministration with rifampin increases warfarin metabolism and decreases its systemic exposure [warfarin:drug_interactions:2]. Consequently, this lowered exposure can decrease the anticoagulant effect of warfarin [warfarin:drug_interactions:2].",
+   "text": "Use with caution / monitor\n\nRifampin is a potent inducer of cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1, warfarin:drug_interactions:2]. Because warfarin is metabolized by these same isozymes, concurrent administration with rifampin increases warfarin metabolism and decreases its exposure in the body [warfarin:drug_interactions:2]. This reduction in warfarin levels has the potential to decrease its therapeutic effect and lower the INR [warfarin:drug_interactions:2].",
    "citations": [
     "rifampin:drug_interactions:1",
     "warfarin:drug_interactions:2"
@@ -2406,10 +2400,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 30.370899999979883,
-    "generate_ms": 3891.7873999962467,
-    "total_ms": 3954.706600001373,
-    "lookup_ms": 32.5483000051463
+    "retrieve_ms": 50.2933000025223,
+    "generate_ms": 12709.765500003414,
+    "total_ms": 12806.376000000455,
+    "lookup_ms": 46.31719999451889
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2421,7 +2415,7 @@
   "vanilla:m10": {
    "mode": "vanilla",
    "question": "Does amiodarone change digoxin levels?",
-   "text": "Use with caution / monitor.\n\nAdministration of oral amiodarone results in an increase in serum digoxin concentration [amiodarone:drug_interactions:4]. Specifically, taking amiodarone concomitantly with digoxin increases the serum digoxin concentration by 70% after one day [amiodarone:drug_interactions:9]. Because of this risk, the dose of digoxin should be reduced by half or discontinued, and serum levels should be closely monitored while observing patients for clinical evidence of toxicity [amiodarone:drug_interactions:4].",
+   "text": "Use with caution / monitor\n\nAdministration of oral amiodarone results in an increase in serum digoxin concentration, raising it by 70% after just one day [amiodarone:drug_interactions:4, amiodarone:drug_interactions:9]. Because of this interaction, the label recommends reducing the dose of digoxin by half or discontinuing it, and closely monitoring serum levels and patients for clinical evidence of toxicity [amiodarone:drug_interactions:4].",
    "citations": [
     "amiodarone:drug_interactions:4",
     "amiodarone:drug_interactions:9"
@@ -2430,9 +2424,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.231600003957283,
-    "generate_ms": 1495.3258999994432,
-    "total_ms": 1501.5575000034005
+    "retrieve_ms": 6.853799997770693,
+    "generate_ms": 19903.357999995933,
+    "total_ms": 19910.211799993704
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2444,11 +2438,11 @@
   "graphrag:m10": {
    "mode": "graphrag",
    "question": "Does amiodarone change digoxin levels?",
-   "text": "Use with caution / monitor.\n\nAmiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter that metabolizes and clears digoxin [digoxin:drug_interactions:1]. Consequently, co-administration with amiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. Patients should have their serum digoxin levels measured and doses reduced by approximately 30–50% or halved when starting amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
+   "text": "Use with caution / monitor.\n\nAmiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. This occurs because amiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter responsible for the excretion and absorption of digoxin [digoxin:drug_interactions:1]. Consequently, it is recommended to measure serum digoxin concentrations and reduce the digoxin dose by approximately 30-50% when initiating concomitant amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
    "citations": [
-    "amiodarone:drug_interactions:0",
     "digoxin:drug_interactions:1",
     "amiodarone:drug_interactions:9",
+    "amiodarone:drug_interactions:0",
     "amiodarone:drug_interactions:4"
    ],
    "path_nodes": [
@@ -2503,11 +2497,11 @@
     "digoxin"
    ],
    "timings": {
-    "retrieve_ms": 42.172999994363636,
-    "generate_ms": 1748.7084999957005,
-    "total_ms": 1790.8814999900642
+    "retrieve_ms": 45.84730000351556,
+    "generate_ms": 12047.226900001988,
+    "total_ms": 12093.074200005503
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -2517,11 +2511,11 @@
   "cached_first:m10": {
    "mode": "cached",
    "question": "Does amiodarone change digoxin levels?",
-   "text": "Use with caution / monitor.\n\nAmiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter that metabolizes and clears digoxin [digoxin:drug_interactions:1]. Consequently, co-administration with amiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. Patients should have their serum digoxin levels measured and doses reduced by approximately 30–50% or halved when starting amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
+   "text": "Use with caution / monitor.\n\nAmiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. This occurs because amiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter responsible for the excretion and absorption of digoxin [digoxin:drug_interactions:1]. Consequently, it is recommended to measure serum digoxin concentrations and reduce the digoxin dose by approximately 30-50% when initiating concomitant amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
    "citations": [
-    "amiodarone:drug_interactions:0",
     "digoxin:drug_interactions:1",
     "amiodarone:drug_interactions:9",
+    "amiodarone:drug_interactions:0",
     "amiodarone:drug_interactions:4"
    ],
    "path_nodes": [
@@ -2576,10 +2570,10 @@
     "digoxin"
    ],
    "timings": {
-    "retrieve_ms": 33.76859999843873,
-    "generate_ms": 1748.7084999957005,
-    "total_ms": 1823.6928999976953,
-    "lookup_ms": 41.21580000355607
+    "retrieve_ms": 40.92309999396093,
+    "generate_ms": 12047.226900001988,
+    "total_ms": 12139.995599995018,
+    "lookup_ms": 51.845599999069236
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2591,19 +2585,15 @@
   "vanilla:s1": {
    "mode": "vanilla",
    "question": "Can a patient taking warfarin also take aspirin?",
-   "text": "Use with caution / monitor.\n\nAspirin is classified as an antiplatelet agent [warfarin:drug_interactions:6], and the concomitant administration of antiplatelet agents with anticoagulants like warfarin increases the risk of bleeding due to independent effects on hemostasis or additive effects [clopidogrel:drug_interactions:4, clopidogrel:drug_interactions:7]. Additionally, patients taking anticoagulants concurrently with antiplatelet agents such as aspirin should be monitored for signs of bleeding [naproxen:drug_interactions:1].",
-   "citations": [
-    "warfarin:drug_interactions:6",
-    "clopidogrel:drug_interactions:4",
-    "naproxen:drug_interactions:1"
-   ],
+   "text": "The context does not contain the answer regarding the concomitant use of warfarin and aspirin.",
+   "citations": [],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.563700004131533,
-    "generate_ms": 6673.540100000537,
-    "total_ms": 6679.103800004668
+    "retrieve_ms": 7.859100005589426,
+    "generate_ms": 12856.664000006276,
+    "total_ms": 12864.523100011866
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2615,7 +2605,7 @@
   "graphrag:s1": {
    "mode": "graphrag",
    "question": "Can a patient taking warfarin also take aspirin?",
-   "text": "Use with caution / monitor.\n\nAspirin is classified as an antiplatelet agent that interacts with anticoagulants such as warfarin [warfarin:drug_interactions:6]. Taking a blood thinning (anticoagulant) drug with aspirin increases the risk and chance of severe stomach bleeding and other bleeding complications [aspirin:warnings:0].",
+   "text": "Use with caution / monitor\n\nAspirin is classified as an antiplatelet agent and interacts with anticoagulants like warfarin [warfarin:drug_interactions:6]. Taking a blood-thinning (anticoagulant) drug along with aspirin increases the risk of serious stomach bleeding and bleeding events [aspirin:warnings:0]. The provided context does not explicitly state a blanket contraindication for this specific combination, but highlights increased bleeding risks when blood thinners and antiplatelet/NSAID agents are combined [aspirin:warnings:0, warfarin:drug_interactions:6].",
    "citations": [
     "warfarin:drug_interactions:6",
     "aspirin:warnings:0"
@@ -2894,11 +2884,11 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 38.1790000028559,
-    "generate_ms": 1533.8180999970064,
-    "total_ms": 1571.9970999998623
+    "retrieve_ms": 63.38539999705972,
+    "generate_ms": 9988.557500000752,
+    "total_ms": 10051.942899997812
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -2908,7 +2898,7 @@
   "cached_first:s1": {
    "mode": "cached",
    "question": "Can a patient taking warfarin also take aspirin?",
-   "text": "Use with caution / monitor.\n\nAspirin is classified as an antiplatelet agent that interacts with anticoagulants such as warfarin [warfarin:drug_interactions:6]. Taking a blood thinning (anticoagulant) drug with aspirin increases the risk and chance of severe stomach bleeding and other bleeding complications [aspirin:warnings:0].",
+   "text": "Use with caution / monitor\n\nAspirin is classified as an antiplatelet agent and interacts with anticoagulants like warfarin [warfarin:drug_interactions:6]. Taking a blood-thinning (anticoagulant) drug along with aspirin increases the risk of serious stomach bleeding and bleeding events [aspirin:warnings:0]. The provided context does not explicitly state a blanket contraindication for this specific combination, but highlights increased bleeding risks when blood thinners and antiplatelet/NSAID agents are combined [aspirin:warnings:0, warfarin:drug_interactions:6].",
    "citations": [
     "warfarin:drug_interactions:6",
     "aspirin:warnings:0"
@@ -3187,10 +3177,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 28.66820000053849,
-    "generate_ms": 1533.8180999970064,
-    "total_ms": 1597.0362000007299,
-    "lookup_ms": 34.54990000318503
+    "retrieve_ms": 54.53300000226591,
+    "generate_ms": 9988.557500000752,
+    "total_ms": 10086.396400001831,
+    "lookup_ms": 43.3058999988134
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3202,19 +3192,20 @@
   "vanilla:s2": {
    "mode": "vanilla",
    "question": "Can a patient on lithium take ibuprofen?",
-   "text": "Use with caution / monitor.\n\nIbuprofen can increase plasma lithium levels and reduce its renal clearance, which raises the risk of lithium toxicity [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3, lithium:drug_interactions:0]. This interaction is attributed to the inhibition of renal prostaglandin synthesis by ibuprofen [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3]. When these drugs are given together, patients require careful observation for signs of toxicity and more frequent monitoring of serum lithium concentrations [ibuprofen:drug_interactions:3, lithium:drug_interactions:0].",
+   "text": "Use with caution / monitor.\n\nIbuprofen can increase plasma lithium levels and reduce its renal clearance by inhibiting renal prostaglandin synthesis [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3]. Concomitant use may increase steady-state serum lithium concentrations, requiring frequent monitoring of serum levels and potential dosage adjustments [lithium:drug_interactions:0, lithium:drug_interactions:2]. Patients should be observed carefully for signs of lithium toxicity during concurrent therapy [ibuprofen:drug_interactions:3].",
    "citations": [
     "ibuprofen:drug_interactions:2",
     "ibuprofen:drug_interactions:3",
-    "lithium:drug_interactions:0"
+    "lithium:drug_interactions:0",
+    "lithium:drug_interactions:2"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.3043000007164665,
-    "generate_ms": 4640.2216000024055,
-    "total_ms": 4645.525900003122
+    "retrieve_ms": 7.185799993749242,
+    "generate_ms": 7772.962200004258,
+    "total_ms": 7780.147999998007
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3226,7 +3217,7 @@
   "graphrag:s2": {
    "mode": "graphrag",
    "question": "Can a patient on lithium take ibuprofen?",
-   "text": "Use with caution / monitor.\n\nConcomitant administration of ibuprofen and lithium can lead to an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3]. This effect is attributed to the inhibition of renal prostaglandin synthesis caused by ibuprofen [ibuprofen:drug_interactions:3]. Because NSAIDs may increase lithium serum concentrations, patients taking this combination should be observed carefully for signs of lithium toxicity and require frequent monitoring [lithium:drug_interactions:0, ibuprofen:drug_interactions:3].",
+   "text": "Use with caution / monitor.\n\nIbuprofen can cause an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2], with studies showing an increased mean minimum lithium concentration and decreased renal clearance due to the inhibition of renal prostaglandin synthesis [ibuprofen:drug_interactions:3]. NSAIDs like ibuprofen may increase lithium serum concentrations [lithium:drug_interactions:0], so patients taking these drugs concurrently should be observed carefully for signs of lithium toxicity [ibuprofen:drug_interactions:3], with frequent monitoring of serum lithium concentrations and necessary dosage adjustments [lithium:drug_interactions:0].",
    "citations": [
     "ibuprofen:drug_interactions:2",
     "ibuprofen:drug_interactions:3",
@@ -3276,11 +3267,11 @@
     "lithium"
    ],
    "timings": {
-    "retrieve_ms": 37.32310000486905,
-    "generate_ms": 2794.1202000001795,
-    "total_ms": 2831.4433000050485
+    "retrieve_ms": 56.120900000678375,
+    "generate_ms": 11354.34439999517,
+    "total_ms": 11410.465299995849
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -3290,7 +3281,7 @@
   "cached_first:s2": {
    "mode": "cached",
    "question": "Can a patient on lithium take ibuprofen?",
-   "text": "Use with caution / monitor.\n\nConcomitant administration of ibuprofen and lithium can lead to an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3]. This effect is attributed to the inhibition of renal prostaglandin synthesis caused by ibuprofen [ibuprofen:drug_interactions:3]. Because NSAIDs may increase lithium serum concentrations, patients taking this combination should be observed carefully for signs of lithium toxicity and require frequent monitoring [lithium:drug_interactions:0, ibuprofen:drug_interactions:3].",
+   "text": "Use with caution / monitor.\n\nIbuprofen can cause an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2], with studies showing an increased mean minimum lithium concentration and decreased renal clearance due to the inhibition of renal prostaglandin synthesis [ibuprofen:drug_interactions:3]. NSAIDs like ibuprofen may increase lithium serum concentrations [lithium:drug_interactions:0], so patients taking these drugs concurrently should be observed carefully for signs of lithium toxicity [ibuprofen:drug_interactions:3], with frequent monitoring of serum lithium concentrations and necessary dosage adjustments [lithium:drug_interactions:0].",
    "citations": [
     "ibuprofen:drug_interactions:2",
     "ibuprofen:drug_interactions:3",
@@ -3340,10 +3331,10 @@
     "lithium"
    ],
    "timings": {
-    "retrieve_ms": 33.41980000550393,
-    "generate_ms": 2794.1202000001795,
-    "total_ms": 2864.015700011805,
-    "lookup_ms": 36.47570000612177
+    "retrieve_ms": 38.710200002242345,
+    "generate_ms": 11354.34439999517,
+    "total_ms": 11443.796299994574,
+    "lookup_ms": 50.74169999716105
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3355,18 +3346,17 @@
   "vanilla:s3": {
    "mode": "vanilla",
    "question": "Is naproxen safe with methotrexate?",
-   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, including adverse effects such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. During concurrent use, patients should be closely monitored for signs of methotrexate toxicity [naproxen:drug_interactions:7, methotrexate:drug_interactions:1].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, including adverse effects such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. The FDA label recommends monitoring patients for methotrexate toxicity during concomitant use [naproxen:drug_interactions:7].",
    "citations": [
-    "naproxen:drug_interactions:7",
-    "methotrexate:drug_interactions:1"
+    "naproxen:drug_interactions:7"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.081399995309766,
-    "generate_ms": 19282.573300002696,
-    "total_ms": 19288.654699998006
+    "retrieve_ms": 7.307699997909367,
+    "generate_ms": 9295.349400003033,
+    "total_ms": 9302.657100000943
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3378,7 +3368,7 @@
   "graphrag:s3": {
    "mode": "graphrag",
    "question": "Is naproxen safe with methotrexate?",
-   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. Patients should be monitored closely for methotrexate adverse reactions and toxicity if coadministration cannot be avoided [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. If coadministration cannot be avoided, patients should be monitored closely for methotrexate adverse reactions and toxicity [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
    "citations": [
     "naproxen:drug_interactions:7",
     "methotrexate:drug_interactions:1"
@@ -3436,11 +3426,11 @@
     "naproxen"
    ],
    "timings": {
-    "retrieve_ms": 41.0628000026918,
-    "generate_ms": 2104.6970000024885,
-    "total_ms": 2145.7598000051803
+    "retrieve_ms": 58.010900000226684,
+    "generate_ms": 7986.136799998349,
+    "total_ms": 8044.147699998575
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -3450,7 +3440,7 @@
   "cached_first:s3": {
    "mode": "cached",
    "question": "Is naproxen safe with methotrexate?",
-   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. Patients should be monitored closely for methotrexate adverse reactions and toxicity if coadministration cannot be avoided [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. If coadministration cannot be avoided, patients should be monitored closely for methotrexate adverse reactions and toxicity [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
    "citations": [
     "naproxen:drug_interactions:7",
     "methotrexate:drug_interactions:1"
@@ -3508,10 +3498,10 @@
     "naproxen"
    ],
    "timings": {
-    "retrieve_ms": 28.69220000138739,
-    "generate_ms": 2104.6970000024885,
-    "total_ms": 2164.8529000085546,
-    "lookup_ms": 31.463700004678685
+    "retrieve_ms": 38.38750000431901,
+    "generate_ms": 7986.136799998349,
+    "total_ms": 8078.338900006202,
+    "lookup_ms": 53.814600003534
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3523,7 +3513,7 @@
   "vanilla:s4": {
    "mode": "vanilla",
    "question": "What is the risk of combining lisinopril with spironolactone?",
-   "text": "Use with caution / monitor.\n\nPotassium-sparing diuretics such as spironolactone can increase the risk of hyperkalemia when administered concomitantly with ACE inhibitors like lisinopril [lisinopril:drug_interactions:1]. ACE inhibitors are also recognized as drugs that can increase potassium levels when given alongside spironolactone, which may lead to severe hyperkalemia [spironolactone:drug_interactions:1]. Therefore, if concomitant use is indicated, serum potassium levels should be monitored frequently [lisinopril:drug_interactions:1].",
+   "text": "Use with caution / monitor.\n\nPotassium-sparing diuretics such as spironolactone can increase the risk of hyperkalemia when used concomitantly with lisinopril [lisinopril:drug_interactions:1]. Additionally, spironolactone labeling notes that serum potassium levels should be checked when ACE inhibitor therapy (such as lisinopril) is altered in patients receiving spironolactone [spironolactone:drug_interactions:1], and lisinopril labeling recommends monitoring the patient's serum potassium frequently if concomitant use is indicated [lisinopril:drug_interactions:1].",
    "citations": [
     "lisinopril:drug_interactions:1",
     "spironolactone:drug_interactions:1"
@@ -3532,9 +3522,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.048299997928552,
-    "generate_ms": 2747.175699998479,
-    "total_ms": 2753.2239999964077
+    "retrieve_ms": 9.506500005954877,
+    "generate_ms": 7678.109199994651,
+    "total_ms": 7687.615700000606
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3546,9 +3536,10 @@
   "graphrag:s4": {
    "mode": "graphrag",
    "question": "What is the risk of combining lisinopril with spironolactone?",
-   "text": "Use with caution / monitor.\n\nCombining lisinopril (an ACE inhibitor) with spironolactone (a potassium-sparing diuretic) increases the risk of hyperkalemia because potassium-sparing diuretics can elevate potassium levels [lisinopril:drug_interactions:1]. Therefore, if concomitant use is indicated, the patient's serum potassium should be monitored frequently [lisinopril:drug_interactions:1].",
+   "text": "Use with caution / monitor [lisinopril:drug_interactions:1].\n\nPotassium-sparing diuretics such as spironolactone can increase the risk of hyperkalemia when used concomitantly with lisinopril [lisinopril:drug_interactions:1]. ACE inhibitors and potassium-sparing agents both affect potassium levels, and combining them requires frequent monitoring of the patient's serum potassium [lisinopril:drug_interactions:1, spironolactone:drug_interactions:1].",
    "citations": [
-    "lisinopril:drug_interactions:1"
+    "lisinopril:drug_interactions:1",
+    "spironolactone:drug_interactions:1"
    ],
    "path_nodes": [
     "ace inhibitor",
@@ -3829,11 +3820,11 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 45.03860000113491,
-    "generate_ms": 1613.1471999979112,
-    "total_ms": 1658.1857999990461
+    "retrieve_ms": 83.32439999503549,
+    "generate_ms": 7128.83249999868,
+    "total_ms": 7212.156899993715
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -3843,9 +3834,10 @@
   "cached_first:s4": {
    "mode": "cached",
    "question": "What is the risk of combining lisinopril with spironolactone?",
-   "text": "Use with caution / monitor.\n\nCombining lisinopril (an ACE inhibitor) with spironolactone (a potassium-sparing diuretic) increases the risk of hyperkalemia because potassium-sparing diuretics can elevate potassium levels [lisinopril:drug_interactions:1]. Therefore, if concomitant use is indicated, the patient's serum potassium should be monitored frequently [lisinopril:drug_interactions:1].",
+   "text": "Use with caution / monitor [lisinopril:drug_interactions:1].\n\nPotassium-sparing diuretics such as spironolactone can increase the risk of hyperkalemia when used concomitantly with lisinopril [lisinopril:drug_interactions:1]. ACE inhibitors and potassium-sparing agents both affect potassium levels, and combining them requires frequent monitoring of the patient's serum potassium [lisinopril:drug_interactions:1, spironolactone:drug_interactions:1].",
    "citations": [
-    "lisinopril:drug_interactions:1"
+    "lisinopril:drug_interactions:1",
+    "spironolactone:drug_interactions:1"
    ],
    "path_nodes": [
     "ace inhibitor",
@@ -4126,10 +4118,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 29.75950000109151,
-    "generate_ms": 1613.1471999979112,
-    "total_ms": 1674.6206999960123,
-    "lookup_ms": 31.713999997009523
+    "retrieve_ms": 44.500299998617265,
+    "generate_ms": 7128.83249999868,
+    "total_ms": 7241.847399993276,
+    "lookup_ms": 68.51459999597864
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4141,7 +4133,7 @@
   "vanilla:s5": {
    "mode": "vanilla",
    "question": "Does taking ibuprofen with prednisone increase any risk?",
-   "text": "Use with caution / monitor.\n\nThe concomitant use of nonsteroidal anti-inflammatory agents (NSAIDs), such as ibuprofen, and corticosteroids increases the risk of gastrointestinal side effects, including gastrointestinal bleeding [prednisone:drug_interactions:5, ibuprofen:warnings:8]. Concomitant use of oral corticosteroids is specifically noted as a factor that increases the risk of GI bleeding in patients treated with NSAIDs [ibuprofen:warnings:8].",
+   "text": "Use with caution / monitor\n\nThe concomitant use of nonsteroidal anti-inflammatory agents (such as ibuprofen) and corticosteroids (such as prednisone) increases the risk of gastrointestinal side effects, including a substantially increased risk of gastrointestinal bleeding [prednisone:drug_interactions:5, ibuprofen:warnings:8]. Patients with a prior history of peptic ulcer disease or gastrointestinal bleeding are at an even greater risk when these agents are combined [ibuprofen:warnings:8].",
    "citations": [
     "prednisone:drug_interactions:5",
     "ibuprofen:warnings:8"
@@ -4150,9 +4142,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.2250999981188215,
-    "generate_ms": 1529.752100002952,
-    "total_ms": 1535.9772000010707
+    "retrieve_ms": 7.731199999398086,
+    "generate_ms": 11606.007199996384,
+    "total_ms": 11613.738399995782
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4164,7 +4156,7 @@
   "graphrag:s5": {
    "mode": "graphrag",
    "question": "Does taking ibuprofen with prednisone increase any risk?",
-   "text": "Use with caution / monitor.\n\nTaking nonsteroidal anti-inflammatory drugs (NSAIDs) such as ibuprofen concurrently with corticosteroids like prednisone increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5]. The provided context indicates that ibuprofen belongs to the class of NSAIDs [ibuprofen:clinical_pharmacology:0] and that concomitant use of NSAIDs and corticosteroids leads to this heightened gastrointestinal risk [prednisone:drug_interactions:5].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs), such as ibuprofen, and corticosteroids, such as prednisone, increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5]. Ibuprofen belongs to the NSAIDs class [ibuprofen:clinical_pharmacology:0], and the prednisone label specifically notes that combining NSAIDs with corticosteroids leads to this increased gastrointestinal risk [prednisone:drug_interactions:5].",
    "citations": [
     "prednisone:drug_interactions:5",
     "ibuprofen:clinical_pharmacology:0"
@@ -4222,11 +4214,11 @@
     "prednisone"
    ],
    "timings": {
-    "retrieve_ms": 51.291300005686935,
-    "generate_ms": 2021.3269000014407,
-    "total_ms": 2072.6182000071276
+    "retrieve_ms": 56.087699995259754,
+    "generate_ms": 11454.616199996963,
+    "total_ms": 11510.703899992222
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -4236,7 +4228,7 @@
   "cached_first:s5": {
    "mode": "cached",
    "question": "Does taking ibuprofen with prednisone increase any risk?",
-   "text": "Use with caution / monitor.\n\nTaking nonsteroidal anti-inflammatory drugs (NSAIDs) such as ibuprofen concurrently with corticosteroids like prednisone increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5]. The provided context indicates that ibuprofen belongs to the class of NSAIDs [ibuprofen:clinical_pharmacology:0] and that concomitant use of NSAIDs and corticosteroids leads to this heightened gastrointestinal risk [prednisone:drug_interactions:5].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs), such as ibuprofen, and corticosteroids, such as prednisone, increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5]. Ibuprofen belongs to the NSAIDs class [ibuprofen:clinical_pharmacology:0], and the prednisone label specifically notes that combining NSAIDs with corticosteroids leads to this increased gastrointestinal risk [prednisone:drug_interactions:5].",
    "citations": [
     "prednisone:drug_interactions:5",
     "ibuprofen:clinical_pharmacology:0"
@@ -4294,10 +4286,10 @@
     "prednisone"
    ],
    "timings": {
-    "retrieve_ms": 27.20940000290284,
-    "generate_ms": 2021.3269000014407,
-    "total_ms": 2082.0883000051253,
-    "lookup_ms": 33.552000000781845
+    "retrieve_ms": 42.36920000403188,
+    "generate_ms": 11454.616199996963,
+    "total_ms": 11549.375800001144,
+    "lookup_ms": 52.390400000149384
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4309,7 +4301,7 @@
   "vanilla:s6": {
    "mode": "vanilla",
    "question": "Can omeprazole affect levothyroxine?",
-   "text": "Use with caution / monitor.\n\nProton pump inhibitors like omeprazole can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:15]. Because gastric acidity is required for adequate absorption of levothyroxine, this interaction can reduce its absorption [levothyroxine:drug_interactions:15]. Patients should be monitored appropriately or administered the drugs at least 4 hours apart [levothyroxine:drug_interactions:15, levothyroxine:drug_interactions:2].",
+   "text": "- Use with caution / monitor\n- Proton pump inhibitors, such as omeprazole, can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:15]. Because gastric acidity is required for adequate absorption of levothyroxine, this interaction can reduce its absorption [levothyroxine:drug_interactions:15]. Patients should be monitored appropriately or the drugs should be administered at least 4 hours apart [levothyroxine:drug_interactions:15, levothyroxine:drug_interactions:2].",
    "citations": [
     "levothyroxine:drug_interactions:15",
     "levothyroxine:drug_interactions:2"
@@ -4318,9 +4310,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.076899997424334,
-    "generate_ms": 1529.6594999999797,
-    "total_ms": 1535.736399997404
+    "retrieve_ms": 8.376600002520718,
+    "generate_ms": 12586.513499998546,
+    "total_ms": 12594.890100001066
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4332,10 +4324,8 @@
   "graphrag:s6": {
    "mode": "graphrag",
    "question": "Can omeprazole affect levothyroxine?",
-   "text": "Use with caution / monitor.\n\nOmeprazole belongs to the class of proton pump inhibitors [clarithromycin:drug_interactions:11, omeprazole:contraindications:1], which can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is essential for the adequate absorption of levothyroxine, proton pump inhibitors may reduce its absorption [levothyroxine:drug_interactions:2]. It is recommended to administer levothyroxine at least 4 hours prior to these drugs or to monitor TSH levels appropriately [levothyroxine:drug_interactions:2].",
+   "text": "Use with caution / monitor.\n\nProton pump inhibitors, including omeprazole, can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is required for the adequate absorption of levothyroxine, concomitant use may reduce its absorption [levothyroxine:drug_interactions:2]. Patients should be monitored appropriately, or levothyroxine should be administered at least 4 hours prior to these drugs [levothyroxine:drug_interactions:2].",
    "citations": [
-    "clarithromycin:drug_interactions:11",
-    "omeprazole:contraindications:1",
     "levothyroxine:drug_interactions:2"
    ],
    "path_nodes": [
@@ -4374,11 +4364,11 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 46.6426000057254,
-    "generate_ms": 2120.1151000059326,
-    "total_ms": 2166.757700011658
+    "retrieve_ms": 57.966700005636085,
+    "generate_ms": 2707.643100002315,
+    "total_ms": 2765.609800007951
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -4388,10 +4378,8 @@
   "cached_first:s6": {
    "mode": "cached",
    "question": "Can omeprazole affect levothyroxine?",
-   "text": "Use with caution / monitor.\n\nOmeprazole belongs to the class of proton pump inhibitors [clarithromycin:drug_interactions:11, omeprazole:contraindications:1], which can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is essential for the adequate absorption of levothyroxine, proton pump inhibitors may reduce its absorption [levothyroxine:drug_interactions:2]. It is recommended to administer levothyroxine at least 4 hours prior to these drugs or to monitor TSH levels appropriately [levothyroxine:drug_interactions:2].",
+   "text": "Use with caution / monitor.\n\nProton pump inhibitors, including omeprazole, can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is required for the adequate absorption of levothyroxine, concomitant use may reduce its absorption [levothyroxine:drug_interactions:2]. Patients should be monitored appropriately, or levothyroxine should be administered at least 4 hours prior to these drugs [levothyroxine:drug_interactions:2].",
    "citations": [
-    "clarithromycin:drug_interactions:11",
-    "omeprazole:contraindications:1",
     "levothyroxine:drug_interactions:2"
    ],
    "path_nodes": [
@@ -4430,10 +4418,10 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 29.86520000558812,
-    "generate_ms": 2120.1151000059326,
-    "total_ms": 2181.544400009443,
-    "lookup_ms": 31.564099997922312
+    "retrieve_ms": 43.57549999986077,
+    "generate_ms": 2707.643100002315,
+    "total_ms": 2801.639900004375,
+    "lookup_ms": 50.42130000219913
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4445,20 +4433,20 @@
   "vanilla:c1": {
    "mode": "vanilla",
    "question": "Can sildenafil be used by a patient taking nitroglycerin?",
-   "text": "Contraindicated [nitroglycerin:contraindications:0].\n\nSildenafil is a PDE-5 inhibitor that affects the nitric oxide/cGMP pathway, and its concurrent use with organic nitrates like nitroglycerin has been shown to potentiate hypotensive effects [nitroglycerin:drug_interactions:0, sildenafil:drug_interactions:1]. Combining these medications can lead to severe hypotension, syncope, or myocardial ischemia, and use within a few days of one another is not recommended [nitroglycerin:drug_interactions:0, nitroglycerin:contraindications:0]. Therefore, administration of sildenafil to patients using nitrates in any form is contraindicated [sildenafil:contraindications:0].",
+   "text": "- Contraindicated\n- Sildenafil is a phosphodiesterase type 5 (PDE-5) inhibitor that affects the nitric oxide/cGMP pathway, and its co-administration with organic nitrates like nitroglycerin has been shown to potentiate hypotensive effects [nitroglycerin:drug_interactions:0, sildenafil:drug_interactions:1]. This combination can lead to severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, the use of sildenafil is contraindicated in patients using nitroglycerin [nitroglycerin:contraindications:0, sildenafil:contraindications:0].",
    "citations": [
-    "nitroglycerin:contraindications:0",
     "nitroglycerin:drug_interactions:0",
     "sildenafil:drug_interactions:1",
+    "nitroglycerin:contraindications:0",
     "sildenafil:contraindications:0"
    ],
    "path_nodes": [],
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.992600003082771,
-    "generate_ms": 1707.175899999129,
-    "total_ms": 1713.1685000022117
+    "retrieve_ms": 10.637800005497411,
+    "generate_ms": 3581.9919999994454,
+    "total_ms": 3592.629800004943
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4470,10 +4458,11 @@
   "graphrag:c1": {
    "mode": "graphrag",
    "question": "Can sildenafil be used by a patient taking nitroglycerin?",
-   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Sildenafil and other PDE-5 inhibitors are contraindicated in patients taking nitroglycerin or other organic nitrates because they potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0]. Concomitant use can lead to severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by a patient taking nitroglycerin [nitroglycerin:contraindications:0].",
+   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Nitroglycerin and other organic nitrates are contraindicated with PDE-5 inhibitors like sildenafil because sildenafil can potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0, sildenafil:drug_interactions:1]. Concomitant use can result in severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by patients taking nitroglycerin [nitroglycerin:contraindications:0, sildenafil:drug_interactions:1].",
    "citations": [
     "nitroglycerin:contraindications:0",
-    "nitroglycerin:drug_interactions:0"
+    "nitroglycerin:drug_interactions:0",
+    "sildenafil:drug_interactions:1"
    ],
    "path_nodes": [
     "alcohol",
@@ -4747,11 +4736,11 @@
     "sildenafil"
    ],
    "timings": {
-    "retrieve_ms": 38.01430000021355,
-    "generate_ms": 2395.405800001754,
-    "total_ms": 2433.4201000019675
+    "retrieve_ms": 64.17680000595283,
+    "generate_ms": 9951.946100001805,
+    "total_ms": 10016.122900007758
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
+   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
    "cache_hit": false,
    "cache_score": null,
@@ -4761,10 +4750,11 @@
   "cached_first:c1": {
    "mode": "cached",
    "question": "Can sildenafil be used by a patient taking nitroglycerin?",
-   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Sildenafil and other PDE-5 inhibitors are contraindicated in patients taking nitroglycerin or other organic nitrates because they potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0]. Concomitant use can lead to severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by a patient taking nitroglycerin [nitroglycerin:contraindications:0].",
+   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Nitroglycerin and other organic nitrates are contraindicated with PDE-5 inhibitors like sildenafil because sildenafil can potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0, sildenafil:drug_interactions:1]. Concomitant use can result in severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by patients taking nitroglycerin [nitroglycerin:contraindications:0, sildenafil:drug_interactions:1].",
    "citations": [
     "nitroglycerin:contraindications:0",
-    "nitroglycerin:drug_interactions:0"
+    "nitroglycerin:drug_interactions:0",
+    "sildenafil:drug_interactions:1"
    ],
    "path_nodes": [
     "alcohol",
@@ -5038,10 +5028,10 @@
     "sildenafil"
    ],
    "timings": {
-    "retrieve_ms": 30.696900001203176,
-    "generate_ms": 2395.405800001754,
-    "total_ms": 2457.0269000032567,
-    "lookup_ms": 30.924200000299606
+    "retrieve_ms": 43.08010000386275,
+    "generate_ms": 9951.946100001805,
+    "total_ms": 10048.808900006406,
+    "lookup_ms": 53.78270000073826
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5053,7 +5043,7 @@
   "vanilla:c2": {
    "mode": "vanilla",
    "question": "When is metformin contraindicated because of kidney function?",
-   "text": "Contraindicated.\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, such as those with serum creatinine levels ≥1.5 mg/dL in males or ≥1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Decreased renal function prolongs the plasma and blood half-life of metformin and decreases its renal clearance [metformin:clinical_pharmacology:5], which increases the risk of drug accumulation and lactic acidosis [metformin:warnings:2].",
+   "text": "Contraindicated.\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels $\\ge 1.5$ mg/dL in males, $\\ge 1.4$ mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. In patients with decreased renal function, the plasma half-life of metformin is prolonged and renal clearance is decreased, leading to drug accumulation [metformin:clinical_pharmacology:5]. This accumulation increases the risk of developing serious conditions such as lactic acidosis [metformin:warnings:2].",
    "citations": [
     "metformin:contraindications:0",
     "metformin:clinical_pharmacology:5",
@@ -5063,9 +5053,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.46460000280058,
-    "generate_ms": 1692.1744999999646,
-    "total_ms": 1698.6391000027652
+    "retrieve_ms": 7.820600003469735,
+    "generate_ms": 10227.145900003961,
+    "total_ms": 10234.966500007431
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5077,7 +5067,7 @@
   "graphrag:c2": {
    "mode": "graphrag",
    "question": "When is metformin contraindicated because of kidney function?",
-   "text": "Contraindicated\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels $\\ge$1.5 mg/dL in males, $\\ge$1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Such renal impairment can result from conditions like cardiovascular collapse, acute myocardial infarction, and septicemia [metformin:contraindications:0].",
+   "text": "Contraindicated\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels ≥1.5 mg/dL in males, ≥1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Such renal impairment may also result from conditions such as cardiovascular collapse (shock), acute myocardial infarction, and septicemia [metformin:contraindications:0].",
    "citations": [
     "metformin:contraindications:0"
    ],
@@ -5171,9 +5161,9 @@
     "metformin"
    ],
    "timings": {
-    "retrieve_ms": 44.111199997132644,
-    "generate_ms": 1599.8063000006368,
-    "total_ms": 1643.9174999977695
+    "retrieve_ms": 52.651899997727014,
+    "generate_ms": 17142.414500005543,
+    "total_ms": 17195.06640000327
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5185,7 +5175,7 @@
   "cached_first:c2": {
    "mode": "cached",
    "question": "When is metformin contraindicated because of kidney function?",
-   "text": "Contraindicated\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels $\\ge$1.5 mg/dL in males, $\\ge$1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Such renal impairment can result from conditions like cardiovascular collapse, acute myocardial infarction, and septicemia [metformin:contraindications:0].",
+   "text": "Contraindicated\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels ≥1.5 mg/dL in males, ≥1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Such renal impairment may also result from conditions such as cardiovascular collapse (shock), acute myocardial infarction, and septicemia [metformin:contraindications:0].",
    "citations": [
     "metformin:contraindications:0"
    ],
@@ -5279,10 +5269,10 @@
     "metformin"
    ],
    "timings": {
-    "retrieve_ms": 32.74900000542402,
-    "generate_ms": 1599.8063000006368,
-    "total_ms": 1677.6207000075374,
-    "lookup_ms": 45.06540000147652
+    "retrieve_ms": 39.465100002416875,
+    "generate_ms": 17142.414500005543,
+    "total_ms": 17236.80690000765,
+    "lookup_ms": 54.92729999969015
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5294,7 +5284,7 @@
   "vanilla:c3": {
    "mode": "vanilla",
    "question": "Is lisinopril contraindicated in patients with a history of angioedema?",
-   "text": "Contraindicated.\n\nLisinopril is contraindicated in patients with a history of angioedema, including hereditary, idiopathic, or previous ACE inhibitor-related angioedema [lisinopril:contraindications:0]. Patients with a history of angioedema unrelated to ACE inhibitor therapy may also be at an increased risk of developing angioedema while receiving lisinopril [lisinopril:warnings_and_cautions:2].",
+   "text": "- Contraindicated\n- Lisinopril is contraindicated in patients with a history of hereditary, idiopathic, or ACE inhibitor-induced angioedema [lisinopril:contraindications:0]. Patients with a history of angioedema may be at an increased risk for recurrent angioedema while receiving ACE inhibitors like lisinopril [lisinopril:contraindications:0, lisinopril:warnings_and_cautions:2].",
    "citations": [
     "lisinopril:contraindications:0",
     "lisinopril:warnings_and_cautions:2"
@@ -5303,9 +5293,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.133900002168957,
-    "generate_ms": 1550.474600000598,
-    "total_ms": 1556.608500002767
+    "retrieve_ms": 9.910900000249967,
+    "generate_ms": 2279.9406000049203,
+    "total_ms": 2289.8515000051702
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5317,7 +5307,7 @@
   "graphrag:c3": {
    "mode": "graphrag",
    "question": "Is lisinopril contraindicated in patients with a history of angioedema?",
-   "text": "Contraindicated [lisinopril:contraindications:0].\n\nLisinopril is contraindicated in patients with a history of angioedema, including those with a history of hereditary, idiopathic, or ACE inhibitor-related angioedema [lisinopril:contraindications:0]. The context states that lisinopril should not be used in these patients due to the risk of triggering severe angioedema reactions [lisinopril:contraindications:0].",
+   "text": "Contraindicated.\n\nLisinopril is contraindicated in patients with a history of angioedema or hypersensitivity related to previous treatment with an angiotensin-converting enzyme (ACE) inhibitor [lisinopril:contraindications:0]. Additionally, it is contraindicated in patients with hereditary or idiopathic angioedema [lisinopril:contraindications:0].",
    "citations": [
     "lisinopril:contraindications:0"
    ],
@@ -5599,9 +5589,9 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 36.56710000359453,
-    "generate_ms": 1613.2367000027443,
-    "total_ms": 1649.8038000063389
+    "retrieve_ms": 91.30249999725493,
+    "generate_ms": 24851.122300002316,
+    "total_ms": 24942.42479999957
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5613,7 +5603,7 @@
   "cached_first:c3": {
    "mode": "cached",
    "question": "Is lisinopril contraindicated in patients with a history of angioedema?",
-   "text": "Contraindicated [lisinopril:contraindications:0].\n\nLisinopril is contraindicated in patients with a history of angioedema, including those with a history of hereditary, idiopathic, or ACE inhibitor-related angioedema [lisinopril:contraindications:0]. The context states that lisinopril should not be used in these patients due to the risk of triggering severe angioedema reactions [lisinopril:contraindications:0].",
+   "text": "Contraindicated.\n\nLisinopril is contraindicated in patients with a history of angioedema or hypersensitivity related to previous treatment with an angiotensin-converting enzyme (ACE) inhibitor [lisinopril:contraindications:0]. Additionally, it is contraindicated in patients with hereditary or idiopathic angioedema [lisinopril:contraindications:0].",
    "citations": [
     "lisinopril:contraindications:0"
    ],
@@ -5895,10 +5885,10 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 37.6105000032112,
-    "generate_ms": 1613.2367000027443,
-    "total_ms": 1686.8176000061794,
-    "lookup_ms": 35.97040000022389
+    "retrieve_ms": 45.68160000053467,
+    "generate_ms": 24851.122300002316,
+    "total_ms": 24958.53039999929,
+    "lookup_ms": 61.72649999643909
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5910,7 +5900,7 @@
   "vanilla:c4": {
    "mode": "vanilla",
    "question": "Which patients must not take spironolactone?",
-   "text": "Contraindicated.\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison’s disease, or those concurrently using eplerenone [spironolactone:contraindications:0].",
+   "text": "Contraindicated\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison’s disease, or those who are concomitantly using eplerenone [spironolactone:contraindications:0]. The product label explicitly restricts use in patients presenting with these specific conditions [spironolactone:contraindications:0].",
    "citations": [
     "spironolactone:contraindications:0"
    ],
@@ -5918,9 +5908,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 5.246699998679105,
-    "generate_ms": 2466.654699997889,
-    "total_ms": 2471.901399996568
+    "retrieve_ms": 34.85490000457503,
+    "generate_ms": 17279.41469999496,
+    "total_ms": 17314.269599999534
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5932,7 +5922,7 @@
   "graphrag:c4": {
    "mode": "graphrag",
    "question": "Which patients must not take spironolactone?",
-   "text": "Contraindicated.\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison's disease, or those undergoing concomitant treatment with eplerenone [spironolactone:contraindications:0]. These conditions present severe clinical risks, such as worsening electrolyte imbalances or dangerous drug interactions associated with the drug's mechanism as an aldosterone antagonist.",
+   "text": "Contraindicated.\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison's disease, or those receiving concomitant treatment with eplerenone [spironolactone:contraindications:0]. These conditions present severe risks of worsening electrolyte imbalances or adverse drug interactions that make the use of spironolactone unsafe.",
    "citations": [
     "spironolactone:contraindications:0"
    ],
@@ -6210,9 +6200,9 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 36.32659999857424,
-    "generate_ms": 1490.644900000916,
-    "total_ms": 1526.9714999994903
+    "retrieve_ms": 63.40089999866905,
+    "generate_ms": 25244.40219999815,
+    "total_ms": 25307.803099996818
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -6224,7 +6214,7 @@
   "cached_first:c4": {
    "mode": "cached",
    "question": "Which patients must not take spironolactone?",
-   "text": "Contraindicated.\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison's disease, or those undergoing concomitant treatment with eplerenone [spironolactone:contraindications:0]. These conditions present severe clinical risks, such as worsening electrolyte imbalances or dangerous drug interactions associated with the drug's mechanism as an aldosterone antagonist.",
+   "text": "Contraindicated.\n\nSpironolactone is contraindicated in patients with hyperkalemia, Addison's disease, or those receiving concomitant treatment with eplerenone [spironolactone:contraindications:0]. These conditions present severe risks of worsening electrolyte imbalances or adverse drug interactions that make the use of spironolactone unsafe.",
    "citations": [
     "spironolactone:contraindications:0"
    ],
@@ -6502,10 +6492,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 27.937200000451412,
-    "generate_ms": 1490.644900000916,
-    "total_ms": 1560.9212000017578,
-    "lookup_ms": 42.33910000039032
+    "retrieve_ms": 61.7497999992338,
+    "generate_ms": 25244.40219999815,
+    "total_ms": 25359.433999998146,
+    "lookup_ms": 53.28200000076322
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -6517,7 +6507,7 @@
   "cached_para:m1": {
    "mode": "cached",
    "question": "Is it safe to take Biaxin while on Zocor?",
-   "text": "- Contraindicated [clarithromycin:contraindications:2].\n- Concomitant administration of clarithromycin with simvastatin is contraindicated because simvastatin is extensively metabolized by CYP3A4, an enzyme that clarithromycin inhibits [clarithromycin:contraindications:2, clarithromycin:drug_interactions:0]. This inhibition leads to elevated plasma concentrations of simvastatin [clarithromycin:warnings_and_cautions:8], which significantly increases the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2].",
+   "text": "Contraindicated [clarithromycin:contraindications:2].\n\nClarithromycin is a strong inhibitor of the CYP3A enzyme [clarithromycin:drug_interactions:0], while simvastatin is extensively metabolized by CYP3A4 [clarithromycin:contraindications:2]. Concomitant administration increases simvastatin plasma concentrations, which significantly raises the risk of myopathy and rhabdomyolysis [clarithromycin:contraindications:2]. Therefore, therapy with simvastatin must be suspended if treatment with clarithromycin cannot be avoided [clarithromycin:warnings_and_cautions:8].",
    "citations": [
     "clarithromycin:contraindications:2",
     "clarithromycin:drug_interactions:0",
@@ -6575,8 +6565,8 @@
     "simvastatin"
    ],
    "timings": {
-    "lookup_ms": 35.68250000535045,
-    "total_ms": 35.68250000535045
+    "lookup_ms": 75.85329999710666,
+    "total_ms": 75.85329999710666
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6588,13 +6578,13 @@
   "cached_para:m2": {
    "mode": "cached",
    "question": "My patient on simvastatin needs ketoconazole for a fungal infection - is that a problem?",
-   "text": "Contraindicated [ketoconazole:contraindications:1].\n\nKetoconazole is contraindicated with simvastatin because ketoconazole is a potent CYP3A4 inhibitor [ketoconazole:drug_interactions:0], and simvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2]. Coadministration can increase plasma concentrations of simvastatin, which raises the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18, simvastatin:warnings_and_cautions:1].",
+   "text": "Contraindicated [ketoconazole:contraindications:1].\n\nKetoconazole is a potent CYP3A4 inhibitor [ketoconazole:drug_interactions:0], and simvastatin is metabolized by CYP3A4 [simvastatin:drug_interactions:2]. Coadministration can lead to increased plasma concentrations of simvastatin, which significantly raises the risk of skeletal muscle toxicity, including myopathy and rhabdomyolysis [ketoconazole:drug_interactions:18]. Consequently, the label states that the concomitant use of simvastatin with ketoconazole is contraindicated [ketoconazole:contraindications:2].",
    "citations": [
     "ketoconazole:contraindications:1",
     "ketoconazole:drug_interactions:0",
     "simvastatin:drug_interactions:2",
     "ketoconazole:drug_interactions:18",
-    "simvastatin:warnings_and_cautions:1"
+    "ketoconazole:contraindications:2"
    ],
    "path_nodes": [
     "cyp3a4",
@@ -6698,26 +6688,24 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 26.191600001766346,
-    "generate_ms": 2113.187900002231,
-    "total_ms": 2190.4792999994243,
-    "lookup_ms": 51.09979999542702
+    "lookup_ms": 95.6406999976025,
+    "total_ms": 95.6406999976025
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
-   "llm_calls": 1,
-   "cache_hit": false,
+   "provider": "semantic cache",
+   "llm_calls": 0,
+   "cache_hit": true,
    "cache_score": 0.8805293440818787,
    "blocked_by_key": null,
-   "served_from": null
+   "served_from": "Can simvastatin be used together with ketoconazole?"
   },
   "cached_para:m3": {
    "mode": "cached",
    "question": "What happens to INR if someone on Coumadin takes Diflucan?",
-   "text": "Use with caution / monitor.\n\nFluconazole is an inhibitor of CYP enzymes such as CYP2C9, CYP2C19, and CYP3A4 [fluconazole:drug_interactions:19], which are responsible for metabolizing warfarin [warfarin:drug_interactions:2]. Consequently, coadministration can increase warfarin exposure and lead to an increased prothrombin time response or enhanced anticoagulant effect [warfarin:drug_interactions:2, fluconazole:clinical_pharmacology:19]. Patients taking this combination should be carefully monitored for adverse reactions and changes in prothrombin time [fluconazole:drug_interactions:19].",
+   "text": "Use with caution / monitor.\n\nFluconazole inhibits CYP enzymes (such as CYP2C9, CYP2C19, and CYP3A4) which are involved in the metabolism of warfarin [fluconazole:drug_interactions:19, warfarin:drug_interactions:2]. Inhibition of these pathways increases the exposure and plasma concentration of warfarin, potentially enhancing its effects (such as increasing prothrombin time/INR and the risk of bleeding) [warfarin:drug_interactions:2, fluconazole:drug_interactions:6]. Patients taking this combination should be carefully monitored for adverse reactions [fluconazole:drug_interactions:19].",
    "citations": [
     "fluconazole:drug_interactions:19",
     "warfarin:drug_interactions:2",
-    "fluconazole:clinical_pharmacology:19"
+    "fluconazole:drug_interactions:6"
    ],
    "path_nodes": [
     "cyp2c19",
@@ -6806,8 +6794,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 37.653100000170525,
-    "total_ms": 37.653100000170525
+    "lookup_ms": 49.8963000063668,
+    "total_ms": 49.8963000063668
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6819,9 +6807,8 @@
   "cached_para:m4": {
    "mode": "cached",
    "question": "Does adding Cordarone affect a patient's warfarin therapy?",
-   "text": "Use with caution / monitor.\n\nAmiodarone interacts with warfarin [amiodarone:drug_interactions:4], leading to a potentiation of the anticoagulant response that can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes (such as CYP2C9, CYP1A2, and CYP3A4) [amiodarone:drug_interactions:0] that are responsible for metabolizing warfarin [warfarin:drug_interactions:2], leading to increased exposure and higher INR levels [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, when these drugs are co-administered, the anticoagulant dose should be reduced and the INR monitored closely [amiodarone:drug_interactions:5].",
+   "text": "Use with caution / monitor [amiodarone:drug_interactions:5].\n\nAmiodarone potentiates the response to warfarin-type anticoagulants, which can result in serious or fatal bleeding [amiodarone:drug_interactions:5]. This interaction occurs because amiodarone inhibits CYP enzymes such as CYP2C9, CYP1A2, and CYP3A [amiodarone:drug_interactions:0], which are involved in metabolizing warfarin [warfarin:drug_interactions:2], thereby increasing warfarin exposure and INR [warfarin:drug_interactions:2, amiodarone:drug_interactions:5]. Consequently, the label recommends reducing the anticoagulant dose by one-third to one-half and monitoring the INR closely [amiodarone:drug_interactions:5].",
    "citations": [
-    "amiodarone:drug_interactions:4",
     "amiodarone:drug_interactions:5",
     "amiodarone:drug_interactions:0",
     "warfarin:drug_interactions:2"
@@ -6921,8 +6908,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 35.61400000035064,
-    "total_ms": 35.61400000035064
+    "lookup_ms": 69.08259999909205,
+    "total_ms": 69.08259999909205
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6934,7 +6921,7 @@
   "cached_para:m5": {
    "mode": "cached",
    "question": "Can Plavix be taken with Prilosec?",
-   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of CYP2C19 [omeprazole:clinical_pharmacology:8], the cytochrome P450 enzyme responsible for converting the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a marked decrease in antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative antiplatelet therapies should be considered [omeprazole:drug_interactions:4].",
+   "text": "Avoid combination.\n\nOmeprazole is an inhibitor of the CYP2C19 enzyme [omeprazole:clinical_pharmacology:8], which is required to convert the prodrug clopidogrel into its active metabolite [clopidogrel:boxed_warning:0, omeprazole:warnings_and_cautions:9]. Concomitant use of omeprazole significantly reduces the plasma concentrations of clopidogrel's active metabolite, leading to a reduction in platelet inhibition and antiplatelet activity [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4]. Therefore, concurrent administration should be avoided, and alternative anti-platelet therapies considered [clopidogrel:drug_interactions:2, omeprazole:drug_interactions:4].",
    "citations": [
     "omeprazole:clinical_pharmacology:8",
     "clopidogrel:boxed_warning:0",
@@ -7011,8 +6998,8 @@
     "omeprazole"
    ],
    "timings": {
-    "lookup_ms": 32.23799999977928,
-    "total_ms": 32.23799999977928
+    "lookup_ms": 48.26429999957327,
+    "total_ms": 48.26429999957327
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7024,7 +7011,7 @@
   "cached_para:m6": {
    "mode": "cached",
    "question": "Is there a risk in combining Zoloft and Ultram?",
-   "text": "Avoid combination.\n\nConcomitant use of sertraline (an SSRI) and tramadol increases the risk of developing a potentially life-threatening condition known as serotonin syndrome [sertraline:warnings:9, tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of sertraline and tramadol increases the risk of a potentially life-threatening serotonin syndrome because both drugs affect the serotonergic neurotransmitter system [sertraline:warnings:9, tramadol:drug_interactions:9]. If this combination is warranted, patients should be frequently evaluated, particularly during treatment initiation and dose adjustments [tramadol:drug_interactions:9]. Additionally, sertraline inhibits the CYP2D6 enzyme [sertraline:drug_interactions:8], which is involved in the metabolic breakdown of tramadol [tramadol:clinical_pharmacology:13].",
    "citations": [
     "sertraline:warnings:9",
     "tramadol:drug_interactions:9",
@@ -7118,8 +7105,8 @@
     "tramadol"
    ],
    "timings": {
-    "lookup_ms": 38.25429999415064,
-    "total_ms": 38.25429999415064
+    "lookup_ms": 64.09249999705935,
+    "total_ms": 64.09249999705935
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7131,7 +7118,7 @@
   "cached_para:m7": {
    "mode": "cached",
    "question": "Why might tramadol work less well and be riskier in a patient taking Prozac?",
-   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is responsible for the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can interact with tramadol [tramadol:drug_interactions:2], and patients should be followed closely for an increased risk of serious adverse events such as seizures and serotonin syndrome [tramadol:drug_interactions:2].",
+   "text": "Use with caution / monitor [tramadol:drug_interactions:2].\n\nFluoxetine is a potent inhibitor of the CYP2D6 enzyme pathway [fluoxetine:drug_interactions:0], which is involved in the metabolism of tramadol [tramadol:clinical_pharmacology:13]. Concomitant use with a CYP2D6 inhibitor like fluoxetine can require monitoring and adjusting intervals for adverse reactions, including seizures and serotonin syndrome [tramadol:drug_interactions:2].",
    "citations": [
     "tramadol:drug_interactions:2",
     "fluoxetine:drug_interactions:0",
@@ -7232,8 +7219,8 @@
     "tramadol"
    ],
    "timings": {
-    "lookup_ms": 39.124399998399895,
-    "total_ms": 39.124399998399895
+    "lookup_ms": 49.75100000592647,
+    "total_ms": 49.75100000592647
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7245,12 +7232,10 @@
   "cached_para:m8": {
    "mode": "cached",
    "question": "What dose limit applies to Lipitor when a patient starts clarithromycin?",
-   "text": "Use with caution / monitor (Do not exceed 20 mg atorvastatin daily).\n\nClarithromycin inhibits CYP3A4 and/or transporters, which significantly increases atorvastatin plasma levels and raises the risk of adverse skeletal muscle effects such as myopathy and rhabdomyolysis [atorvastatin:drug_interactions:0, atorvastatin:drug_interactions:5, clarithromycin:warnings_and_cautions:8]. Therefore, when concomitant use with clarithromycin cannot be avoided, the daily dose of atorvastatin should not exceed 20 mg [clarithromycin:warnings_and_cautions:8, atorvastatin:drug_interactions:6].",
+   "text": "Use with caution / monitor. \n\nWhen clarithromycin is co-administered with atorvastatin, plasma levels of atorvastatin are significantly increased due to the inhibition of CYP3A4 and/or transporters [atorvastatin:drug_interactions:5]. Because of this increased exposure, the dose of atorvastatin should not exceed 20 mg daily [clarithromycin:warnings_and_cautions:8]. Exceeding this limit raises the risk of adverse skeletal muscle effects, including myopathy and rhabdomyolysis [clarithromycin:warnings_and_cautions:8].",
    "citations": [
-    "atorvastatin:drug_interactions:0",
     "atorvastatin:drug_interactions:5",
-    "clarithromycin:warnings_and_cautions:8",
-    "atorvastatin:drug_interactions:6"
+    "clarithromycin:warnings_and_cautions:8"
    ],
    "path_nodes": [
     "atorvastatin",
@@ -7345,8 +7330,8 @@
     "clarithromycin"
    ],
    "timings": {
-    "lookup_ms": 32.74849999434082,
-    "total_ms": 32.74849999434082
+    "lookup_ms": 51.51289999776054,
+    "total_ms": 51.51289999776054
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7358,7 +7343,7 @@
   "cached_para:m9": {
    "mode": "cached",
    "question": "Could starting Rifadin reduce the effect of Coumadin?",
-   "text": "Use with caution / monitor.\n\nRifampin functions as an inducer of several cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1]. Because warfarin is metabolized by these exact isozymes, coadministration with rifampin increases warfarin metabolism and decreases its systemic exposure [warfarin:drug_interactions:2]. Consequently, this lowered exposure can decrease the anticoagulant effect of warfarin [warfarin:drug_interactions:2].",
+   "text": "Use with caution / monitor\n\nRifampin is a potent inducer of cytochrome P450 enzymes, including CYP2C9, 1A2, and 3A4 [rifampin:drug_interactions:1, warfarin:drug_interactions:2]. Because warfarin is metabolized by these same isozymes, concurrent administration with rifampin increases warfarin metabolism and decreases its exposure in the body [warfarin:drug_interactions:2]. This reduction in warfarin levels has the potential to decrease its therapeutic effect and lower the INR [warfarin:drug_interactions:2].",
    "citations": [
     "rifampin:drug_interactions:1",
     "warfarin:drug_interactions:2"
@@ -7508,8 +7493,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 32.50349999871105,
-    "total_ms": 32.50349999871105
+    "lookup_ms": 48.8377000001492,
+    "total_ms": 48.8377000001492
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7521,11 +7506,11 @@
   "cached_para:m10": {
    "mode": "cached",
    "question": "Does Cordarone affect Lanoxin concentrations?",
-   "text": "Use with caution / monitor.\n\nAmiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter that metabolizes and clears digoxin [digoxin:drug_interactions:1]. Consequently, co-administration with amiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. Patients should have their serum digoxin levels measured and doses reduced by approximately 30–50% or halved when starting amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
+   "text": "Use with caution / monitor.\n\nAmiodarone increases serum digoxin concentrations by approximately 70% [digoxin:drug_interactions:1, amiodarone:drug_interactions:9]. This occurs because amiodarone inhibits P-glycoprotein (P-gp) [amiodarone:drug_interactions:0], a transporter responsible for the excretion and absorption of digoxin [digoxin:drug_interactions:1]. Consequently, it is recommended to measure serum digoxin concentrations and reduce the digoxin dose by approximately 30-50% when initiating concomitant amiodarone [digoxin:drug_interactions:1, amiodarone:drug_interactions:4].",
    "citations": [
-    "amiodarone:drug_interactions:0",
     "digoxin:drug_interactions:1",
     "amiodarone:drug_interactions:9",
+    "amiodarone:drug_interactions:0",
     "amiodarone:drug_interactions:4"
    ],
    "path_nodes": [
@@ -7580,8 +7565,8 @@
     "digoxin"
    ],
    "timings": {
-    "lookup_ms": 36.407300001883414,
-    "total_ms": 36.407300001883414
+    "lookup_ms": 46.32110000238754,
+    "total_ms": 46.32110000238754
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7593,7 +7578,7 @@
   "cached_para:s1": {
    "mode": "cached",
    "question": "Is it OK to take aspirin while on Coumadin?",
-   "text": "Use with caution / monitor.\n\nAspirin is classified as an antiplatelet agent that interacts with anticoagulants such as warfarin [warfarin:drug_interactions:6]. Taking a blood thinning (anticoagulant) drug with aspirin increases the risk and chance of severe stomach bleeding and other bleeding complications [aspirin:warnings:0].",
+   "text": "Use with caution / monitor\n\nAspirin is classified as an antiplatelet agent and interacts with anticoagulants like warfarin [warfarin:drug_interactions:6]. Taking a blood-thinning (anticoagulant) drug along with aspirin increases the risk of serious stomach bleeding and bleeding events [aspirin:warnings:0]. The provided context does not explicitly state a blanket contraindication for this specific combination, but highlights increased bleeding risks when blood thinners and antiplatelet/NSAID agents are combined [aspirin:warnings:0, warfarin:drug_interactions:6].",
    "citations": [
     "warfarin:drug_interactions:6",
     "aspirin:warnings:0"
@@ -7872,8 +7857,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 36.81549999600975,
-    "total_ms": 36.81549999600975
+    "lookup_ms": 50.406599999405444,
+    "total_ms": 50.406599999405444
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7885,7 +7870,7 @@
   "cached_para:s2": {
    "mode": "cached",
    "question": "Is Advil safe for someone taking lithium?",
-   "text": "Use with caution / monitor.\n\nConcomitant administration of ibuprofen and lithium can lead to an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2, ibuprofen:drug_interactions:3]. This effect is attributed to the inhibition of renal prostaglandin synthesis caused by ibuprofen [ibuprofen:drug_interactions:3]. Because NSAIDs may increase lithium serum concentrations, patients taking this combination should be observed carefully for signs of lithium toxicity and require frequent monitoring [lithium:drug_interactions:0, ibuprofen:drug_interactions:3].",
+   "text": "Use with caution / monitor.\n\nIbuprofen can cause an elevation of plasma lithium levels and a reduction in renal lithium clearance [ibuprofen:drug_interactions:2], with studies showing an increased mean minimum lithium concentration and decreased renal clearance due to the inhibition of renal prostaglandin synthesis [ibuprofen:drug_interactions:3]. NSAIDs like ibuprofen may increase lithium serum concentrations [lithium:drug_interactions:0], so patients taking these drugs concurrently should be observed carefully for signs of lithium toxicity [ibuprofen:drug_interactions:3], with frequent monitoring of serum lithium concentrations and necessary dosage adjustments [lithium:drug_interactions:0].",
    "citations": [
     "ibuprofen:drug_interactions:2",
     "ibuprofen:drug_interactions:3",
@@ -7935,8 +7920,8 @@
     "lithium"
    ],
    "timings": {
-    "lookup_ms": 31.510599998000544,
-    "total_ms": 31.510599998000544
+    "lookup_ms": 48.98780000075931,
+    "total_ms": 48.98780000075931
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7948,7 +7933,7 @@
   "cached_para:s3": {
    "mode": "cached",
    "question": "Can Aleve be taken by a patient on methotrexate?",
-   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. Patients should be monitored closely for methotrexate adverse reactions and toxicity if coadministration cannot be avoided [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs) like naproxen with methotrexate may increase the risk for methotrexate toxicity, such as neutropenia, thrombocytopenia, and renal dysfunction [naproxen:drug_interactions:7]. If coadministration cannot be avoided, patients should be monitored closely for methotrexate adverse reactions and toxicity [methotrexate:drug_interactions:1, naproxen:drug_interactions:7].",
    "citations": [
     "naproxen:drug_interactions:7",
     "methotrexate:drug_interactions:1"
@@ -8006,8 +7991,8 @@
     "naproxen"
    ],
    "timings": {
-    "lookup_ms": 39.644600001338404,
-    "total_ms": 39.644600001338404
+    "lookup_ms": 47.77679999824613,
+    "total_ms": 47.77679999824613
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8019,9 +8004,10 @@
   "cached_para:s4": {
    "mode": "cached",
    "question": "What's the concern with taking Zestril and Aldactone together?",
-   "text": "Use with caution / monitor.\n\nCombining lisinopril (an ACE inhibitor) with spironolactone (a potassium-sparing diuretic) increases the risk of hyperkalemia because potassium-sparing diuretics can elevate potassium levels [lisinopril:drug_interactions:1]. Therefore, if concomitant use is indicated, the patient's serum potassium should be monitored frequently [lisinopril:drug_interactions:1].",
+   "text": "Use with caution / monitor [lisinopril:drug_interactions:1].\n\nPotassium-sparing diuretics such as spironolactone can increase the risk of hyperkalemia when used concomitantly with lisinopril [lisinopril:drug_interactions:1]. ACE inhibitors and potassium-sparing agents both affect potassium levels, and combining them requires frequent monitoring of the patient's serum potassium [lisinopril:drug_interactions:1, spironolactone:drug_interactions:1].",
    "citations": [
-    "lisinopril:drug_interactions:1"
+    "lisinopril:drug_interactions:1",
+    "spironolactone:drug_interactions:1"
    ],
    "path_nodes": [
     "ace inhibitor",
@@ -8302,8 +8288,8 @@
     "spironolactone"
    ],
    "timings": {
-    "lookup_ms": 33.82489999785321,
-    "total_ms": 33.82489999785321
+    "lookup_ms": 56.29210000188323,
+    "total_ms": 56.29210000188323
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8315,13 +8301,12 @@
   "cached_para:s5": {
    "mode": "cached",
    "question": "Is there a stomach risk if Advil is combined with corticosteroids like prednisone?",
-   "text": "Use with caution / monitor.\n\nThe provided context states that ibuprofen belongs to the class of nonsteroidal anti-inflammatory agents (NSAIDs) [ibuprofen:clinical_pharmacology:0]. Concomitant use of nonsteroidal anti-inflammatory agents and corticosteroids (such as prednisone) increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5].",
+   "text": "Use with caution / monitor.\n\nConcomitant use of nonsteroidal anti-inflammatory drugs (NSAIDs), such as ibuprofen, and corticosteroids, such as prednisone, increases the risk of gastrointestinal side effects [prednisone:drug_interactions:5]. Ibuprofen belongs to the NSAIDs class [ibuprofen:clinical_pharmacology:0], and the prednisone label specifically notes that combining NSAIDs with corticosteroids leads to this increased gastrointestinal risk [prednisone:drug_interactions:5].",
    "citations": [
-    "ibuprofen:clinical_pharmacology:0",
-    "prednisone:drug_interactions:5"
+    "prednisone:drug_interactions:5",
+    "ibuprofen:clinical_pharmacology:0"
    ],
    "path_nodes": [
-    "corticosteroids",
     "diuretics",
     "ibuprofen",
     "nsaids",
@@ -8370,30 +8355,25 @@
     }
    ],
    "entities": [
-    "corticosteroids",
     "ibuprofen",
     "prednisone"
    ],
    "timings": {
-    "retrieve_ms": 27.392199997848365,
-    "generate_ms": 2225.4624999986845,
-    "total_ms": 2286.2569999924744,
-    "lookup_ms": 33.402299995941576
+    "lookup_ms": 61.85380000533769,
+    "total_ms": 61.85380000533769
    },
-   "provider": "gemini/gemini-3.5-flash-lite",
-   "llm_calls": 1,
-   "cache_hit": false,
+   "provider": "semantic cache",
+   "llm_calls": 0,
+   "cache_hit": true,
    "cache_score": 0.884426474571228,
    "blocked_by_key": null,
-   "served_from": null
+   "served_from": "Does taking ibuprofen with prednisone increase any risk?"
   },
   "cached_para:s6": {
    "mode": "cached",
    "question": "Could Prilosec reduce how well Synthroid works?",
-   "text": "Use with caution / monitor.\n\nOmeprazole belongs to the class of proton pump inhibitors [clarithromycin:drug_interactions:11, omeprazole:contraindications:1], which can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is essential for the adequate absorption of levothyroxine, proton pump inhibitors may reduce its absorption [levothyroxine:drug_interactions:2]. It is recommended to administer levothyroxine at least 4 hours prior to these drugs or to monitor TSH levels appropriately [levothyroxine:drug_interactions:2].",
+   "text": "Use with caution / monitor.\n\nProton pump inhibitors, including omeprazole, can cause hypochlorhydria and affect intragastric pH [levothyroxine:drug_interactions:2]. Because gastric acidity is required for the adequate absorption of levothyroxine, concomitant use may reduce its absorption [levothyroxine:drug_interactions:2]. Patients should be monitored appropriately, or levothyroxine should be administered at least 4 hours prior to these drugs [levothyroxine:drug_interactions:2].",
    "citations": [
-    "clarithromycin:drug_interactions:11",
-    "omeprazole:contraindications:1",
     "levothyroxine:drug_interactions:2"
    ],
    "path_nodes": [
@@ -8432,8 +8412,8 @@
     "omeprazole"
    ],
    "timings": {
-    "lookup_ms": 36.999300005845726,
-    "total_ms": 36.999300005845726
+    "lookup_ms": 45.4399000009289,
+    "total_ms": 45.4399000009289
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8445,10 +8425,11 @@
   "cached_para:c1": {
    "mode": "cached",
    "question": "Can a man using nitroglycerin for angina take Viagra?",
-   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Sildenafil and other PDE-5 inhibitors are contraindicated in patients taking nitroglycerin or other organic nitrates because they potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0]. Concomitant use can lead to severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by a patient taking nitroglycerin [nitroglycerin:contraindications:0].",
+   "text": "- Contraindicated [nitroglycerin:contraindications:0]\n- Nitroglycerin and other organic nitrates are contraindicated with PDE-5 inhibitors like sildenafil because sildenafil can potentiate the hypotensive effects of nitrates [nitroglycerin:drug_interactions:0, sildenafil:drug_interactions:1]. Concomitant use can result in severe hypotension, syncope, or myocardial ischemia [nitroglycerin:contraindications:0]. Therefore, sildenafil should not be used by patients taking nitroglycerin [nitroglycerin:contraindications:0, sildenafil:drug_interactions:1].",
    "citations": [
     "nitroglycerin:contraindications:0",
-    "nitroglycerin:drug_interactions:0"
+    "nitroglycerin:drug_interactions:0",
+    "sildenafil:drug_interactions:1"
    ],
    "path_nodes": [
     "alcohol",
@@ -8722,8 +8703,8 @@
     "sildenafil"
    ],
    "timings": {
-    "lookup_ms": 43.393800006015226,
-    "total_ms": 43.393800006015226
+    "lookup_ms": 53.25330000050599,
+    "total_ms": 53.25330000050599
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8735,11 +8716,9 @@
   "cached_para:c2": {
    "mode": "cached",
    "question": "At what level of kidney impairment should Glucophage not be used?",
-   "text": "Contraindicated.\n\nGlucophage (metformin) is contraindicated in patients with renal disease or renal dysfunction, such as those suggested by serum creatinine levels of $\\ge$1.5 mg/dL in males or $\\ge$1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Renal impairment can lead to drug accumulation, which significantly increases the risk of developing rare but serious and potentially fatal lactic acidosis [metformin:warnings:0, metformin:warnings:2].",
+   "text": "Contraindicated\n\nMetformin is contraindicated in patients with renal disease or renal dysfunction, as suggested by serum creatinine levels ≥1.5 mg/dL in males, ≥1.4 mg/dL in females, or abnormal creatinine clearance [metformin:contraindications:0]. Such renal impairment may also result from conditions such as cardiovascular collapse (shock), acute myocardial infarction, and septicemia [metformin:contraindications:0].",
    "citations": [
-    "metformin:contraindications:0",
-    "metformin:warnings:0",
-    "metformin:warnings:2"
+    "metformin:contraindications:0"
    ],
    "path_nodes": [
     "cimetidine",
@@ -8831,22 +8810,20 @@
     "metformin"
    ],
    "timings": {
-    "retrieve_ms": 29.020299996773247,
-    "generate_ms": 1586.281299998518,
-    "total_ms": 1646.9413999948301,
-    "lookup_ms": 31.63979999953881
+    "lookup_ms": 61.33659999613883,
+    "total_ms": 61.33659999613883
    },
-   "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
-   "llm_calls": 1,
-   "cache_hit": false,
+   "provider": "semantic cache",
+   "llm_calls": 0,
+   "cache_hit": true,
    "cache_score": 0.8891535997390747,
    "blocked_by_key": null,
-   "served_from": null
+   "served_from": "When is metformin contraindicated because of kidney function?"
   },
   "cached_para:c3": {
    "mode": "cached",
    "question": "Should someone who once had swelling of the face and throat from an ACE inhibitor take Zestril?",
-   "text": "- Contraindicated [lisinopril:contraindications:0]\n- Zestril (lisinopril) is an ACE inhibitor, and the drug label explicitly states that lisinopril is contraindicated in patients with a history of angioedema or hypersensitivity related to previous treatment with an angiotensin-converting enzyme inhibitor [lisinopril:contraindications:0]. Swelling of the face and throat is a sign of angioedema [lisinopril:warnings_and_cautions:2], putting the patient at severe risk of recurrent airway obstruction.",
+   "text": "- Contraindicated\n- Lisinopril (Zestril) is contraindicated in patients with a history of angioedema related to previous treatment with an angiotensin-converting enzyme (ACE) inhibitor [lisinopril:contraindications:0]. Swelling of the face and throat is a sign of angioedema, which can cause fatal airway obstruction [lisinopril:warnings_and_cautions:2]. Therefore, a patient with this history should not take Zestril [lisinopril:contraindications:0].",
    "citations": [
     "lisinopril:contraindications:0",
     "lisinopril:warnings_and_cautions:2"
@@ -9131,10 +9108,10 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 28.331799992884044,
-    "generate_ms": 2057.08869999944,
-    "total_ms": 2121.3598999893293,
-    "lookup_ms": 35.93939999700524
+    "retrieve_ms": 46.17850000067847,
+    "generate_ms": 24881.90300000133,
+    "total_ms": 25000.963300000876,
+    "lookup_ms": 72.88179999886779
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -9146,10 +9123,9 @@
   "cached_para:c4": {
    "mode": "cached",
    "question": "Is Aldactone contraindicated in someone with high potassium or Addison's disease?",
-   "text": "Contraindicated.\n\nSpironolactone (Aldactone) is explicitly contraindicated in patients with hyperkalemia or Addison's disease [spironolactone:contraindications:0]. Using the drug in these conditions poses significant clinical risks, as spironolactone is known to cause and exacerbate high potassium levels [spironolactone:warnings_and_cautions:0].",
+   "text": "Contraindicated\n- Spironolactone (Aldactone) is explicitly contraindicated in patients with hyperkalemia or Addison's disease [spironolactone:contraindications:0].",
    "citations": [
-    "spironolactone:contraindications:0",
-    "spironolactone:warnings_and_cautions:0"
+    "spironolactone:contraindications:0"
    ],
    "path_nodes": [
     "ace inhibitor",
@@ -9425,10 +9401,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 34.144700002798345,
-    "generate_ms": 1500.9586999985913,
-    "total_ms": 1574.2175000013958,
-    "lookup_ms": 39.11410000000615
+    "retrieve_ms": 56.9720999992569,
+    "generate_ms": 32953.16889999958,
+    "total_ms": 33082.69479999581,
+    "lookup_ms": 72.55379999696743
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -9439,7 +9415,6 @@
   }
  },
  "llm_providers": {
-  "gemini/gemini-3.5-flash-lite": 24,
-  "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free": 6
+  "gemini/gemini-3.5-flash-lite": 3
  }
 }

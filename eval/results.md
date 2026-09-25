@@ -2,15 +2,15 @@
 
 | Pipeline | Accuracy | Multi-hop | Single-hop | Contraindication | Avg latency | LLM calls | Answered |
 |---|---|---|---|---|---|---|---|
-| Vanilla RAG | 90% | 90% | 92% | 88% | 5.58 s | 20 | 20 |
-| GraphRAG | 90% | 90% | 92% | 88% | 2.05 s | 20 | 20 |
-| GraphRAG + semantic cache (paraphrases) | 95% | 90% | 100% | 100% | 0.52 s | 5 | 20 |
+| Vanilla RAG | 90% | 90% | 83% | 100% | 14.52 s | 20 | 20 |
+| GraphRAG | 95% | 95% | 100% | 88% | 14.09 s | 20 | 20 |
+| GraphRAG + semantic cache (paraphrases) | 100% | 100% | 100% | 100% | 2.96 s | 2 | 20 |
 
 ## Semantic cache
 
-- Paraphrase cache hits: **15/20**
-- Avg latency: hit **36 ms** vs miss **1.96 s**
-- Accuracy of answers served on paraphrases: **95%**
+- Paraphrase cache hits: **18/20**
+- Avg latency: hit **57 ms** vs miss **29.04 s**
+- Accuracy of answers served on paraphrases: **100%**
 - Wrong-drug trap questions served another drug's answer: **0/5** (same-drug reuse: 0)
 
 ## Threshold sweep (offline, no LLM calls)
