@@ -54,7 +54,8 @@ PROVIDERS = {
         ("gemini", "gemini-3.5-flash-lite"),
     ],
 }
-TIMEOUTS = {"answer": 60.0, "extract": 600.0}
+# "extract_fast" (live label-update demo) has no chain of its own → uses the "answer" chain
+TIMEOUTS = {"answer": 60.0, "extract": 600.0, "extract_fast": 90.0}
 EXTRACT_WORKERS = 5  # parallel labels during graph build (OpenRouter free: 20 req/min)
 
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"

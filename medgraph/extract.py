@@ -78,13 +78,13 @@ def parse_extraction(text: str, valid_chunk_ids: set[str]) -> tuple[list[dict], 
     return entities, relations
 
 
-def extract_drug(router, drug: str, chunks: list[dict]) -> tuple[list[dict], list[dict]]:
+def extract_drug(router, drug: str, chunks: list[dict], task: str = "extract") -> tuple[list[dict], list[dict]]:
     valid = {c["id"] for c in chunks}
-    res = router.complete(build_prompt(drug, chunks), task="extract", json_mode=True)
+    res = router.complete(build_prompt(drug, chunks), task=task, json_mode=True)
     try:
         return parse_extraction(res.text, valid)
     except ValueError:
-        fixed = router.complete(REPAIR.format(text=res.text), task="extract", json_mode=True)
+        fixed = router.complete(REPAIR.format(text=res.text), task=task, json_mode=True)
         try:
             return parse_extraction(fixed.text, valid)
         except ValueError:

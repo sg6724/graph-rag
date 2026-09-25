@@ -127,3 +127,35 @@ def test_model_with_exhausted_daily_quota_is_skipped_afterwards(tmp_path):
     router.complete("second")
     assert calls == ["g1", "q1", "q1"]  # g1 not retried once its daily quota is gone
     assert "gemini/g1" in router.disabled
+
+
+def test_unknown_task_falls_back_to_answer_chain(tmp_path):
+    seen = []
+
+    def t(provider, model, prompt, task, json_mode):
+        seen.append(model)
+        return "ok"
+
+    chains = {"answer": [("gemini", "fast")], "extract": [("openrouter", "big")]}
+    Router(providers=chains, cache_dir=tmp_path, transport=t, retry_pause_s=0).complete("x", task="extract_fast")
+    assert seen == ["fast"]
+
+
+def test_gemini_thinking_low_for_all_but_offline_extract(monkeypatch):
+    import medgraph.llm_router as lr
+
+    bodies = []
+
+    class Resp:
+        status_code = 200
+
+        def json(self):
+            return {"candidates": [{"content": {"parts": [{"text": "ok"}]}}]}
+
+    monkeypatch.setattr(lr, "get_key", lambda name: "k")
+    monkeypatch.setattr(lr.httpx, "post", lambda url, headers, json, timeout: bodies.append((json, timeout)) or Resp())
+    lr._gemini("m", "p", "extract_fast", True)
+    lr._gemini("m", "p", "extract", True)
+    assert bodies[0][0]["generationConfig"]["thinkingConfig"] == {"thinkingLevel": "low"}
+    assert "thinkingConfig" not in bodies[1][0]["generationConfig"]
+    assert bodies[0][1] < bodies[1][1]  # fast task gets the short timeout

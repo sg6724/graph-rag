@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Warfarin: new interaction with metronidazole",
+    "drug": "warfarin",
+    "section": "drug_interactions",
+    "text": "Metronidazole can markedly increase the anticoagulant effect of warfarin by inhibiting its CYP2C9-mediated metabolism, raising INR and the risk of serious bleeding. Monitor INR closely and consider reducing the warfarin dose."
+  },
+  {
+    "label": "Simvastatin: dose limit with amiodarone",
+    "drug": "simvastatin",
+    "section": "drug_interactions",
+    "text": "Amiodarone increases simvastatin exposure and the risk of myopathy and rhabdomyolysis. Do not exceed simvastatin 20 mg daily when used with amiodarone."
+  }
+]

@@ -53,6 +53,10 @@ def _check(r: httpx.Response) -> None:
         raise RuntimeError(f"HTTP {r.status_code}: {r.text[:400]}")
 
 
+def _timeout(task: str) -> float:
+    return config.TIMEOUTS.get(task, config.TIMEOUTS["answer"])
+
+
 def _gemini(model: str, prompt: str, task: str, json_mode: bool) -> str:
     key = get_key("GEMINI_API_KEY")
     if not key:
@@ -60,11 +64,11 @@ def _gemini(model: str, prompt: str, task: str, json_mode: bool) -> str:
     gen: dict = {}
     if json_mode:
         gen["responseMimeType"] = "application/json"
-    if task == "answer":
+    if task != "extract":  # only the offline graph build gets full thinking
         gen["thinkingConfig"] = {"thinkingLevel": "low"}
     body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": gen}
     r = httpx.post(f"{config.GEMINI_URL}/{model}:generateContent",
-                   headers={"x-goog-api-key": key}, json=body, timeout=config.TIMEOUTS[task])
+                   headers={"x-goog-api-key": key}, json=body, timeout=_timeout(task))
     _check(r)
     parts = r.json()["candidates"][0]["content"].get("parts", [])
     return "".join(p.get("text", "") for p in parts if not p.get("thought"))
@@ -75,10 +79,10 @@ def _openrouter(model: str, prompt: str, task: str, json_mode: bool) -> str:
     if not key:
         raise RuntimeError("OPENROUTER_API_KEY not set")
     body: dict = {"model": model, "messages": [{"role": "user", "content": prompt}]}
-    if task == "answer":
+    if task != "extract":
         body["reasoning"] = {"enabled": False}
     r = httpx.post(config.OPENROUTER_URL, headers={"Authorization": f"Bearer {key}"},
-                   json=body, timeout=config.TIMEOUTS[task])
+                   json=body, timeout=_timeout(task))
     _check(r)
     return r.json()["choices"][0]["message"].get("content") or ""
 
