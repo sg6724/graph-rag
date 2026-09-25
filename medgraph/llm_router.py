@@ -84,12 +84,15 @@ def default_transport(provider: str, model: str, prompt: str, task: str, json_mo
 
 class Router:
     def __init__(self, providers=None, cache_dir: Path | None = None,
-                 transport: Transport | None = None, retry_pause_s: float = 5.0):
+                 transport: Transport | None = None, retry_pause_s: float = 5.0, rounds: int = 4,
+                 sleep: Callable[[float], None] = time.sleep):
         self.providers = providers or config.PROVIDERS
         self.cache_dir = Path(cache_dir or config.LLM_CACHE_DIR)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.transport = transport or default_transport
         self.retry_pause_s = retry_pause_s
+        self.rounds = rounds  # full passes over the chain; free tiers have short demand spikes
+        self.sleep = sleep
         self.calls = 0
         self.cache_hits = 0
         self.by_provider: dict[str, int] = {}
@@ -107,7 +110,7 @@ class Router:
             self.cache_hits += 1
             return LLMResult(d["text"], d["provider"], d["model"], True,
                              (time.perf_counter() - t0) * 1000, d.get("gen_latency_ms", 0.0))
-        for attempt in range(2):
+        for attempt in range(self.rounds):
             for provider, model in self.providers:
                 t_call = time.perf_counter()
                 try:
@@ -126,8 +129,8 @@ class Router:
                                             "gen_latency_ms": gen_ms}), encoding="utf-8")
                 return LLMResult(text, provider, model, False,
                                  (time.perf_counter() - t0) * 1000, gen_ms)
-            if attempt == 0:
-                time.sleep(self.retry_pause_s)
+            if attempt < self.rounds - 1:
+                self.sleep(self.retry_pause_s * 3 ** attempt)  # 5 s, 15 s, 45 s
         raise LLMError("all providers failed: " + " | ".join(self.errors[-len(self.providers):]))
 
 

@@ -78,3 +78,22 @@ def test_parse_json_object_strips_fences_and_prose():
     assert parse_json_object('Here you go: {"a": [1, 2]} thanks') == {"a": [1, 2]}
     with pytest.raises(ValueError):
         parse_json_object("no json here")
+
+
+def test_retries_whole_chain_with_backoff_until_a_provider_recovers(tmp_path):
+    rounds = [0]
+    pauses = []
+
+    def t(provider, model, prompt, task, json_mode):
+        if model == "g1":
+            rounds[0] += 1
+            if rounds[0] < 3:  # overloaded for the first two rounds
+                raise RuntimeError("503 high demand")
+            return "recovered"
+        raise RuntimeError("429")
+
+    router = Router(providers=PROV, cache_dir=tmp_path, transport=t, retry_pause_s=1.0, rounds=4,
+                    sleep=pauses.append)
+    r = router.complete("q")
+    assert r.text == "recovered" and r.model == "g1"
+    assert pauses == [1.0, 3.0]  # backoff x3 between rounds
