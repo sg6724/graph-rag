@@ -45,8 +45,8 @@ def test_summarize_rows_and_cache_stats():
 def test_threshold_sweep_entity_key_blocks_traps(engine):  # noqa: F811
     rows = threshold_sweep(engine, QS, TRAPS, [0.5])
     row = rows[0]
-    assert row["trap_false_hits_with_key"] == 0
-    assert row["trap_false_hits_without_key"] == 1
+    assert row["wrong_drug_hits_with_key"] == 0
+    assert row["wrong_drug_hits_without_key"] == 1
 
 
 def test_write_results(tmp_path):
@@ -54,11 +54,28 @@ def test_write_results(tmp_path):
                      "avg_ms": 6000.0, "llm_calls": 20}],
            "cache": {"paraphrase_hits": 15, "paraphrases": 20, "avg_hit_ms": 25.0, "avg_miss_ms": 6000.0,
                      "trap_false_hits": 0, "traps": 5, "cached_para_accuracy": 0.9},
-           "sweep": [{"threshold": 0.9, "correct_hits_with_key": 15, "wrong_hits_with_key": 0,
-                      "trap_false_hits_with_key": 0, "correct_hits_without_key": 16,
-                      "wrong_hits_without_key": 1, "trap_false_hits_without_key": 3}],
+           "sweep": [{"threshold": 0.9, "correct_hits_with_key": 15, "wrong_drug_hits_with_key": 0,
+                      "same_drug_reuse_with_key": 2, "correct_hits_without_key": 16,
+                      "wrong_drug_hits_without_key": 3, "same_drug_reuse_without_key": 2}],
            "scores": {}, "answers": {}}
     write_results(res, tmp_path)
     md = (tmp_path / "results.md").read_text(encoding="utf-8")
     assert "| GraphRAG | 90% |" in md and "15/20" in md
     assert json.loads((tmp_path / "results.json").read_text(encoding="utf-8"))["rows"][0]["llm_calls"] == 20
+
+
+def test_sweep_same_drug_trap_hit_is_not_a_wrong_drug_hit(engine):  # noqa: F811
+    # trap asks about the same drug pair as a *different* base question → a correct reuse, not a failure
+    qs = QS + [{"id": "s2", "type": "single_hop", "question": "Can I take ibuprofen with warfarin?",
+                "paraphrase": "Ibuprofen plus warfarin okay?", "reference": "bleeding"}]
+    row = threshold_sweep(engine, qs, [{"id": "t9", "base_id": "s1", "question": "Can I take ibuprofen with warfarin?"}],
+                          [0.5])[0]
+    assert row["wrong_drug_hits_with_key"] == 0
+
+
+def test_summarize_counts_only_wrong_drug_trap_hits():
+    answers = {"cached_para:m1": ans("cached", "p", hit=True, calls=0, ms=20)}
+    traps = [{"id": "t1", "hit": True, "wrong_drug": False}, {"id": "t2", "hit": True, "wrong_drug": True},
+             {"id": "t3", "hit": False, "wrong_drug": False}]
+    res = summarize(QS[:1], answers, {}, traps)
+    assert res["cache"]["trap_false_hits"] == 1 and res["cache"]["trap_hits_same_drugs"] == 1

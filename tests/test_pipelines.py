@@ -112,3 +112,28 @@ def test_update_label_evicts_only_affected(engine):
 def test_answer_roundtrip():
     a = Answer(mode="graphrag", question="q", text="t", citations=["x:y:0"], timings={"total_ms": 1.0})
     assert Answer.from_dict(a.to_dict()) == a
+
+
+def test_cache_hit_records_which_cached_question_served_it(engine):
+    engine.cached("Can simvastatin be taken with clarithromycin?")
+    hit = engine.cached("Can Zocor be taken with Biaxin?")
+    assert hit.served_from == "Can simvastatin be taken with clarithromycin?"
+    miss = engine.cached("Can I take aspirin with warfarin?")
+    assert miss.served_from is None
+
+
+def test_graphrag_ignores_paths_through_unrelated_drugs(engine):
+    # warfarin–ibuprofen–... : "A interacts with X, X interacts with B" is not a mechanism linking A and B
+    engine.graph.add_extraction("naproxen", [], [
+        {"source": "naproxen", "target": "ibuprofen", "type": "INTERACTS_WITH",
+         "chunk_id": "ibuprofen:drug_interactions:0", "evidence": "x"}])
+    engine.graphrag("Can I take naproxen with warfarin?")
+    facts = engine.router.prompts[-1][1].split("Evidence passages:")[0]
+    # the drug-bridge path is dropped, so the context falls back to the question drugs' own facts
+    assert "warfarin --CAUSES--> bleeding" in facts
+
+
+def test_graphrag_keeps_mechanism_paths_through_enzymes(engine):
+    a = engine.graphrag("Can simvastatin be taken with clarithromycin?")
+    assert {"simvastatin", "cyp3a4", "clarithromycin"} <= set(a.path_nodes)
+

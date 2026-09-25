@@ -103,8 +103,8 @@
   ],
   "traps": [
     {"id": "t1", "base_id": "s1", "question": "Can a patient taking warfarin also take naproxen?"},
-    {"id": "t2", "base_id": "m1", "question": "Can a patient taking atorvastatin start clarithromycin?"},
-    {"id": "t3", "base_id": "m6", "question": "Is it safe to combine fluoxetine and tramadol?"},
+    {"id": "t2", "base_id": "m1", "question": "Can a patient taking simvastatin start erythromycin?"},
+    {"id": "t3", "base_id": "m6", "question": "Is it safe to combine sertraline and lithium?"},
     {"id": "t4", "base_id": "m5", "question": "Should clopidogrel be taken with aspirin?"},
     {"id": "t5", "base_id": "s2", "question": "Can a patient on lithium take naproxen?"}
   ]

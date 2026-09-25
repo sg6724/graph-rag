@@ -69,7 +69,9 @@ def summarize(questions, answers, scores, traps) -> dict:
     cache = {"paraphrase_hits": len(hits), "paraphrases": len(para),
              "avg_hit_ms": _avg([a.timings["total_ms"] for a in hits]),
              "avg_miss_ms": _avg([a.timings["total_ms"] for a in misses]),
-             "trap_false_hits": sum(1 for t in traps if t["hit"]), "traps": len(traps),
+             "trap_false_hits": sum(1 for t in traps if t.get("wrong_drug")),
+             "trap_hits_same_drugs": sum(1 for t in traps if t["hit"] and not t.get("wrong_drug")),
+             "traps": len(traps),
              "cached_para_accuracy": rows[2]["accuracy"]}
     return {"rows": rows, "cache": cache}
 
@@ -90,7 +92,7 @@ def threshold_sweep(engine, questions, traps, thresholds) -> list[dict]:
     for th in thresholds:
         row = {"threshold": th}
         for use_key in (True, False):
-            correct = wrong = trap_hits = 0
+            correct = wrong_drug = same_drug_reuse = 0
             for own_id, vec, key, is_trap in probes:
                 sims = matrix @ vec
                 if use_key:
@@ -98,16 +100,16 @@ def threshold_sweep(engine, questions, traps, thresholds) -> list[dict]:
                 j = int(np.argmax(sims))
                 if not np.isfinite(sims[j]) or sims[j] < th:
                     continue
-                if is_trap:
-                    trap_hits += 1
-                elif ids[j] == own_id:
+                if base[ids[j]][1] != key:
+                    wrong_drug += 1  # would serve an answer about different drugs
+                elif not is_trap and ids[j] == own_id:
                     correct += 1
                 else:
-                    wrong += 1
+                    same_drug_reuse += 1  # another question about the same drugs: safe reuse
             suffix = "with_key" if use_key else "without_key"
             row[f"correct_hits_{suffix}"] = correct
-            row[f"wrong_hits_{suffix}"] = wrong
-            row[f"trap_false_hits_{suffix}"] = trap_hits
+            row[f"wrong_drug_hits_{suffix}"] = wrong_drug
+            row[f"same_drug_reuse_{suffix}"] = same_drug_reuse
         rows.append(row)
     return rows
 
@@ -135,15 +137,17 @@ def write_results(results: dict, out_dir: Path) -> None:
               f"- Paraphrase cache hits: **{c['paraphrase_hits']}/{c['paraphrases']}**",
               f"- Avg latency: hit **{hit_ms}** vs miss **{miss_ms}**",
               f"- Accuracy of answers served on paraphrases: **{_pct(c['cached_para_accuracy'])}**",
-              f"- Wrong-drug trap questions served from cache: **{c['trap_false_hits']}/{c['traps']}**",
+              f"- Wrong-drug trap questions served another drug's answer: **{c['trap_false_hits']}/{c['traps']}**"
+              f" (same-drug reuse: {c.get('trap_hits_same_drugs', 0)})",
               "", "## Threshold sweep (offline, no LLM calls)", "",
-              "| Threshold | Correct hits (key) | Wrong hits (key) | Trap hits (key) | "
-              "Correct hits (no key) | Wrong hits (no key) | Trap hits (no key) |",
+              "Each probe (20 paraphrases + traps) is matched to its most similar cached question.", "",
+              "| Threshold | Correct hits (key) | Wrong-drug hits (key) | Same-drug reuse (key) | "
+              "Correct hits (no key) | Wrong-drug hits (no key) | Same-drug reuse (no key) |",
               "|---|---|---|---|---|---|---|"]
     for s in results.get("sweep", []):
-        lines.append(f"| {s['threshold']:.2f} | {s['correct_hits_with_key']} | {s['wrong_hits_with_key']} | "
-                     f"{s['trap_false_hits_with_key']} | {s['correct_hits_without_key']} | "
-                     f"{s['wrong_hits_without_key']} | {s['trap_false_hits_without_key']} |")
+        lines.append(f"| {s['threshold']:.2f} | {s['correct_hits_with_key']} | {s['wrong_drug_hits_with_key']} | "
+                     f"{s['same_drug_reuse_with_key']} | {s['correct_hits_without_key']} | "
+                     f"{s['wrong_drug_hits_without_key']} | {s['same_drug_reuse_without_key']} |")
     lines += ["", "_Latency for LLM answers is the original generation time (recorded even when replayed from "
               "the dev disk cache); cache-hit latency is measured live._"]
     (out_dir / "results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -174,16 +178,24 @@ def main() -> None:
         answers[f"cached_para:{q['id']}"] = a
         print(f"[{q['id']}] paraphrase -> {'HIT' if a and a.cache_hit else 'MISS'}"
               f" ({a.cache_score if a else None})", flush=True)
+    types = engine.graph.node_types()
+
+    def key(text):
+        return drug_key(match_entities(text, types), types)
+
     traps = []
     for t in traps_def:
         a = _safe(engine.cached, t["question"])
-        traps.append({"id": t["id"], "hit": bool(a and a.cache_hit)})
+        hit = bool(a and a.cache_hit)
+        traps.append({"id": t["id"], "hit": hit, "served_from": a.served_from if a else None,
+                      "wrong_drug": hit and key(a.served_from) != key(t["question"])})
     refs = {q["id"]: q["reference"] for q in questions}
     items = [{"id": k, "question": a.question, "reference": refs[k.split(":")[1]], "answer": a.text}
              for k, a in answers.items() if a is not None and k.split(":")[0] in ("vanilla", "graphrag", "cached_para")]
     scores = judge(engine.router, items)
     results = summarize(questions, answers, scores, traps)
     results["sweep"] = threshold_sweep(engine, questions, traps_def, [0.80, 0.85, 0.90, 0.95])
+    results["traps"] = traps
     results["scores"] = scores
     results["answers"] = {k: a.to_dict() for k, a in answers.items() if a is not None}
     results["llm_providers"] = engine.router.by_provider

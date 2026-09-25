@@ -27,6 +27,9 @@ Question: {question}
 {context}
 """
 CHUNK_ID_RE = re.compile(r"[a-z0-9\-]+:[a-z_]+:\d+")
+# A path explains an interaction only if every hop in between is a mechanism (shared enzyme, drug class or
+# side effect). "A interacts with X, X interacts with B" says nothing about A + B and floods the context.
+MECHANISM_TYPES = {"Enzyme", "DrugClass", "SideEffect"}
 
 
 @dataclass
@@ -44,6 +47,7 @@ class Answer:
     cache_hit: bool = False
     cache_score: float | None = None
     blocked_by_key: str | None = None
+    served_from: str | None = None  # on a cache hit: the cached question whose answer was reused
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -112,6 +116,8 @@ class Engine:
         edges: list[dict] = []
         for a, b in combinations(drugs, 2):
             for path in self.graph.paths_between(a, b):
+                if any(types.get(n) not in MECHANISM_TYPES for n in path[1:-1]):
+                    continue
                 nodes.update(path)
                 for u, v in zip(path, path[1:]):
                     edges.extend(self.graph.edges_between(u, v))
@@ -153,6 +159,7 @@ class Engine:
             a = Answer.from_dict(entry.answer)
             a.mode, a.question, a.cache_hit, a.cache_score = "cached", question, True, score
             a.llm_calls, a.provider, a.blocked_by_key = 0, "semantic cache", None
+            a.served_from = entry.query
             a.timings = {"lookup_ms": lookup_ms, "total_ms": lookup_ms}
             return a
         near, near_score = self.cache.nearest(qvec)

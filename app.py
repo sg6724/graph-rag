@@ -94,7 +94,10 @@ if submitted and q.strip():
 
 def show_answer(a):
     if a.cache_hit:
-        st.success(f"⚡ Cache HIT · similarity {a.cache_score:.3f} · 0 LLM calls · {a.timings['total_ms']:.0f} ms")
+        st.success(f"⚡ Cache HIT · similarity {a.cache_score:.3f} · 0 LLM calls · {a.timings['total_ms']:.0f} ms
+
+"
+                   f"Reused the answer to: “{a.served_from}”")
     else:
         st.info(f"{MODES.get(a.mode, a.mode)} · {a.provider} · {a.timings.get('total_ms', 0) / 1000:.1f} s")
     if a.blocked_by_key:
