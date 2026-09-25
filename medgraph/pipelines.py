@@ -18,6 +18,8 @@ ANSWER_PROMPT = """You are a clinical pharmacology assistant in an educational d
 context below, which comes from FDA drug labels{graph_note}.
 - Start with a one-line verdict (e.g. "Avoid combination", "Use with caution / monitor", "Contraindicated",
   or "No significant interaction documented in these labels").
+  Say "Contraindicated" or "Avoid" only if the label text for these two drugs says so; if it says to monitor,
+  adjust the dose or use caution, say "Use with caution / monitor". Facts about other drugs never set the verdict.
 - Then explain the mechanism or risk in 2-4 sentences (e.g. which enzyme is inhibited and whose levels rise).
 - Cite sources inline with their ids in square brackets, e.g. [simvastatin:drug_interactions:2].
 - If the context does not contain the answer, say so plainly. Do not use outside knowledge.

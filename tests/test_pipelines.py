@@ -137,3 +137,9 @@ def test_graphrag_keeps_mechanism_paths_through_enzymes(engine):
     a = engine.graphrag("Can simvastatin be taken with clarithromycin?")
     assert {"simvastatin", "cyp3a4", "clarithromycin"} <= set(a.path_nodes)
 
+
+
+def test_answer_prompt_ties_verdict_to_label_wording(engine):
+    engine.vanilla("Can simvastatin be taken with clarithromycin?")
+    prompt = engine.router.prompts[-1][1]
+    assert "only if the label text for these two drugs says so" in prompt

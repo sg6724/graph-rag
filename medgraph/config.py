@@ -67,5 +67,5 @@ NEIGHBOR_EDGE_LIMIT = 30
 MAX_FACTS = 40
 MAX_CONTEXT_CHUNKS = 8
 
-CACHE_THRESHOLD = 0.90
+CACHE_THRESHOLD = 0.85  # tuned on eval/results.md sweep: 0 wrong-drug hits with key; margin above 0.80
 REF_USD_PER_CALL = 0.01  # illustrative paid-model price per answer call, for "$ saved"
