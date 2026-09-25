@@ -28,10 +28,9 @@ def test_demo_walkthrough():
     assert not at.exception, at.exception
     assert "not medical advice" in at.caption[0].value
 
-    # 1. GraphRAG + cache, first ask → MISS with graph panel
+    # 1. GraphRAG + cache: the demo cache is pre-warmed with the 20 benchmark questions → served from cache
     ask(at, "Can a patient taking simvastatin start clarithromycin?", "cached")
-    out = texts(at)
-    assert "Cache HIT" not in out and "cyp3a4" in out.lower()
+    assert "cyp3a4" in texts(at).lower()
     first_answer = at.session_state["last"].text
 
     # 2. Brand-name paraphrase → HIT, 0 LLM calls, same answer
@@ -40,8 +39,9 @@ def test_demo_walkthrough():
     assert last.cache_hit and last.llm_calls == 0 and last.text == first_answer, last.cache_score
     print("paraphrase hit score", round(last.cache_score, 3), "latency ms", round(last.timings["total_ms"]))
 
-    # 3. Same wording, different drug → MISS + blocked warning
+    # 3. Same wording, different drug → never served warfarin+aspirin's answer
     ask(at, "Can a patient taking warfarin also take aspirin?", "cached")
+    assert at.session_state["last"].cache_hit  # pre-warmed
     ask(at, "Can a patient taking warfarin also take naproxen?", "cached")
     last = at.session_state["last"]
     assert not last.cache_hit

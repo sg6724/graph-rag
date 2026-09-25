@@ -4,12 +4,12 @@
 |---|---|---|---|---|---|---|---|
 | Vanilla RAG | 90% | 90% | 83% | 100% | 14.52 s | 20 | 20 |
 | GraphRAG | 95% | 95% | 100% | 88% | 14.09 s | 20 | 20 |
-| GraphRAG + semantic cache (paraphrases) | 100% | 100% | 100% | 100% | 2.96 s | 2 | 20 |
+| GraphRAG + semantic cache (paraphrases) | 100% | 100% | 100% | 100% | 2.95 s | 2 | 20 |
 
 ## Semantic cache
 
 - Paraphrase cache hits: **18/20**
-- Avg latency: hit **57 ms** vs miss **29.04 s**
+- Avg latency: hit **52 ms** vs miss **29.02 s**
 - Accuracy of answers served on paraphrases: **100%**
 - Wrong-drug trap questions served another drug's answer: **0/5** (same-drug reuse: 0)
 

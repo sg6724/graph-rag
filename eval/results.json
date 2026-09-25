@@ -9,7 +9,7 @@
     "multi_hop": 0.9,
     "single_hop": 0.8333333333333334
    },
-   "avg_ms": 14520.359660001122,
+   "avg_ms": 14519.184735001181,
    "llm_calls": 20
   },
   {
@@ -21,7 +21,7 @@
     "multi_hop": 0.95,
     "single_hop": 1.0
    },
-   "avg_ms": 14094.897880001372,
+   "avg_ms": 14094.05190500147,
    "llm_calls": 20
   },
   {
@@ -33,15 +33,15 @@
     "multi_hop": 1.0,
     "single_hop": 1.0
    },
-   "avg_ms": 2955.4128700001456,
+   "avg_ms": 2948.9303549995384,
    "llm_calls": 2
   }
  ],
  "cache": {
   "paraphrase_hits": 18,
   "paraphrases": 20,
-  "avg_hit_ms": 56.92218333367944,
-  "avg_miss_ms": 29041.82904999834,
+  "avg_hit_ms": 52.39900555534405,
+  "avg_miss_ms": 29017.712499997288,
   "trap_false_hits": 0,
   "trap_hits_same_drugs": 0,
   "traps": 5,
@@ -192,9 +192,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 10.587800003122538,
+    "retrieve_ms": 21.53800000087358,
     "generate_ms": 16250.428899998951,
-    "total_ms": 16261.016700002074
+    "total_ms": 16271.966899999825
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -264,9 +264,9 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 69.16830000409391,
+    "retrieve_ms": 105.37689999910071,
     "generate_ms": 15869.006600005378,
-    "total_ms": 15938.174900009471
+    "total_ms": 15974.383500004478
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -336,10 +336,10 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 40.648599999258295,
+    "retrieve_ms": 76.69770000211429,
     "generate_ms": 15869.006600005378,
-    "total_ms": 15963.591500003531,
-    "lookup_ms": 53.936299998895265
+    "total_ms": 16034.536100007244,
+    "lookup_ms": 88.83179999975255
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -361,9 +361,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.908999999926891,
+    "retrieve_ms": 9.858700002951082,
     "generate_ms": 26728.207499996643,
-    "total_ms": 26736.11649999657
+    "total_ms": 26738.066199999594
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -485,9 +485,9 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 51.15550000482472,
+    "retrieve_ms": 94.56420000060461,
     "generate_ms": 19811.276699998416,
-    "total_ms": 19862.43220000324
+    "total_ms": 19905.84089999902
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -609,10 +609,10 @@
     "simvastatin"
    ],
    "timings": {
-    "retrieve_ms": 39.13309999916237,
+    "retrieve_ms": 75.38990000466583,
     "generate_ms": 19811.276699998416,
-    "total_ms": 19897.724499991455,
-    "lookup_ms": 47.314699993876275
+    "total_ms": 19973.55890000472,
+    "lookup_ms": 86.89230000163661
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -633,9 +633,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 9.463800000958145,
+    "retrieve_ms": 10.507400002097711,
     "generate_ms": 22425.463300001866,
-    "total_ms": 22434.927100002824
+    "total_ms": 22435.970700003963
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -740,9 +740,9 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 54.630799997539725,
+    "retrieve_ms": 98.49560000293422,
     "generate_ms": 15625.59440000041,
-    "total_ms": 15680.225199997949
+    "total_ms": 15724.090000003343
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -847,10 +847,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 39.446400005545,
+    "retrieve_ms": 40.454800000588875,
     "generate_ms": 15625.59440000041,
-    "total_ms": 15735.69720001251,
-    "lookup_ms": 70.65640000655549
+    "total_ms": 15723.236999998335,
+    "lookup_ms": 57.1877999973367
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -870,9 +870,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.1336999972118065,
+    "retrieve_ms": 6.62009999359725,
     "generate_ms": 22118.737900003907,
-    "total_ms": 22125.87160000112
+    "total_ms": 22125.357999997505
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -985,9 +985,9 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 62.8798999969149,
+    "retrieve_ms": 48.57500000071013,
     "generate_ms": 14774.446900002658,
-    "total_ms": 14837.326799999573
+    "total_ms": 14823.021900003369
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1100,10 +1100,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 45.60679999849526,
+    "retrieve_ms": 55.96040000091307,
     "generate_ms": 14774.446900002658,
-    "total_ms": 14863.750100004836,
-    "lookup_ms": 43.696400003682356
+    "total_ms": 14898.202200005471,
+    "lookup_ms": 67.7949000018998
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1125,9 +1125,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 8.076999998593237,
+    "retrieve_ms": 7.310499997402076,
     "generate_ms": 10854.463099996792,
-    "total_ms": 10862.540099995385
+    "total_ms": 10861.773599994194
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1216,9 +1216,9 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 54.669400000420865,
+    "retrieve_ms": 56.84109999856446,
     "generate_ms": 19708.64040000015,
-    "total_ms": 19763.30980000057
+    "total_ms": 19765.481499998714
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1307,10 +1307,10 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 38.50949999468867,
+    "retrieve_ms": 35.8293000026606,
     "generate_ms": 19708.64040000015,
-    "total_ms": 19808.64229999861,
-    "lookup_ms": 61.49240000377176
+    "total_ms": 19812.28490000649,
+    "lookup_ms": 67.81520000367891
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1330,9 +1330,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.706099997449201,
+    "retrieve_ms": 6.8611000024247915,
     "generate_ms": 17262.758000004396,
-    "total_ms": 17270.464100001846
+    "total_ms": 17269.61910000682
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1438,9 +1438,9 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 67.66020000213757,
+    "retrieve_ms": 55.52860000170767,
     "generate_ms": 13493.469800007006,
-    "total_ms": 13561.130000009143
+    "total_ms": 13548.998400008713
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1546,10 +1546,10 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 37.42030000285013,
+    "retrieve_ms": 53.05010000301991,
     "generate_ms": 13493.469800007006,
-    "total_ms": 13580.070400013938,
-    "lookup_ms": 49.1803000040818
+    "total_ms": 13598.434400009864,
+    "lookup_ms": 51.91449999983888
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1571,9 +1571,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.7598999996553175,
+    "retrieve_ms": 7.0331000024452806,
     "generate_ms": 35883.85520000156,
-    "total_ms": 35891.61510000122
+    "total_ms": 35890.88830000401
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1686,9 +1686,9 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 79.96689999708906,
+    "retrieve_ms": 49.16439999942668,
     "generate_ms": 11997.755299998971,
-    "total_ms": 12077.72219999606
+    "total_ms": 12046.919699998398
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1801,10 +1801,10 @@
     "tramadol"
    ],
    "timings": {
-    "retrieve_ms": 36.56830000545597,
+    "retrieve_ms": 36.29519999958575,
     "generate_ms": 11997.755299998971,
-    "total_ms": 12104.193099999975,
-    "lookup_ms": 69.86949999554781
+    "total_ms": 12095.696899996256,
+    "lookup_ms": 61.64639999769861
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1825,9 +1825,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 9.20849999965867,
+    "retrieve_ms": 8.903900001314469,
     "generate_ms": 10295.266100001754,
-    "total_ms": 10304.474600001413
+    "total_ms": 10304.170000003069
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -1937,9 +1937,9 @@
     "clarithromycin"
    ],
    "timings": {
-    "retrieve_ms": 63.83330000244314,
+    "retrieve_ms": 57.34639999718638,
     "generate_ms": 16802.424600005907,
-    "total_ms": 16866.25790000835
+    "total_ms": 16859.771000003093
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2049,10 +2049,10 @@
     "clarithromycin"
    ],
    "timings": {
-    "retrieve_ms": 43.731099998694845,
+    "retrieve_ms": 40.859100001398474,
     "generate_ms": 16802.424600005907,
-    "total_ms": 16894.102900005237,
-    "lookup_ms": 47.94720000063535
+    "total_ms": 16891.951500008872,
+    "lookup_ms": 48.66780000156723
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2072,9 +2072,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.200799998827279,
+    "retrieve_ms": 8.150299996486865,
     "generate_ms": 13327.465000002121,
-    "total_ms": 13334.665800000948
+    "total_ms": 13335.615299998608
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2236,9 +2236,9 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 52.095200000621844,
+    "retrieve_ms": 51.67970000184141,
     "generate_ms": 12709.765500003414,
-    "total_ms": 12761.860700004036
+    "total_ms": 12761.445200005255
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2400,10 +2400,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 50.2933000025223,
+    "retrieve_ms": 53.906500004814006,
     "generate_ms": 12709.765500003414,
-    "total_ms": 12806.376000000455,
-    "lookup_ms": 46.31719999451889
+    "total_ms": 12818.659500007925,
+    "lookup_ms": 54.98749999969732
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2424,9 +2424,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 6.853799997770693,
+    "retrieve_ms": 6.271199999901,
     "generate_ms": 19903.357999995933,
-    "total_ms": 19910.211799993704
+    "total_ms": 19909.629199995834
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2497,9 +2497,9 @@
     "digoxin"
    ],
    "timings": {
-    "retrieve_ms": 45.84730000351556,
+    "retrieve_ms": 53.166600002441555,
     "generate_ms": 12047.226900001988,
-    "total_ms": 12093.074200005503
+    "total_ms": 12100.39350000443
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2570,10 +2570,10 @@
     "digoxin"
    ],
    "timings": {
-    "retrieve_ms": 40.92309999396093,
+    "retrieve_ms": 47.70489999646088,
     "generate_ms": 12047.226900001988,
-    "total_ms": 12139.995599995018,
-    "lookup_ms": 51.845599999069236
+    "total_ms": 12144.425599995884,
+    "lookup_ms": 49.49379999743542
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2591,9 +2591,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.859100005589426,
+    "retrieve_ms": 8.841400005621836,
     "generate_ms": 12856.664000006276,
-    "total_ms": 12864.523100011866
+    "total_ms": 12865.505400011898
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -2884,9 +2884,9 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 63.38539999705972,
+    "retrieve_ms": 63.15280000126222,
     "generate_ms": 9988.557500000752,
-    "total_ms": 10051.942899997812
+    "total_ms": 10051.710300002014
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3177,10 +3177,10 @@
     "warfarin"
    ],
    "timings": {
-    "retrieve_ms": 54.53300000226591,
+    "retrieve_ms": 36.97749999992084,
     "generate_ms": 9988.557500000752,
-    "total_ms": 10086.396400001831,
-    "lookup_ms": 43.3058999988134
+    "total_ms": 10080.51279999927,
+    "lookup_ms": 54.97779999859631
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3203,9 +3203,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.185799993749242,
+    "retrieve_ms": 7.497300000977702,
     "generate_ms": 7772.962200004258,
-    "total_ms": 7780.147999998007
+    "total_ms": 7780.459500005236
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3267,9 +3267,9 @@
     "lithium"
    ],
    "timings": {
-    "retrieve_ms": 56.120900000678375,
+    "retrieve_ms": 49.689700004819315,
     "generate_ms": 11354.34439999517,
-    "total_ms": 11410.465299995849
+    "total_ms": 11404.03409999999
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3331,10 +3331,10 @@
     "lithium"
    ],
    "timings": {
-    "retrieve_ms": 38.710200002242345,
+    "retrieve_ms": 41.553200004273094,
     "generate_ms": 11354.34439999517,
-    "total_ms": 11443.796299994574,
-    "lookup_ms": 50.74169999716105
+    "total_ms": 11443.34969999909,
+    "lookup_ms": 47.452099999645725
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3354,9 +3354,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.307699997909367,
+    "retrieve_ms": 6.180800002766773,
     "generate_ms": 9295.349400003033,
-    "total_ms": 9302.657100000943
+    "total_ms": 9301.5302000058
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3426,9 +3426,9 @@
     "naproxen"
    ],
    "timings": {
-    "retrieve_ms": 58.010900000226684,
+    "retrieve_ms": 55.3146000020206,
     "generate_ms": 7986.136799998349,
-    "total_ms": 8044.147699998575
+    "total_ms": 8041.451400000369
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3498,10 +3498,10 @@
     "naproxen"
    ],
    "timings": {
-    "retrieve_ms": 38.38750000431901,
+    "retrieve_ms": 48.6146999974153,
     "generate_ms": 7986.136799998349,
-    "total_ms": 8078.338900006202,
-    "lookup_ms": 53.814600003534
+    "total_ms": 8096.137299995462,
+    "lookup_ms": 61.385799999698065
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3522,9 +3522,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 9.506500005954877,
+    "retrieve_ms": 8.051400000113063,
     "generate_ms": 7678.109199994651,
-    "total_ms": 7687.615700000606
+    "total_ms": 7686.160599994764
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -3820,9 +3820,9 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 83.32439999503549,
+    "retrieve_ms": 65.98389999999199,
     "generate_ms": 7128.83249999868,
-    "total_ms": 7212.156899993715
+    "total_ms": 7194.816399998672
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4118,10 +4118,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 44.500299998617265,
+    "retrieve_ms": 38.06970000005094,
     "generate_ms": 7128.83249999868,
-    "total_ms": 7241.847399993276,
-    "lookup_ms": 68.51459999597864
+    "total_ms": 7223.9839999965625,
+    "lookup_ms": 57.081799997831695
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4142,9 +4142,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.731199999398086,
+    "retrieve_ms": 8.442199999990407,
     "generate_ms": 11606.007199996384,
-    "total_ms": 11613.738399995782
+    "total_ms": 11614.449399996374
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4214,9 +4214,9 @@
     "prednisone"
    ],
    "timings": {
-    "retrieve_ms": 56.087699995259754,
+    "retrieve_ms": 51.51019999902928,
     "generate_ms": 11454.616199996963,
-    "total_ms": 11510.703899992222
+    "total_ms": 11506.126399995992
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4286,10 +4286,10 @@
     "prednisone"
    ],
    "timings": {
-    "retrieve_ms": 42.36920000403188,
+    "retrieve_ms": 39.436799997929484,
     "generate_ms": 11454.616199996963,
-    "total_ms": 11549.375800001144,
-    "lookup_ms": 52.390400000149384
+    "total_ms": 11542.369799994049,
+    "lookup_ms": 48.3167999991565
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4310,9 +4310,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 8.376600002520718,
+    "retrieve_ms": 6.676500001049135,
     "generate_ms": 12586.513499998546,
-    "total_ms": 12594.890100001066
+    "total_ms": 12593.189999999595
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4364,9 +4364,9 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 57.966700005636085,
+    "retrieve_ms": 49.24580000079004,
     "generate_ms": 2707.643100002315,
-    "total_ms": 2765.609800007951
+    "total_ms": 2756.888900003105
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4418,10 +4418,10 @@
     "omeprazole"
    ],
    "timings": {
-    "retrieve_ms": 43.57549999986077,
+    "retrieve_ms": 38.417499999923166,
     "generate_ms": 2707.643100002315,
-    "total_ms": 2801.639900004375,
-    "lookup_ms": 50.42130000219913
+    "total_ms": 2807.7629000035813,
+    "lookup_ms": 61.70230000134325
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4444,9 +4444,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 10.637800005497411,
+    "retrieve_ms": 8.038399995712098,
     "generate_ms": 3581.9919999994454,
-    "total_ms": 3592.629800004943
+    "total_ms": 3590.0303999951575
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -4736,9 +4736,9 @@
     "sildenafil"
    ],
    "timings": {
-    "retrieve_ms": 64.17680000595283,
+    "retrieve_ms": 65.64870000147494,
     "generate_ms": 9951.946100001805,
-    "total_ms": 10016.122900007758
+    "total_ms": 10017.59480000328
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5028,10 +5028,10 @@
     "sildenafil"
    ],
    "timings": {
-    "retrieve_ms": 43.08010000386275,
+    "retrieve_ms": 45.96809999929974,
     "generate_ms": 9951.946100001805,
-    "total_ms": 10048.808900006406,
-    "lookup_ms": 53.78270000073826
+    "total_ms": 10047.989399994549,
+    "lookup_ms": 50.075199993443675
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5053,9 +5053,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 7.820600003469735,
+    "retrieve_ms": 6.265100004384294,
     "generate_ms": 10227.145900003961,
-    "total_ms": 10234.966500007431
+    "total_ms": 10233.411000008346
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5161,9 +5161,9 @@
     "metformin"
    ],
    "timings": {
-    "retrieve_ms": 52.651899997727014,
+    "retrieve_ms": 55.25849999685306,
     "generate_ms": 17142.414500005543,
-    "total_ms": 17195.06640000327
+    "total_ms": 17197.673000002396
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5269,10 +5269,10 @@
     "metformin"
    ],
    "timings": {
-    "retrieve_ms": 39.465100002416875,
+    "retrieve_ms": 38.671800000884105,
     "generate_ms": 17142.414500005543,
-    "total_ms": 17236.80690000765,
-    "lookup_ms": 54.92729999969015
+    "total_ms": 17235.38400000689,
+    "lookup_ms": 54.29770000046119
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5293,9 +5293,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 9.910900000249967,
+    "retrieve_ms": 8.183400001144037,
     "generate_ms": 2279.9406000049203,
-    "total_ms": 2289.8515000051702
+    "total_ms": 2288.1240000060643
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5589,9 +5589,9 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 91.30249999725493,
+    "retrieve_ms": 57.90749999869149,
     "generate_ms": 24851.122300002316,
-    "total_ms": 24942.42479999957
+    "total_ms": 24909.029800001008
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5885,10 +5885,10 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 45.68160000053467,
+    "retrieve_ms": 42.30649999954039,
     "generate_ms": 24851.122300002316,
-    "total_ms": 24958.53039999929,
-    "lookup_ms": 61.72649999643909
+    "total_ms": 24939.736400003312,
+    "lookup_ms": 46.307600001455285
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -5908,9 +5908,9 @@
    "path_edges": [],
    "entities": [],
    "timings": {
-    "retrieve_ms": 34.85490000457503,
+    "retrieve_ms": 8.362200002011377,
     "generate_ms": 17279.41469999496,
-    "total_ms": 17314.269599999534
+    "total_ms": 17287.77689999697
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -6200,9 +6200,9 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 63.40089999866905,
+    "retrieve_ms": 46.96519999561133,
     "generate_ms": 25244.40219999815,
-    "total_ms": 25307.803099996818
+    "total_ms": 25291.36739999376
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -6492,10 +6492,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 61.7497999992338,
+    "retrieve_ms": 40.4634000005899,
     "generate_ms": 25244.40219999815,
-    "total_ms": 25359.433999998146,
-    "lookup_ms": 53.28200000076322
+    "total_ms": 25342.066099998192,
+    "lookup_ms": 57.200499999453314
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -6565,8 +6565,8 @@
     "simvastatin"
    ],
    "timings": {
-    "lookup_ms": 75.85329999710666,
-    "total_ms": 75.85329999710666
+    "lookup_ms": 53.140500000154134,
+    "total_ms": 53.140500000154134
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6688,8 +6688,8 @@
     "simvastatin"
    ],
    "timings": {
-    "lookup_ms": 95.6406999976025,
-    "total_ms": 95.6406999976025
+    "lookup_ms": 57.80149999918649,
+    "total_ms": 57.80149999918649
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6794,8 +6794,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 49.8963000063668,
-    "total_ms": 49.8963000063668
+    "lookup_ms": 51.96730000170646,
+    "total_ms": 51.96730000170646
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6908,8 +6908,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 69.08259999909205,
-    "total_ms": 69.08259999909205
+    "lookup_ms": 60.062199998355936,
+    "total_ms": 60.062199998355936
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -6998,8 +6998,8 @@
     "omeprazole"
    ],
    "timings": {
-    "lookup_ms": 48.26429999957327,
-    "total_ms": 48.26429999957327
+    "lookup_ms": 46.22679999738466,
+    "total_ms": 46.22679999738466
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7105,8 +7105,8 @@
     "tramadol"
    ],
    "timings": {
-    "lookup_ms": 64.09249999705935,
-    "total_ms": 64.09249999705935
+    "lookup_ms": 47.52079999889247,
+    "total_ms": 47.52079999889247
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7219,8 +7219,8 @@
     "tramadol"
    ],
    "timings": {
-    "lookup_ms": 49.75100000592647,
-    "total_ms": 49.75100000592647
+    "lookup_ms": 59.784199998830445,
+    "total_ms": 59.784199998830445
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7330,8 +7330,8 @@
     "clarithromycin"
    ],
    "timings": {
-    "lookup_ms": 51.51289999776054,
-    "total_ms": 51.51289999776054
+    "lookup_ms": 63.22569999611005,
+    "total_ms": 63.22569999611005
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7493,8 +7493,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 48.8377000001492,
-    "total_ms": 48.8377000001492
+    "lookup_ms": 46.74999999406282,
+    "total_ms": 46.74999999406282
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7565,8 +7565,8 @@
     "digoxin"
    ],
    "timings": {
-    "lookup_ms": 46.32110000238754,
-    "total_ms": 46.32110000238754
+    "lookup_ms": 47.60289999831002,
+    "total_ms": 47.60289999831002
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7857,8 +7857,8 @@
     "warfarin"
    ],
    "timings": {
-    "lookup_ms": 50.406599999405444,
-    "total_ms": 50.406599999405444
+    "lookup_ms": 43.508000002475455,
+    "total_ms": 43.508000002475455
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7920,8 +7920,8 @@
     "lithium"
    ],
    "timings": {
-    "lookup_ms": 48.98780000075931,
-    "total_ms": 48.98780000075931
+    "lookup_ms": 54.53090000082739,
+    "total_ms": 54.53090000082739
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -7991,8 +7991,8 @@
     "naproxen"
    ],
    "timings": {
-    "lookup_ms": 47.77679999824613,
-    "total_ms": 47.77679999824613
+    "lookup_ms": 45.73720000189496,
+    "total_ms": 45.73720000189496
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8288,8 +8288,8 @@
     "spironolactone"
    ],
    "timings": {
-    "lookup_ms": 56.29210000188323,
-    "total_ms": 56.29210000188323
+    "lookup_ms": 53.08040000090841,
+    "total_ms": 53.08040000090841
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8359,8 +8359,8 @@
     "prednisone"
    ],
    "timings": {
-    "lookup_ms": 61.85380000533769,
-    "total_ms": 61.85380000533769
+    "lookup_ms": 43.71479999826988,
+    "total_ms": 43.71479999826988
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8412,8 +8412,8 @@
     "omeprazole"
    ],
    "timings": {
-    "lookup_ms": 45.4399000009289,
-    "total_ms": 45.4399000009289
+    "lookup_ms": 53.08550000336254,
+    "total_ms": 53.08550000336254
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8703,8 +8703,8 @@
     "sildenafil"
    ],
    "timings": {
-    "lookup_ms": 53.25330000050599,
-    "total_ms": 53.25330000050599
+    "lookup_ms": 53.75140000251122,
+    "total_ms": 53.75140000251122
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -8810,8 +8810,8 @@
     "metformin"
    ],
    "timings": {
-    "lookup_ms": 61.33659999613883,
-    "total_ms": 61.33659999613883
+    "lookup_ms": 61.6920000029495,
+    "total_ms": 61.6920000029495
    },
    "provider": "semantic cache",
    "llm_calls": 0,
@@ -9108,10 +9108,10 @@
     "lisinopril"
    ],
    "timings": {
-    "retrieve_ms": 46.17850000067847,
+    "retrieve_ms": 48.98539999703644,
     "generate_ms": 24881.90300000133,
-    "total_ms": 25000.963300000876,
-    "lookup_ms": 72.88179999886779
+    "total_ms": 24990.66920000041,
+    "lookup_ms": 59.780800002045
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -9401,10 +9401,10 @@
     "spironolactone"
    ],
    "timings": {
-    "retrieve_ms": 56.9720999992569,
+    "retrieve_ms": 36.828199998126365,
     "generate_ms": 32953.16889999958,
-    "total_ms": 33082.69479999581,
-    "lookup_ms": 72.55379999696743
+    "total_ms": 33044.755799994164,
+    "lookup_ms": 54.75869999645511
    },
    "provider": "gemini/gemini-3.5-flash-lite (disk cache)",
    "llm_calls": 1,
@@ -9414,7 +9414,5 @@
    "served_from": null
   }
  },
- "llm_providers": {
-  "gemini/gemini-3.5-flash-lite": 3
- }
+ "llm_providers": {}
 }

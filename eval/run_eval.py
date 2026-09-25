@@ -173,6 +173,7 @@ def main() -> None:
         answers[f"vanilla:{q['id']}"] = _safe(engine.vanilla, q["question"])
         answers[f"graphrag:{q['id']}"] = _safe(engine.graphrag, q["question"])
         answers[f"cached_first:{q['id']}"] = _safe(engine.cached, q["question"])  # warms cache; replays graphrag prompt
+    demo_entries = list(engine.cache.entries)  # the 20 originals only: traps must stay un-cached for the live demo
     for q in questions:
         a = _safe(engine.cached, q["paraphrase"])
         answers[f"cached_para:{q['id']}"] = a
@@ -200,6 +201,7 @@ def main() -> None:
     results["answers"] = {k: a.to_dict() for k, a in answers.items() if a is not None}
     results["llm_providers"] = engine.router.by_provider
     write_results(results, HERE)
+    engine.cache.entries = demo_entries
     engine.cache.save(config.CACHE_PATH)  # pre-warmed cache for the live demo
     print((HERE / "results.md").read_text(encoding="utf-8"))
 
