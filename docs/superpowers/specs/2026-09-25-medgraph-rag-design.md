@@ -39,22 +39,29 @@ global search, auth, multi-user, cloud deployment, more than one domain.
 - Edge types: `INHIBITS`, `INDUCES`, `METABOLIZED_BY`, `INTERACTS_WITH`,
   `CONTRAINDICATED_IN`, `CAUSES`, `BELONGS_TO`.
 - Every edge carries provenance: `chunk_id`, `drug` (source label), `evidence` (short quote).
-- Extraction: LLM (Qwen 27B) per chunk → strict JSON `{entities:[...], relations:[...]}`,
+- Extraction: LLM ("quality" task, see Section 6) → strict JSON `{entities:[...], relations:[...]}`,
   validated against the allowed types; invalid items dropped. Entity names normalized
   (lowercase, alias map for enzymes like "CYP 3A4" → "cyp3a4").
+- **Quota-aware batching:** one extraction call covers one or more whole drug labels (all its
+  chunks, with chunk ids inline so relations keep provenance), packed up to ~60K input tokens.
+  Target: ~10–30 extraction calls for the whole corpus.
 
 ## 4. Retrieval & answering
 
 Three pipelines behind one interface `answer(question) -> Answer{text, citations, path_nodes, path_edges, timings, provider}`:
 
 1. **Vanilla RAG:** embed question → top-k (k=6) chunks by cosine → LLM answer with citations.
+   (All LLM answering uses the `answer` task profile from Section 6.)
 2. **GraphRAG:**
-   - Extract drug/entity mentions from the question (Nemotron, fast) + fuzzy match to graph nodes.
+   - Extract drug/entity mentions from the question **deterministically, with no LLM call**:
+     word-boundary + fuzzy matching against graph node names and an alias map
+     (brand names, e.g. "Coumadin" → warfarin). Zero quota, instant, and stable — which the
+     cache's `entity_key` depends on.
    - Seed nodes = matched entities (fallback: nodes from top vector chunks).
    - Expand up to 2 hops; find all simple paths (≤3 edges) between seed drug pairs
      (captures drug→enzyme←drug mechanisms).
    - Context = serialized path triples + their evidence chunks (deduplicated, capped).
-   - LLM answer (Qwen 27B) instructed to explain the mechanism and cite chunk ids.
+   - LLM answer instructed to explain the mechanism and cite chunk ids.
 3. **GraphRAG + cache:** pipeline 2 wrapped by the cache (Section 5).
 
 Embeddings: local `fastembed` (BAAI/bge-small-en-v1.5, CPU), stored in `data/embeddings.npy`.
@@ -78,16 +85,26 @@ Embeddings: local `fastembed` (BAAI/bge-small-en-v1.5, CPU), stored in `data/emb
 Single module `llm_router` used by every LLM call:
 
 ```
-disk cache (sha256 of model+prompt) → hit: return
-→ OpenRouter primary model for the task
-   - "quality" tasks (extraction, answering, judging): qwen 3.8 27B (free)
-   - "fast" tasks (query entity extraction): nemotron 3.5 lightning (free)
-→ on 429 / 5xx / timeout: the other OpenRouter free model
-→ still failing: Gemini free tier (OpenAI-compatible endpoint)
-→ record which provider served the call
+disk cache (sha256 of task+prompt) → hit: return
+→ 1. Gemini   models/gemini-3.8-flash      (primary)
+→ 2. OpenRouter qwen/qwen3.8-27b:free       (fallback on 429 / 5xx / timeout / empty output)
+→ 3. Gemini   models/gemini-3.5-flash      (last resort; separate per-model free quota)
+→ record which provider/model served the call
 ```
 
-- Config via env vars: `OPENROUTER_API_KEY`, `GEMINI_API_KEY`; model ids in `config.py`.
+- Task profiles:
+  - `extract` (offline graph build, judging): default thinking, JSON output, long timeout.
+  - `answer` (live queries): Gemini `thinkingLevel: "low"` (measured ~6 s vs ~17 s default;
+    `"minimal"` is rejected by the API), Qwen with reasoning disabled.
+- Measured 2026-09-25: Qwen free returned 429 (upstream saturation) with 0/50 daily quota used —
+  the fallback chain is required, not optional.
+- Clients: Gemini via REST `generateContent`; OpenRouter via the OpenAI-compatible
+  `/chat/completions`. Both through `httpx`, no vendor SDK needed.
+- Config via env vars: `OPENROUTER_API_KEY`, `GEMINI_API_KEY` (read from process env, falling
+  back to the Windows user environment in the registry since `setx` doesn't update open shells);
+  model ids in `config.py`.
+- Quota: OpenRouter free = 50 requests/day on this account (1,000/day after a one-time $10
+  credit purchase — optional insurance).
 - The disk cache (`data/llm_cache/`) is separate from the semantic cache: it exists to save
   quota during development and to make the demo reproducible offline.
 
@@ -103,11 +120,15 @@ disk cache (sha256 of model+prompt) → hit: return
 
 ## 8. Benchmark
 
-- `eval/questions.json`: 30 questions (10 single-hop, 15 multi-hop/mechanism, 5 contraindication),
-  each with a reference answer written from the labels, plus 1 paraphrase each (60 total).
+- `eval/questions.json`: 20 questions (6 single-hop, 10 multi-hop/mechanism, 4 contraindication),
+  each with a reference answer written from the labels, plus 1 paraphrase each (40 total).
 - Also 5 "trap" pairs (same wording, different drug) to measure false cache hits (target 0).
-- Runner compares the 3 pipelines: accuracy (LLM judge on Qwen 27B + manual spot-check of 10),
-  latency, LLM requests. Output: `eval/results.md` table + `eval/results.json`.
+- Runner compares the 3 pipelines: accuracy (one batched LLM-judge call + manual spot-check of 10),
+  latency, LLM requests. The cached pipeline's misses reuse GraphRAG's answers via the LLM disk
+  cache (identical prompts), so the budget is ~85 LLM calls total.
+  Output: `eval/results.md` table + `eval/results.json`.
+- Latency for cache hits/misses is measured live; "requests saved" and "$ saved" are computed
+  from the recorded call counts.
 
 ## 9. Error handling
 
