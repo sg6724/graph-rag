@@ -33,13 +33,29 @@ SECTION_CHAR_CAP = 15000
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
 
-# (provider, model) in fallback order
-PROVIDERS = [
-    ("gemini", "gemini-3.8-flash"),
-    ("openrouter", "qwen/qwen3.8-27b:free"),
-    ("gemini", "gemini-3.5-flash"),
-]
-TIMEOUTS = {"answer": 60.0, "extract": 240.0}
+# (provider, model) fallback chains per task. Free tiers: Gemini = 20 requests/day *per model*;
+# OpenRouter = 50 free requests/day per account. Measured 2026-09-25 (see spec §6).
+PROVIDERS = {
+    # live answers: fast Gemini Flash models first, each with its own daily quota
+    "answer": [
+        ("gemini", "gemini-3.8-flash"),
+        ("gemini", "gemini-3.6-flash"),
+        ("gemini", "gemini-3.5-flash-lite"),
+        ("gemini", "gemini-3.5-flash"),
+        ("gemini", "gemini-3.7-flash"),
+        ("openrouter", "qwen/qwen3.8-27b:free"),
+        ("openrouter", "openrouter/free"),
+    ],
+    # offline graph extraction + judging: quality over speed
+    "extract": [
+        ("openrouter", "nvidia/nemotron-3-ultra-550b-a55b:free"),
+        ("openrouter", "nvidia/nemotron-3-super-120b-a12b:free"),
+        ("gemini", "gemini-3.6-flash"),
+        ("gemini", "gemini-3.5-flash-lite"),
+    ],
+}
+TIMEOUTS = {"answer": 60.0, "extract": 600.0}
+EXTRACT_WORKERS = 5  # parallel labels during graph build (OpenRouter free: 20 req/min)
 
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 

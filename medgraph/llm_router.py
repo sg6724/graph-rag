@@ -47,6 +47,12 @@ def get_key(name: str) -> str | None:
         return None
 
 
+def _check(r: httpx.Response) -> None:
+    """Raise with the response body included, so quota ids (e.g. '...PerDay...') reach the router."""
+    if r.status_code >= 400:
+        raise RuntimeError(f"HTTP {r.status_code}: {r.text[:400]}")
+
+
 def _gemini(model: str, prompt: str, task: str, json_mode: bool) -> str:
     key = get_key("GEMINI_API_KEY")
     if not key:
@@ -59,7 +65,7 @@ def _gemini(model: str, prompt: str, task: str, json_mode: bool) -> str:
     body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": gen}
     r = httpx.post(f"{config.GEMINI_URL}/{model}:generateContent",
                    headers={"x-goog-api-key": key}, json=body, timeout=config.TIMEOUTS[task])
-    r.raise_for_status()
+    _check(r)
     parts = r.json()["candidates"][0]["content"].get("parts", [])
     return "".join(p.get("text", "") for p in parts if not p.get("thought"))
 
@@ -73,7 +79,7 @@ def _openrouter(model: str, prompt: str, task: str, json_mode: bool) -> str:
         body["reasoning"] = {"enabled": False}
     r = httpx.post(config.OPENROUTER_URL, headers={"Authorization": f"Bearer {key}"},
                    json=body, timeout=config.TIMEOUTS[task])
-    r.raise_for_status()
+    _check(r)
     return r.json()["choices"][0]["message"].get("content") or ""
 
 
@@ -97,6 +103,12 @@ class Router:
         self.cache_hits = 0
         self.by_provider: dict[str, int] = {}
         self.errors: list[str] = []
+        self.disabled: set[str] = set()  # "provider/model" whose daily quota is exhausted
+
+    def _chain(self, task: str) -> list[tuple[str, str]]:
+        if isinstance(self.providers, dict):
+            return self.providers.get(task) or self.providers["answer"]
+        return self.providers
 
     def _path(self, prompt: str, task: str, json_mode: bool) -> Path:
         digest = hashlib.sha256(f"{task}|{json_mode}|{prompt}".encode("utf-8")).hexdigest()
@@ -110,28 +122,36 @@ class Router:
             self.cache_hits += 1
             return LLMResult(d["text"], d["provider"], d["model"], True,
                              (time.perf_counter() - t0) * 1000, d.get("gen_latency_ms", 0.0))
+        chain = self._chain(task)
         for attempt in range(self.rounds):
-            for provider, model in self.providers:
+            for provider, model in chain:
+                label = f"{provider}/{model}"
+                if label in self.disabled:
+                    continue
                 t_call = time.perf_counter()
                 try:
                     text = self.transport(provider, model, prompt, task, json_mode)
                 except Exception as e:  # any provider failure → next in chain
-                    self.errors.append(f"{provider}/{model}: {type(e).__name__}: {e}"[:300])
+                    msg = f"{label}: {type(e).__name__}: {e}"
+                    self.errors.append(msg[:300])
+                    if "perday" in msg.lower().replace("-", "").replace("_", ""):
+                        self.disabled.add(label)  # daily quota gone: retrying only wastes time
                     continue
                 if not text or not text.strip():
                     self.errors.append(f"{provider}/{model}: empty output")
                     continue
                 gen_ms = (time.perf_counter() - t_call) * 1000
                 self.calls += 1
-                label = f"{provider}/{model}"
                 self.by_provider[label] = self.by_provider.get(label, 0) + 1
                 path.write_text(json.dumps({"text": text, "provider": provider, "model": model,
                                             "gen_latency_ms": gen_ms}), encoding="utf-8")
                 return LLMResult(text, provider, model, False,
                                  (time.perf_counter() - t0) * 1000, gen_ms)
+            if all(f"{p}/{m}" in self.disabled for p, m in chain):
+                break
             if attempt < self.rounds - 1:
                 self.sleep(self.retry_pause_s * 3 ** attempt)  # 5 s, 15 s, 45 s
-        raise LLMError("all providers failed: " + " | ".join(self.errors[-len(self.providers):]))
+        raise LLMError("all providers failed: " + " | ".join(self.errors[-len(chain):]))
 
 
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)

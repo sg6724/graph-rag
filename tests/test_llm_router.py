@@ -97,3 +97,33 @@ def test_retries_whole_chain_with_backoff_until_a_provider_recovers(tmp_path):
     r = router.complete("q")
     assert r.text == "recovered" and r.model == "g1"
     assert pauses == [1.0, 3.0]  # backoff x3 between rounds
+
+
+def test_providers_can_differ_per_task(tmp_path):
+    seen = []
+
+    def t(provider, model, prompt, task, json_mode):
+        seen.append((task, model))
+        return "ok"
+
+    chains = {"answer": [("gemini", "fast")], "extract": [("openrouter", "big")]}
+    router = Router(providers=chains, cache_dir=tmp_path, transport=t, retry_pause_s=0)
+    router.complete("a", task="answer")
+    router.complete("b", task="extract")
+    assert seen == [("answer", "fast"), ("extract", "big")]
+
+
+def test_model_with_exhausted_daily_quota_is_skipped_afterwards(tmp_path):
+    calls = []
+
+    def t(provider, model, prompt, task, json_mode):
+        calls.append(model)
+        if model == "g1":
+            raise RuntimeError("429 quota GenerateRequestsPerDayPerProjectPerModel-FreeTier exceeded")
+        return "ok"
+
+    router = make(t, tmp_path)
+    router.complete("first")
+    router.complete("second")
+    assert calls == ["g1", "q1", "q1"]  # g1 not retried once its daily quota is gone
+    assert "gemini/g1" in router.disabled

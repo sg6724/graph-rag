@@ -58,3 +58,25 @@ def test_extract_drug_gives_up_after_one_repair():
     router = FakeRouter(replies=["nope", "still nope"])
     chunks = [{"id": "simvastatin:drug_interactions:0", "section": "drug_interactions", "text": "t"}]
     assert extract_drug(router, "simvastatin", chunks) == ([], [])
+
+
+def test_build_graph_parallel_keeps_order_and_survives_failures():
+    from medgraph.extract import build_graph
+    from medgraph.llm_router import LLMError
+
+    class Router:
+        def complete(self, prompt, task="extract", json_mode=False):
+            drug = prompt.split("FDA label for ")[1].split(".")[0]
+            if drug == "bad":
+                raise LLMError("down")
+            cid = f"{drug}:drug_interactions:0"
+            from medgraph.llm_router import LLMResult
+            return LLMResult(json.dumps({"entities": [], "relations": [
+                {"source": drug, "target": "cyp3a4", "type": "METABOLIZED_BY", "chunk_id": cid, "evidence": "e"}]}),
+                "fake", "m", False, 1.0, 1.0)
+
+    by_drug = {d: [{"id": f"{d}:drug_interactions:0", "section": "drug_interactions", "text": "t"}]
+               for d in ["alpha", "bad", "gamma"]}
+    graph, failed = build_graph(Router(), by_drug, ["alpha", "bad", "gamma"], workers=3)
+    assert failed == ["bad"]
+    assert graph.paths_between("alpha", "gamma") == [["alpha", "cyp3a4", "gamma"]]

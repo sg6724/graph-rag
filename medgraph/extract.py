@@ -92,6 +92,36 @@ def extract_drug(router, drug: str, chunks: list[dict]) -> tuple[list[dict], lis
             return [], []
 
 
+def build_graph(router, by_drug: dict[str, list[dict]], drugs: list[str],
+                workers: int = config.EXTRACT_WORKERS) -> tuple[GraphStore, list[str]]:
+    """Extract labels in parallel (slow free models), then add to the graph in a fixed order."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    todo = [d for d in drugs if d in by_drug]
+    results: dict[str, tuple[list[dict], list[dict]]] = {}
+    failed: list[str] = []
+
+    def run(drug: str):
+        try:
+            return drug, extract_drug(router, drug, by_drug[drug])
+        except Exception as e:  # keep building; a missing drug is better than no graph
+            print(f"FAIL {drug}: {str(e)[:200]}", flush=True)
+            return drug, None
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for drug, res in pool.map(run, todo):
+            if res is None:
+                failed.append(drug)
+                continue
+            results[drug] = res
+            print(f"{drug:15s} entities={len(res[0]):3d} relations={len(res[1]):3d}", flush=True)
+    graph = GraphStore()
+    for drug in todo:
+        if drug in results:
+            graph.add_extraction(drug, *results[drug])
+    return graph, failed
+
+
 def main() -> None:
     from medgraph.ingest import load_chunks
 
@@ -99,18 +129,10 @@ def main() -> None:
     by_drug: dict[str, list[dict]] = defaultdict(list)
     for c in load_chunks().values():
         by_drug[c["drug"]].append(c)
-    graph = GraphStore()
-    for drug in config.DRUGS:
-        if drug not in by_drug:
-            continue
-        try:
-            ents, rels = extract_drug(router, drug, by_drug[drug])
-        except Exception as e:  # keep building; a missing drug is better than no graph
-            print(f"FAIL {drug}: {e}")
-            continue
-        graph.add_extraction(drug, ents, rels)
-        graph.save()  # save as we go so a crash mid-way keeps progress
-        print(f"{drug:15s} entities={len(ents):3d} relations={len(rels):3d}  via={router.by_provider}", flush=True)
+    graph, failed = build_graph(router, by_drug, config.DRUGS)
+    graph.save()
+    print("providers:", router.by_provider, "| disabled:", router.disabled)
+    print("FAILED:", failed or "none")
     print(graph.stats())
 
 
