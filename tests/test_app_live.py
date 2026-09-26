@@ -22,8 +22,11 @@ def texts(at):
 
 
 @pytest.mark.live
-def test_demo_walkthrough():
+def test_demo_walkthrough(monkeypatch):
+    monkeypatch.setenv("MEDGRAPH_BACKEND", "files")  # never mutate the real Supabase cache from a test
     at = AppTest.from_file("../app.py", default_timeout=300)
+    at.run()
+    at.sidebar.selectbox(key="dataset").set_value("fda")
     at.run()
     assert not at.exception, at.exception
     assert "not medical advice" in at.caption[0].value
@@ -32,6 +35,9 @@ def test_demo_walkthrough():
     ask(at, "Can a patient taking simvastatin start clarithromycin?", "cached")
     assert "cyp3a4" in texts(at).lower()
     first_answer = at.session_state["last"].text
+    # metrics must reflect this question in the same run (not one click late)
+    hit_rate = [m for m in at.sidebar.metric if m.label == "Cache hit rate"][0]
+    assert hit_rate.delta == "1/1", hit_rate.delta
 
     # 2. Brand-name paraphrase → HIT, 0 LLM calls, same answer
     ask(at, "Is it safe to take Biaxin while on Zocor?", "cached")
@@ -48,7 +54,7 @@ def test_demo_walkthrough():
     print("trap blocked_by_key:", last.blocked_by_key, "| score", last.cache_score)
 
     # 4. Label update → warfarin answers evicted, simvastatin answer kept
-    at.sidebar.selectbox[0].set_value(0)
+    at.sidebar.selectbox(key="update_pick").set_value(0)
     at.sidebar.button[0].click()  # "Apply update"
     at.run(timeout=300)
     assert not at.exception, at.exception

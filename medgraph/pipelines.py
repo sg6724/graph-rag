@@ -204,7 +204,9 @@ def load_engine(cache_path=config.CACHE_PATH, dataset: str = "fda", backend: str
     profile = fda_profile()
     if dataset == "medline":
         profile = medline_profile(json.loads((config.MEDLINE_DIR / "aliases.json").read_text(encoding="utf-8")))
-    backend = backend or ("pg" if get_key("DATABASE_URL") else "files")
+    import os
+
+    backend = backend or os.environ.get("MEDGRAPH_BACKEND") or ("pg" if get_key("DATABASE_URL") else "files")
     if backend == "pg":
         from medgraph.pgstore import PgSemanticCache, PgVectorIndex, connect, load_graph, read_chunks
 

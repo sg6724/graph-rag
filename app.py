@@ -47,20 +47,12 @@ with st.sidebar:
     mode = st.radio("Pipeline", list(MODES), format_func=MODES.get)
     st.divider()
     st.subheader("Live metrics")
-    s = ss.metrics.summary()
-    c1, c2 = st.columns(2)
-    c1.metric("Cache hit rate", f"{s['hit_rate']:.0%}", f"{s['hits']}/{s['cache_queries']}")
-    c2.metric("LLM calls saved", s["llm_calls_saved"])
-    c1.metric("Avg hit latency", f"{s['avg_hit_ms']:.0f} ms")
-    c2.metric("Avg miss latency", f"{s['avg_miss_ms'] / 1000:.1f} s")
-    st.metric("Est. $ saved", f"${s['usd_saved']:.2f}", help=f"${config.REF_USD_PER_CALL}/call reference price")
-    st.caption(f"Cache entries: {len(engine.cache.entries)} · threshold {engine.cache.threshold:.2f}")
-    st.caption(f"LLM providers used: {engine.router.by_provider or 'none yet'}")
+    metrics_box = st.container()  # filled at the end of the script, after this run's question is recorded
     st.divider()
     st.subheader("Simulate a source update")
     updates = [u for u in json.loads(config.DEMO_UPDATES_PATH.read_text(encoding="utf-8"))
                if u.get("dataset", "fda") == dataset]
-    pick = st.selectbox("Update", range(len(updates)), format_func=lambda i: updates[i]["label"])
+    pick = st.selectbox("Update", range(len(updates)), format_func=lambda i: updates[i]["label"], key="update_pick")
     if st.button("Apply update", width="stretch"):
         u = updates[pick]
         with st.spinner("Re-extracting the changed passage and invalidating affected answers…"):
@@ -133,7 +125,7 @@ elif ss.last:
         show_answer(a)
     with right:
         if a.path_nodes:
-            st.caption("Knowledge-graph path used for this answer (bold = drugs in your question)")
+            st.caption("Knowledge-graph path used for this answer (large nodes = entities in your question)")
             components.html(subgraph_html(engine.graph.node_types(), a.path_nodes, a.path_edges, a.entities),
                             height=540)
         else:
@@ -153,3 +145,19 @@ if ss.update_log:
         st.success(f"Kept ({len(u['retained'])}) — still valid, still served from cache")
         for qq in u["retained"]:
             st.write("• " + qq)
+
+
+def render_metrics():
+    s = ss.metrics.summary()
+    with metrics_box:
+        c1, c2 = st.columns(2)
+        c1.metric("Cache hit rate", f"{s['hit_rate']:.0%}", f"{s['hits']}/{s['cache_queries']}")
+        c2.metric("LLM calls saved", s["llm_calls_saved"])
+        c1.metric("Avg hit latency", f"{s['avg_hit_ms']:.0f} ms")
+        c2.metric("Avg miss latency", f"{s['avg_miss_ms'] / 1000:.1f} s")
+        st.metric("Est. $ saved", f"${s['usd_saved']:.2f}", help=f"${config.REF_USD_PER_CALL}/call reference price")
+        st.caption(f"Cache entries: {len(engine.cache.entries)} · threshold {engine.cache.threshold:.2f}")
+        st.caption(f"LLM providers used: {engine.router.by_provider or 'none yet'}")
+
+
+render_metrics()
