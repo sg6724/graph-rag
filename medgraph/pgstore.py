@@ -43,17 +43,48 @@ SCHEMA_SQL = [
 ]
 
 
-def connect(url: str | None = None, schema: str | None = None) -> psycopg.Connection:
+class PgConn:
+    """A Postgres connection that reopens itself. Supabase's pooler drops idle connections, and a Streamlit
+    app keeps one engine (and connection) alive for hours — without this the next query fails."""
+
+    def __init__(self, url: str, schema: str | None = None):
+        self.url, self.schema = url, schema
+        self.raw: psycopg.Connection = self._open()
+
+    def _open(self) -> psycopg.Connection:
+        conn = psycopg.connect(self.url, autocommit=True, prepare_threshold=None, connect_timeout=15,
+                               keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=3)
+        conn.execute("create extension if not exists vector")
+        if self.schema:
+            conn.execute(f'create schema if not exists "{self.schema}"')
+            conn.execute(f'set search_path to "{self.schema}", public, extensions')
+        register_vector(conn)
+        return conn
+
+    def _live(self) -> psycopg.Connection:
+        if self.raw.closed:
+            self.raw = self._open()
+        return self.raw
+
+    def execute(self, query, params=None):
+        try:
+            return self._live().execute(query, params)
+        except psycopg.OperationalError:  # dropped mid-idle: reopen once and retry
+            self.raw = self._open()
+            return self.raw.execute(query, params)
+
+    def cursor(self):
+        return self._live().cursor()
+
+    def close(self) -> None:
+        self.raw.close()
+
+
+def connect(url: str | None = None, schema: str | None = None) -> PgConn:
     url = url or get_key("DATABASE_URL")
     if not url:
         raise RuntimeError("DATABASE_URL not set")
-    conn = psycopg.connect(url, autocommit=True, prepare_threshold=None)
-    conn.execute("create extension if not exists vector")
-    if schema:
-        conn.execute(f'create schema if not exists "{schema}"')
-        conn.execute(f'set search_path to "{schema}", public, extensions')
-    register_vector(conn)
-    return conn
+    return PgConn(url, schema)
 
 
 def init_schema(conn: psycopg.Connection) -> None:

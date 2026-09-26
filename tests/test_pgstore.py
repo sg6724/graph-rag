@@ -103,3 +103,12 @@ def test_cache_export_import(conn, tmp_path):
     d = PgSemanticCache(conn, "t2")
     d.load(tmp_path / "warm.json")
     assert [e.query for e in d.entries] == ["q"] and d.lookup(v(1, 0), "k")[0].answer == {"text": "A"}
+
+
+def test_connection_reopens_after_being_closed(conn):
+    from medgraph.pgstore import PgSemanticCache
+
+    c = PgSemanticCache(conn, "t")
+    c.store("q", v(1, 0), "k", {"text": "A"}, ["n"])
+    conn.raw.close()  # what Supabase's pooler does to an idle connection
+    assert [e.query for e in c.entries] == ["q"]  # reconnects transparently (schema/search_path restored)
