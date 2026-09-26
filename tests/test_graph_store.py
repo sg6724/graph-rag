@@ -67,3 +67,12 @@ def test_paths_see_edges_added_after_a_search():
     assert g.paths_between("simvastatin", "clarithromycin")  # builds the cached undirected view
     g.add_relation("ketoconazole", "cyp3a4", "INHIBITS", "ketoconazole:drug_interactions:0", "ketoconazole")
     assert g.paths_between("simvastatin", "ketoconazole") == [["simvastatin", "cyp3a4", "ketoconazole"]]
+
+
+def test_add_extraction_source_type_is_configurable():
+    g = GraphStore()
+    g.add_extraction("dengue", [], [{"source": "dengue", "target": "fever", "type": "MENTIONS",
+                                     "chunk_id": "dengue:summary:0", "evidence": "e"}], source_type="Topic")
+    assert g.node_types()["dengue"] == "Topic"
+    g.replace_chunks("dengue", {"dengue:summary:1"}, [], [], source_type="Topic")
+    assert g.node_types()["dengue"] == "Topic"

@@ -38,8 +38,9 @@ class GraphStore:
                         chunk_id=chunk_id, drug=drug, evidence=evidence)
         self._und = None
 
-    def add_extraction(self, drug: str, entities: list[dict], relations: list[dict]) -> None:
-        self.add_entity(drug, "Drug")
+    def add_extraction(self, drug: str, entities: list[dict], relations: list[dict],
+                       source_type: str = "Drug") -> None:
+        self.add_entity(drug, source_type)
         for e in entities:
             self.add_entity(e["name"], e["type"])
         for r in relations:
@@ -50,12 +51,12 @@ class GraphStore:
         return {(u, v, d["type"]) for u, v, d in self.g.edges(data=True) if d["chunk_id"] in chunk_ids}
 
     def replace_chunks(self, drug: str, chunk_ids: set[str], entities: list[dict],
-                       relations: list[dict]) -> set[str]:
+                       relations: list[dict], source_type: str = "Drug") -> set[str]:
         """Swap the facts sourced from `chunk_ids`; return nodes whose facts changed (always incl. drug)."""
         before = self._signature(chunk_ids)
         stale = [(u, v, k) for u, v, k, d in self.g.edges(keys=True, data=True) if d["chunk_id"] in chunk_ids]
         self.g.remove_edges_from(stale)
-        self.add_extraction(drug, entities, relations)  # bumps version once
+        self.add_extraction(drug, entities, relations, source_type)  # bumps version once
         after = self._signature(chunk_ids)
         changed = {drug}
         for u, v, _ in before ^ after:
@@ -94,14 +95,14 @@ class GraphStore:
                     out.append({"source": a, "target": b, **d})
         return out
 
-    def neighborhood_edges(self, nodes: list[str], limit: int) -> list[dict]:
+    def neighborhood_edges(self, nodes: list[str], limit: int, priority: list[str] | None = None) -> list[dict]:
         edges = []
         for n in nodes:
             if n not in self.g:
                 continue
             for u, v, d in list(self.g.out_edges(n, data=True)) + list(self.g.in_edges(n, data=True)):
                 edges.append({"source": u, "target": v, **d})
-        rank = {t: i for i, t in enumerate(EDGE_PRIORITY)}
+        rank = {t: i for i, t in enumerate(priority or EDGE_PRIORITY)}
         edges.sort(key=lambda e: rank.get(e["type"], len(rank)))
         return edges[:limit]
 

@@ -24,16 +24,17 @@ def topic_slug(url: str) -> str | None:
 
 def plural_variants(text: str) -> str:
     """Crude singularization applied to both questions and names, so 'mosquitoes' matches 'mosquito'."""
-    out = []
-    for w in text.lower().split():
+    def one(m: re.Match) -> str:
+        w = m.group(0)
         if len(w) > 4 and w.endswith("oes"):
-            w = w[:-2]
-        elif len(w) > 4 and w.endswith("ies"):
-            w = w[:-3] + "y"
-        elif len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is")):
-            w = w[:-1]
-        out.append(w)
-    return " ".join(out)
+            return w[:-2]
+        if len(w) > 4 and w.endswith("ies"):
+            return w[:-3] + "y"
+        if len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is")):
+            return w[:-1]
+        return w
+
+    return re.sub(r"[a-z]+", one, " ".join(text.lower().split()))  # words only, so "mosquitoes?" works
 
 
 def parse_topics(path: Path) -> list[dict]:
@@ -136,7 +137,7 @@ def build_medline(topics: list[dict]) -> tuple[list[dict], list[dict], list[dict
             pieces = chunk_text(body)
             sec_chunks = []
             for piece in pieces:
-                c = {"id": f"{t['slug']}:summary:{len(topic_chunks)}", "drug": t["slug"], "section": "summary",
+                c = {"id": f"{t['slug']}:summary:{len(topic_chunks)}", "drug": node, "section": "summary",
                      "text": f"{prefix} {piece}"}
                 topic_chunks.append(c)
                 sec_chunks.append(c)

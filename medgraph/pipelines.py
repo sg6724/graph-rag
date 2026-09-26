@@ -11,27 +11,9 @@ import numpy as np
 
 from medgraph import config
 from medgraph.embeddings import doc_text
-from medgraph.entities import canonicalize, drug_key, match_entities
-from medgraph.extract import extract_drug
+from medgraph.profiles import Profile, fda_profile
 
-ANSWER_PROMPT = """You are a clinical pharmacology assistant in an educational demo. Answer the question using ONLY the
-context below, which comes from FDA drug labels{graph_note}.
-- Start with a one-line verdict (e.g. "Avoid combination", "Use with caution / monitor", "Contraindicated",
-  or "No significant interaction documented in these labels").
-  Say "Contraindicated" or "Avoid" only if the label text for these two drugs says so; if it says to monitor,
-  adjust the dose or use caution, say "Use with caution / monitor". Facts about other drugs never set the verdict.
-- Then explain the mechanism or risk in 2-4 sentences (e.g. which enzyme is inhibited and whose levels rise).
-- Cite sources inline with their ids in square brackets, e.g. [simvastatin:drug_interactions:2].
-- If the context does not contain the answer, say so plainly. Do not use outside knowledge.
-
-Question: {question}
-
-{context}
-"""
 CHUNK_ID_RE = re.compile(r"[a-z0-9\-]+:[a-z_]+:\d+")
-# A path explains an interaction only if every hop in between is a mechanism (shared enzyme, drug class or
-# side effect). "A interacts with X, X interacts with B" says nothing about A + B and floods the context.
-MECHANISM_TYPES = {"Enzyme", "DrugClass", "SideEffect"}
 
 
 @dataclass
@@ -64,7 +46,8 @@ def _ms(t0: float) -> float:
 
 
 class Engine:
-    def __init__(self, router, graph, chunks: dict[str, dict], index, embedder, cache):
+    def __init__(self, router, graph, chunks: dict[str, dict], index, embedder, cache, profile: Profile | None = None):
+        self.profile = profile or fda_profile()
         self.router = router
         self.graph = graph
         self.chunks = chunks
@@ -85,7 +68,7 @@ class Engine:
         return seen
 
     def _generate(self, question: str, context: str, graph_note: str) -> tuple[str, str, float]:
-        res = self.router.complete(ANSWER_PROMPT.format(graph_note=graph_note, question=question,
+        res = self.router.complete(self.profile.prompt.format(graph_note=graph_note, question=question,
                                                         context=context), task="answer")
         provider = f"{res.provider}/{res.model}" + (" (disk cache)" if res.cached else "")
         return res.text, provider, res.gen_latency_ms
@@ -106,25 +89,27 @@ class Engine:
     def graphrag(self, question: str, qvec: np.ndarray | None = None) -> Answer:
         t0 = time.perf_counter()
         types = self.graph.node_types()
-        ents = match_entities(question, types)
+        ents = self.profile.match(question, types)
         if qvec is None:
-            qvec = self.embedder.embed_query(canonicalize(question))
+            qvec = self.embedder.embed_query(self.profile.canonical(question))
         seeds = list(ents)
         if not seeds:
             seeds = sorted({self.chunks[cid]["drug"] for cid, _ in self.index.search(qvec, 3)})
-        drugs = [s for s in seeds if types.get(s) == "Drug"]
+        # A path counts as evidence only if every hop in between is a mechanism (e.g. a shared enzyme);
+        # "A interacts with X, X interacts with B" says nothing about A + B and floods the context.
+        drugs = [s for s in seeds if types.get(s) in self.profile.seed_types]
 
         nodes: set[str] = set(seeds)
         edges: list[dict] = []
         for a, b in combinations(drugs, 2):
             for path in self.graph.paths_between(a, b):
-                if any(types.get(n) not in MECHANISM_TYPES for n in path[1:-1]):
+                if any(types.get(n) not in self.profile.path_types for n in path[1:-1]):
                     continue
                 nodes.update(path)
                 for u, v in zip(path, path[1:]):
                     edges.extend(self.graph.edges_between(u, v))
         if not edges:
-            edges = self.graph.neighborhood_edges(seeds, config.NEIGHBOR_EDGE_LIMIT)
+            edges = self.graph.neighborhood_edges(seeds, config.NEIGHBOR_EDGE_LIMIT, self.profile.edge_priority)
             for e in edges:
                 nodes.update((e["source"], e["target"]))
         unique: dict[tuple, dict] = {}
@@ -153,8 +138,8 @@ class Engine:
     def cached(self, question: str) -> Answer:
         t0 = time.perf_counter()
         types = self.graph.node_types()
-        key = drug_key(match_entities(question, types), types)
-        qvec = self.embedder.embed_query(canonicalize(question))
+        key = self.profile.key(self.profile.match(question, types), types)
+        qvec = self.embedder.embed_query(self.profile.canonical(question))
         entry, score = self.cache.lookup(qvec, key)
         lookup_ms = _ms(t0)
         if entry is not None:
@@ -175,15 +160,17 @@ class Engine:
         self.cache.store(question, qvec, key, a.to_dict(), a.path_nodes)
         return a
 
-    # ---- demo: simulated FDA label update -------------------------------
+    # ---- demo: simulated source update (FDA label / MedlinePlus topic) ---
     def update_label(self, drug: str, section: str, text: str) -> dict:
         n = sum(1 for c in self.chunks.values() if c["drug"] == drug and c["section"] == section)
-        cid = f"{drug}:{section}:{n}"
+        prefix = next((cid.split(":")[0] for cid, c in self.chunks.items() if c["drug"] == drug),
+                      drug.replace(" ", ""))  # ids use the source slug, e.g. "lymedisease"
+        cid = f"{prefix}:{section}:{n}"
         chunk = {"id": cid, "drug": drug, "section": section, "text": f"SIMULATED LABEL UPDATE (demo): {text}"}
         self.chunks[cid] = chunk
         self.index.upsert([cid], self.embedder.embed_docs([doc_text(chunk)]))
-        ents, rels = extract_drug(self.router, drug, [chunk], task="extract_fast")  # live: fast models
-        changed = self.graph.replace_chunks(drug, {cid}, ents, rels)
+        ents, rels = self.profile.link_text(self.router, drug, chunk, self.graph.node_types())
+        changed = self.graph.replace_chunks(drug, {cid}, ents, rels, self.profile.entity_type)
         evicted = self.cache.invalidate_nodes(changed)
         return {"drug": drug, "chunk_id": cid, "changed_nodes": sorted(changed),
                 "evicted": [e.query for e in evicted], "retained": [e.query for e in self.cache.entries]}

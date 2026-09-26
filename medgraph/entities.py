@@ -37,5 +37,28 @@ def match_entities(question: str, node_types: dict[str, str]) -> list[str]:
     return sorted(found)
 
 
+_topic_index: dict[tuple, list[tuple[str, str]]] = {}
+
+
+def match_topics(question: str, node_types: dict[str, str], aliases: dict[str, str]) -> list[str]:
+    """MedlinePlus: find Topic nodes by title or synonym, plural-insensitive, longest match wins."""
+    from medgraph.medline import plural_variants
+
+    # keyed by content, not id(): callers pass a fresh dict each time and ids get reused across graphs
+    key = (frozenset(n for n, t in node_types.items() if t == "Topic"), frozenset(aliases.items()))
+    if key not in _topic_index:  # (normalized phrase, topic) sorted longest first; built once per graph
+        pairs = [(plural_variants(n), n) for n, t in node_types.items() if t == "Topic" and len(n) >= 3]
+        pairs += [(a, n) for a, n in aliases.items() if node_types.get(n) == "Topic" and len(a) >= 3]
+        _topic_index[key] = sorted(pairs, key=lambda p: -len(p[0]))
+    text = plural_variants(normalize_text(question))
+    found: set[str] = set()
+    for phrase, topic in _topic_index[key]:
+        m = re.search(rf"(?<![a-z0-9]){re.escape(phrase)}(?![a-z0-9])", text)
+        if m:
+            found.add(topic)
+            text = text[:m.start()] + " " * (m.end() - m.start()) + text[m.end():]  # consume: longest wins
+    return sorted(found)
+
+
 def drug_key(entities: list[str], node_types: dict[str, str]) -> str:
     return "|".join(sorted(e for e in entities if node_types.get(e) == "Drug"))

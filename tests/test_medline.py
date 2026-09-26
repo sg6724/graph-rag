@@ -48,6 +48,8 @@ def test_build_medline_chunks_are_sections_with_titles(tmp_path):
     assert ids[:2] == ["dengue:summary:0", "dengue:summary:1"]
     c0 = chunks[0]
     assert c0["drug"] == "dengue" and c0["section"] == "summary"
+    mb = [c for c in chunks if c["id"].startswith("mosquitobites:")][0]
+    assert mb["drug"] == "mosquito bites"  # entity = graph node name, so seeds and passages line up
     assert c0["text"].startswith("Dengue — What is dengue?") and "<" not in c0["text"]
 
 

@@ -10,6 +10,8 @@ dependencies = [
     "fastembed>=0.4",
     "streamlit>=1.38",
     "pyvis>=0.3.2",
+    "psycopg[binary]>=3.2",
+    "pgvector>=0.3",
 ]
 
 [dependency-groups]
@@ -18,5 +20,5 @@ dev = ["pytest>=8"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-markers = ["live: calls real network APIs (spends quota)"]
-addopts = "-m 'not live'"
+markers = ["live: calls real network APIs (spends quota)", "db: needs DATABASE_URL (Postgres + pgvector)"]
+addopts = "-m 'not live and not db'"
