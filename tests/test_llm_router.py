@@ -159,3 +159,10 @@ def test_gemini_thinking_low_for_all_but_offline_extract(monkeypatch):
     assert bodies[0][0]["generationConfig"]["thinkingConfig"] == {"thinkingLevel": "low"}
     assert "thinkingConfig" not in bodies[1][0]["generationConfig"]
     assert bodies[0][1] < bodies[1][1]  # fast task gets the short timeout
+
+
+def test_served_counts_live_calls_and_disk_replays(tmp_path):
+    router = make(lambda *a: "x", tmp_path)
+    router.complete("q")
+    router.complete("q")
+    assert router.served == {"gemini/g1": 1, "gemini/g1 (replayed from disk)": 1}

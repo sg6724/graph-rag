@@ -108,6 +108,7 @@ class Router:
         self.by_provider: dict[str, int] = {}
         self.errors: list[str] = []
         self.disabled: set[str] = set()  # "provider/model" whose daily quota is exhausted
+        self.served: dict[str, int] = {}  # which model produced each answer, incl. replays from the disk cache
 
     def _chain(self, task: str) -> list[tuple[str, str]]:
         if isinstance(self.providers, dict):
@@ -124,6 +125,8 @@ class Router:
         if path.exists():
             d = json.loads(path.read_text(encoding="utf-8"))
             self.cache_hits += 1
+            label = f"{d['provider']}/{d['model']} (replayed from disk)"
+            self.served[label] = self.served.get(label, 0) + 1
             return LLMResult(d["text"], d["provider"], d["model"], True,
                              (time.perf_counter() - t0) * 1000, d.get("gen_latency_ms", 0.0))
         chain = self._chain(task)
@@ -147,6 +150,7 @@ class Router:
                 gen_ms = (time.perf_counter() - t_call) * 1000
                 self.calls += 1
                 self.by_provider[label] = self.by_provider.get(label, 0) + 1
+                self.served[label] = self.served.get(label, 0) + 1
                 path.write_text(json.dumps({"text": text, "provider": provider, "model": model,
                                             "gen_latency_ms": gen_ms}), encoding="utf-8")
                 return LLMResult(text, provider, model, False,

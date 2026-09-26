@@ -29,6 +29,7 @@ class Metrics:
             "hit_rate": len(hits) / len(cached) if cached else 0.0,
             "avg_hit_ms": _avg([r["total_ms"] for r in hits]),
             "avg_miss_ms": _avg([r["total_ms"] for r in misses]),
+            "avg_answer_ms": _avg([r["total_ms"] for r in self.records if not r["hit"]]),  # any pipeline
             "llm_calls": sum(r["llm_calls"] for r in self.records),
             "llm_calls_saved": len(hits),
             "usd_saved": len(hits) * config.REF_USD_PER_CALL,
