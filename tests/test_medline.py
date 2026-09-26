@@ -77,3 +77,7 @@ def test_build_medline_aliases_include_synonyms_and_short_forms(tmp_path):
 
 def test_plural_variants():
     assert plural_variants("mosquitoes spread ticks and diseases") == "mosquito spread tick and disease"
+
+
+def test_plural_variants_es_endings():
+    assert plural_variants("rashes and headaches with boxes") == "rash and headache with box"

@@ -12,6 +12,7 @@ LLM_CACHE_DIR = DATA / "llm_cache"
 CACHE_PATH = DATA / "cache.json"
 MODEL_DIR = DATA / "models"
 DEMO_UPDATES_PATH = DATA / "demo_updates.json"
+MEDLINE_DIR = DATA / "medline"
 
 OPENFDA_URL = "https://api.fda.gov/drug/label.json"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models"

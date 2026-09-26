@@ -27,7 +27,7 @@ class Embedder:
         self.model = TextEmbedding(model_name=model_name, cache_dir=str(config.MODEL_DIR))
 
     def embed_docs(self, texts: list[str]) -> np.ndarray:
-        return _normalize(np.array(list(self.model.embed(texts)), dtype=np.float32))
+        return _normalize(np.array(list(self.model.embed(texts, batch_size=32)), dtype=np.float32))  # small batches: low RAM
 
     def embed_query(self, text: str) -> np.ndarray:
         return _normalize(np.array(list(self.model.query_embed([text])), dtype=np.float32))[0]

@@ -14,31 +14,33 @@ st.set_page_config(page_title="MedGraph-RAG", page_icon="💊", layout="wide")
 
 MODES = {"cached": "GraphRAG + semantic cache", "graphrag": "GraphRAG", "vanilla": "Vanilla RAG",
          "compare": "Compare: Vanilla vs GraphRAG"}
-EXAMPLES = [
-    "Can a patient taking simvastatin start clarithromycin?",
-    "Is it safe to take Biaxin while on Zocor?",
-    "Can a patient taking warfarin also take aspirin?",
-    "Can a patient taking warfarin also take naproxen?",
-    "Should clopidogrel be taken with omeprazole?",
-]
+DATASETS = {"medline": "MedlinePlus health topics (plain English)", "fda": "FDA drug labels (drug interactions)"}
 
 
 @st.cache_resource(show_spinner="Loading graph, index and embedding model…")
-def get_engine():
-    return load_engine()
+def get_engine(dataset: str):
+    """Supabase (Postgres + pgvector) when reachable; otherwise the committed local files."""
+    try:
+        return load_engine(dataset=dataset), "Supabase Postgres + pgvector"
+    except Exception as e:  # no DATABASE_URL, no network, …
+        return load_engine(dataset=dataset, backend="files"), f"local files (Supabase unavailable: {type(e).__name__})"
 
 
-engine = get_engine()
 ss = st.session_state
-ss.setdefault("metrics", Metrics())
-ss.setdefault("last", None)
-ss.setdefault("compare", None)
-ss.setdefault("update_log", None)
-ss.setdefault("question", EXAMPLES[0])
+with st.sidebar:
+    dataset = st.selectbox("Dataset", list(DATASETS), format_func=DATASETS.get, key="dataset")
+engine, storage = get_engine(dataset)
+EXAMPLES = engine.profile.examples
+if ss.get("active_dataset") != dataset:  # switching datasets starts a clean session
+    for k in ("last", "compare", "update_log"):
+        ss[k] = None
+    ss["metrics"] = Metrics()
+    ss["question"] = EXAMPLES[0]
+    ss["active_dataset"] = dataset
 
 st.title("💊 MedGraph-RAG")
-st.caption("GraphRAG over real FDA drug labels + a graph-aware semantic cache · "
-           "**Educational demo — not medical advice.**")
+st.caption(f"Graph-based semantic search over **{DATASETS[dataset]}** + a graph-aware semantic cache · "
+           f"storage: {storage} · **Educational demo — not medical advice.**")
 
 # ---------------- sidebar ----------------
 with st.sidebar:
@@ -55,8 +57,9 @@ with st.sidebar:
     st.caption(f"Cache entries: {len(engine.cache.entries)} · threshold {engine.cache.threshold:.2f}")
     st.caption(f"LLM providers used: {engine.router.by_provider or 'none yet'}")
     st.divider()
-    st.subheader("Simulate FDA label update")
-    updates = json.loads(config.DEMO_UPDATES_PATH.read_text(encoding="utf-8"))
+    st.subheader("Simulate a source update")
+    updates = [u for u in json.loads(config.DEMO_UPDATES_PATH.read_text(encoding="utf-8"))
+               if u.get("dataset", "fda") == dataset]
     pick = st.selectbox("Update", range(len(updates)), format_func=lambda i: updates[i]["label"])
     if st.button("Apply update", width="stretch"):
         u = updates[pick]
@@ -66,6 +69,9 @@ with st.sidebar:
             except LLMError as e:
                 st.error(f"All LLM providers are busy right now — try again in a moment. ({e})")
     if st.button("Reset demo", width="stretch"):
+        warm = (config.MEDLINE_DIR if dataset == "medline" else config.DATA) / "cache.json"
+        if hasattr(engine.cache, "conn"):  # Supabase cache persists: restore the pre-warmed answers
+            engine.cache.load(warm) if warm.exists() else engine.cache.clear()
         st.cache_resource.clear()
         ss.clear()
         st.rerun()

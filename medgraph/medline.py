@@ -30,6 +30,8 @@ def plural_variants(text: str) -> str:
             return w[:-2]
         if len(w) > 4 and w.endswith("ies"):
             return w[:-3] + "y"
+        if len(w) > 4 and w.endswith(("shes", "xes", "sses", "zes")):  # rashes → rash ("-ches" is ambiguous)
+            return w[:-2]
         if len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is")):
             return w[:-1]
         return w
@@ -162,3 +164,33 @@ def build_medline(topics: list[dict]) -> tuple[list[dict], list[dict], list[dict
 
     ents = [{"name": n, "type": ty} for n, ty in entities.items()]
     return chunks, ents, list(relations.values()), aliases
+
+
+def main() -> None:
+    """Build MedlinePlus artifacts in data/medline/: chunks, graph, aliases and embeddings."""
+    import json
+
+    from medgraph import config
+    from medgraph.embeddings import Embedder, VectorIndex, doc_text
+    from medgraph.graph_store import GraphStore
+    from medgraph.ingest import save_chunks
+
+    d = config.MEDLINE_DIR
+    chunks, entities, relations, aliases = build_medline(parse_topics(d / "topics.xml"))
+    graph = GraphStore()
+    for e in entities:
+        graph.add_entity(e["name"], e["type"])
+    for r in relations:
+        graph.add_relation(r["source"], r["target"], r["type"], r["chunk_id"], r["source"], r["evidence"])
+    save_chunks(chunks, d / "chunks.jsonl")
+    graph.save(d / "graph.json")
+    (d / "aliases.json").write_text(json.dumps(aliases, indent=0), encoding="utf-8")
+    ids = [c["id"] for c in chunks]
+    matrix = Embedder().embed_docs([doc_text(c) for c in chunks])
+    VectorIndex(ids, matrix).save(d / "embeddings.npy", d / "embedding_ids.json")
+    print(f"{len(chunks)} chunks, {graph.stats()['nodes']} nodes, {graph.stats()['edges']} edges, "
+          f"{len(aliases)} aliases, dim={matrix.shape[1]}")
+
+
+if __name__ == "__main__":
+    main()

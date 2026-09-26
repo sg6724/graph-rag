@@ -67,3 +67,32 @@ def test_topic_update_links_new_text_without_llm_and_evicts_only_dependents(engi
     assert engine.graph.g.has_edge("malaria", "dengue")
     assert res["evicted"] == ["Which diseases spread through mosquitoes?"]
     assert res["retained"] == ["Which diseases spread through ticks?"]
+
+
+def test_symptom_question_ranks_topics_linked_to_all_symptoms(engine):
+    g = engine.graph
+    for t in ("fever", "rashes", "flu"):
+        g.add_entity(t, "Topic")
+    g.add_relation("dengue", "fever", "MENTIONS", "dengue:summary:0", "dengue", "high fever")
+    g.add_relation("dengue", "rashes", "MENTIONS", "dengue:summary:0", "dengue", "rash")
+    g.add_relation("flu", "fever", "MENTIONS", "dengue:summary:0", "flu", "fever")  # fever only
+    a = engine.graphrag("I have a high fever and a rash. What could it be?")
+    assert set(a.entities) == {"fever", "rashes"}
+    assert "dengue" in a.path_nodes and "flu" not in a.path_nodes
+    facts = engine.router.prompts[-1][1].split("Evidence passages:")[0]
+    assert "dengue --MENTIONS--> fever" in facts and "dengue --MENTIONS--> rashes" in facts
+
+
+def test_symptom_ties_are_broken_by_semantic_similarity(engine):
+    g = engine.graph
+    for t in ("fever", "rashes", "antibiotics"):
+        g.add_entity(t, "Topic")
+    for src in ("dengue", "antibiotics"):  # both link to fever and rash → tie on count
+        g.add_relation(src, "fever", "MENTIONS", "dengue:summary:0", src, "e")
+        g.add_relation(src, "rashes", "MENTIONS", "dengue:summary:0", src, "e")
+    engine.chunks["antibiotics:summary:0"] = {"id": "antibiotics:summary:0", "drug": "antibiotics",
+                                              "section": "summary", "text": "Antibiotics treat bacteria."}
+    engine.index.upsert(["antibiotics:summary:0"], engine.embedder.embed_docs(["Antibiotics treat bacteria."]))
+    a = engine.graphrag("You can get it if an infected mosquito bites you: fever and rash")
+    ranked = [n for n in a.path_nodes if n in ("dengue", "antibiotics")]
+    assert engine.last_candidates[:2] == ["dengue", "antibiotics"], engine.last_candidates

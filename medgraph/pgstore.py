@@ -143,7 +143,8 @@ class PgSemanticCache:
     @staticmethod
     def _entry(row) -> CacheEntry:
         query, emb, key, answer, nodes, created = row
-        return CacheEntry(query, [float(x) for x in emb], key, answer, list(nodes), created.timestamp())
+        values = emb.to_list() if hasattr(emb, "to_list") else list(emb)  # pgvector returns a Vector
+        return CacheEntry(query, [float(x) for x in values], key, answer, list(nodes), created.timestamp())
 
     _COLS = "query, embedding, entity_key, answer, node_ids, created_at"
 
@@ -197,3 +198,45 @@ class PgSemanticCache:
         from dataclasses import asdict
 
         Path(path).write_text(json.dumps([asdict(e) for e in self.entries]), encoding="utf-8")
+
+
+# ---------------- loader CLI ----------------
+def dataset_files(dataset: str) -> dict:
+    d = config.MEDLINE_DIR if dataset == "medline" else config.DATA
+    return {"chunks": d / "chunks.jsonl", "graph": d / "graph.json", "emb": d / "embeddings.npy",
+            "ids": d / "embedding_ids.json", "cache": d / "cache.json"}
+
+
+def load_dataset(conn, dataset: str) -> dict:
+    """Copy a dataset's local artifacts (chunks + embeddings, graph, warm cache) into Postgres."""
+    from medgraph.embeddings import VectorIndex
+    from medgraph.ingest import load_chunks
+
+    f = dataset_files(dataset)
+    chunks = load_chunks(f["chunks"])
+    index = VectorIndex.load(f["emb"], f["ids"])
+    conn.execute("delete from chunks where dataset = %s", (dataset,))
+    write_chunks(conn, dataset, [chunks[i] for i in index.ids], index.matrix)
+    save_graph(conn, dataset, GraphStore.load(f["graph"]))
+    cache = PgSemanticCache(conn, dataset)
+    if f["cache"].exists():
+        cache.load(f["cache"])
+    else:
+        cache.clear()
+    counts = {t: conn.execute(f"select count(*) from {t} where dataset = %s", (dataset,)).fetchone()[0]
+              for t in ("chunks", "graph_nodes", "graph_edges", "semantic_cache")}
+    return counts
+
+
+def main() -> None:
+    import sys
+
+    datasets = sys.argv[2:] if len(sys.argv) > 2 and sys.argv[1] == "load" else ["fda", "medline"]
+    conn = connect()
+    init_schema(conn)
+    for ds in datasets:
+        print(ds, load_dataset(conn, ds), flush=True)
+
+
+if __name__ == "__main__":
+    main()

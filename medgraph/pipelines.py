@@ -48,6 +48,7 @@ def _ms(t0: float) -> float:
 class Engine:
     def __init__(self, router, graph, chunks: dict[str, dict], index, embedder, cache, profile: Profile | None = None):
         self.profile = profile or fda_profile()
+        self.last_candidates: list[str] = []  # ranked symptom-style candidates from the last graphrag call
         self.router = router
         self.graph = graph
         self.chunks = chunks
@@ -101,7 +102,20 @@ class Engine:
 
         nodes: set[str] = set(seeds)
         edges: list[dict] = []
-        for a, b in combinations(drugs, 2):
+        if self.profile.common_neighbors and len(drugs) >= 2:
+            # e.g. fever + rash + eye pain: topics that link to *most* of the symptoms are the candidates
+            shared = dict(self.graph.common_neighbors(drugs, self.profile.seed_types, limit=25))
+            own = {cid for cid, c in self.chunks.items() if c["drug"] in shared}
+            sim: dict[str, float] = {}
+            for cid, score in self.index.search(qvec, 200, allowed=own):  # ties → most similar to the question
+                ent = self.chunks[cid]["drug"]
+                sim[ent] = max(sim.get(ent, -1.0), score)
+            self.last_candidates = sorted(shared, key=lambda n: (-shared[n], -sim.get(n, -1.0)))[:8]
+            for cand in self.last_candidates:
+                nodes.add(cand)
+                for s in drugs:
+                    edges.extend(self.graph.edges_between(cand, s))
+        for a, b in ([] if edges else combinations(drugs, 2)):
             for path in self.graph.paths_between(a, b):
                 if any(types.get(n) not in self.profile.path_types for n in path[1:-1]):
                     continue
@@ -176,14 +190,33 @@ class Engine:
                 "evicted": [e.query for e in evicted], "retained": [e.query for e in self.cache.entries]}
 
 
-def load_engine(cache_path=config.CACHE_PATH) -> Engine:
+def load_engine(cache_path=config.CACHE_PATH, dataset: str = "fda", backend: str | None = None) -> Engine:
+    """backend "pg" = Supabase Postgres + pgvector (default when DATABASE_URL is set), "files" = local artifacts."""
+    import json
+
     from medgraph.embeddings import Embedder, VectorIndex
     from medgraph.graph_store import GraphStore
     from medgraph.ingest import load_chunks
-    from medgraph.llm_router import Router
+    from medgraph.llm_router import Router, get_key
+    from medgraph.profiles import medline_profile
     from medgraph.semantic_cache import SemanticCache
 
+    profile = fda_profile()
+    if dataset == "medline":
+        profile = medline_profile(json.loads((config.MEDLINE_DIR / "aliases.json").read_text(encoding="utf-8")))
+    backend = backend or ("pg" if get_key("DATABASE_URL") else "files")
+    if backend == "pg":
+        from medgraph.pgstore import PgSemanticCache, PgVectorIndex, connect, load_graph, read_chunks
+
+        conn = connect()
+        chunks = read_chunks(conn, dataset)
+        return Engine(Router(), load_graph(conn, dataset), chunks, PgVectorIndex(conn, dataset, chunks), Embedder(),
+                      PgSemanticCache(conn, dataset), profile)
+    d = config.MEDLINE_DIR if dataset == "medline" else config.DATA
+    if dataset == "medline":
+        cache_path = d / "cache.json" if cache_path == config.CACHE_PATH else cache_path
     cache = SemanticCache()  # in-memory: demo edits never overwrite the pre-warmed file
     if cache_path and cache_path.exists():
         cache.load(cache_path)
-    return Engine(Router(), GraphStore.load(), load_chunks(), VectorIndex.load(), Embedder(), cache)
+    return Engine(Router(), GraphStore.load(d / "graph.json"), load_chunks(d / "chunks.jsonl"),
+                  VectorIndex.load(d / "embeddings.npy", d / "embedding_ids.json"), Embedder(), cache, profile)

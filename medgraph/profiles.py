@@ -48,6 +48,7 @@ class Profile:
     path_types: set[str]           # node types allowed *between* two seeds on an evidence path
     edge_priority: list[str]       # which neighbour edges to show first when there is no path
     link_text: Callable = None     # (router, entity, chunk, node_types) -> (entities, relations) for new text
+    common_neighbors: bool = False  # several seeds (e.g. symptoms) → rank topics linked to the most of them
     examples: list[str] = field(default_factory=list)
 
 
@@ -89,7 +90,7 @@ def medline_profile(aliases: dict[str, str]) -> Profile:
         name="medline", label="MedlinePlus health topics (plain English)", prompt=MEDLINE_PROMPT,
         match=match, key=key, canonical=normalize_text,
         entity_type="Topic", seed_types={"Topic"}, path_types={"Topic"},
-        edge_priority=["MENTIONS", "RELATED_TO", "IN_GROUP"], link_text=link_text,
+        edge_priority=["MENTIONS", "RELATED_TO", "IN_GROUP"], link_text=link_text, common_neighbors=True,
         examples=["Which diseases spread through mosquito bites?",
                   "Which diseases are spread by mosquitoes?",
                   "Which diseases spread through ticks?",

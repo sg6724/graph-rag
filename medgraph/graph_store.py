@@ -106,6 +106,19 @@ class GraphStore:
         edges.sort(key=lambda e: rank.get(e["type"], len(rank)))
         return edges[:limit]
 
+    def common_neighbors(self, seeds: list[str], types: set[str], min_count: int = 2,
+                         limit: int = 8) -> list[tuple[str, int]]:
+        """Nodes (of the given types) linked to at least `min_count` seeds, most-shared first."""
+        und = self._undirected()
+        counts: dict[str, int] = {}
+        for s in seeds:
+            if s in und:
+                for n in und.neighbors(s):
+                    if n not in seeds and self.g.nodes[n].get("type") in types:
+                        counts[n] = counts.get(n, 0) + 1
+        ranked = sorted(((n, c) for n, c in counts.items() if c >= min_count), key=lambda x: (-x[1], x[0]))
+        return ranked[:limit]
+
     def stats(self) -> dict:
         by_type: dict[str, int] = {}
         for _, t in self.node_types().items():

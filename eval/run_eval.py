@@ -166,7 +166,7 @@ def main() -> None:
 
     data = json.loads(QUESTIONS_PATH.read_text(encoding="utf-8"))
     questions, traps_def = data["questions"], data["traps"]
-    engine = load_engine(cache_path=None)
+    engine = load_engine(cache_path=None, backend="files")  # never clear the Supabase demo cache
     answers = {}
     for q in questions:
         print(f"[{q['id']}] {q['question']}", flush=True)
